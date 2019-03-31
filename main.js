@@ -1,20 +1,22 @@
 const { app, BrowserWindow, ipcMain, systemPreferences } = require('electron')
-
+const path = require("path")
+const { fork, spawn } = require("child_process")
 let mainWindow
 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 500,
-    height: 680,
-    //icon: __dirname + '/assets/icon.ico', 
-    title: 'Quick Share',
+    width: 1024,
+    height: 700,
+    icon: __dirname + '/assets/icon.ico', 
+    title: 'Crushee',
     webPreferences: {
       navigateOnDragDrop: false,
       webSecurity: false,
-      experimentalFeatures: true
+      experimentalFeatures: true,
+      preload: path.resolve(__dirname, 'preload.js')
     },
-    titleBarStyle: "hidden"
+    titleBarStyle: "default"
   })
 
 
@@ -56,3 +58,7 @@ app.on('activate', function () {
     createWindow()
   }
 })
+
+
+let crusheeDir = path.resolve(__dirname, 'crushee-server')
+const server = spawn(path.resolve(crusheeDir + "\\node.exe"), ["index.js"], {cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false})
