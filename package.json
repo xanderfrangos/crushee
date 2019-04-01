@@ -30,7 +30,21 @@
       "category": "",
       "darkModeSupport": true
     },
-    "files": ["./crushee-server/*", "./crushee-server/node_modules/", "./main.js", "./preload.js", "*"],
-    "extraResources": ["./crushee-server/*", "./crushee-server/node_modules/", "./crushee-server/public/", "./crushee-server/public/*"]
+    "win": {
+      "icon": "assets/icon.ico"
+    },
+    "files": [
+      "./crushee-server/*",
+      "./crushee-server/node_modules/",
+      "./main.js",
+      "./preload.js",
+      "*"
+    ],
+    "extraResources": [
+      "./crushee-server/*",
+      "./crushee-server/node_modules/",
+      "./crushee-server/public/",
+      "./crushee-server/public/*"
+    ]
   }
 }

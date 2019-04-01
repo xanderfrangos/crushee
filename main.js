@@ -71,11 +71,11 @@ app.on('activate', function () {
 
 
 let crusheeDir = path.resolve(__dirname, 'crushee-server')
+if(!fs.existsSync(crusheeDir)) {
+  crusheeDir = path.resolve(__dirname, '../crushee-server')
+}
 let server
 if (process.platform === 'darwin') {
-  if(!fs.existsSync(crusheeDir)) {
-    crusheeDir = path.resolve(__dirname, '../crushee-server')
-  }
   server = spawn(path.resolve(crusheeDir + "\/node"), ["index.js"], {cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false})
 } else {
   server = spawn(path.resolve(crusheeDir + "\\node.exe"), ["index.js"], {cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false})
