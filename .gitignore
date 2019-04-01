@@ -79,3 +79,4 @@ releases
 crushee-server/*
 !crushee-server/README.txt
 .DS_Store
+dist/*

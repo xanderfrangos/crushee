@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, systemPreferences } = require('electron')
 const path = require("path")
+const fs = require("fs")
 const { fork, spawn } = require("child_process")
 let mainWindow
 
@@ -24,7 +25,7 @@ function createWindow() {
   
   setTimeout(() => {
     mainWindow.loadURL('http://localhost:1603/')
-  }, 200)
+  }, 400)
 
   mainWindow.setMenuBarVisibility(false)
 
@@ -72,6 +73,9 @@ app.on('activate', function () {
 let crusheeDir = path.resolve(__dirname, 'crushee-server')
 let server
 if (process.platform === 'darwin') {
+  if(!fs.existsSync(crusheeDir)) {
+    crusheeDir = path.resolve(__dirname, '../crushee-server')
+  }
   server = spawn(path.resolve(crusheeDir + "\/node"), ["index.js"], {cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false})
 } else {
   server = spawn(path.resolve(crusheeDir + "\\node.exe"), ["index.js"], {cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false})

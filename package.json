@@ -1,18 +1,36 @@
 {
   "name": "crushee-desktop",
   "version": "1.0.0",
-  "description": "",
+  "description": "Desktop App for Crushee",
   "main": "main.js",
   "dependencies": {
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "electron-builder": "^20.39.0",
     "electron": "^4.1.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Xander Frangos",
+  "license": "ISC",
+  "build": {
+    "productName": "Crushee",
+    "asar": false,
+    "asarUnpack": [
+      "**/crushee-server/node_modules/*"
+    ],
+    "appId": "com.xanderfrangos.crushee",
+    "mac": {
+      "icon": "assets/icon.icns",
+      "category": "",
+      "darkModeSupport": true
+    },
+    "files": ["./crushee-server/*", "./crushee-server/node_modules/", "./main.js", "./preload.js", "*"],
+    "extraResources": ["./crushee-server/*", "./crushee-server/node_modules/", "./crushee-server/public/", "./crushee-server/public/*"]
+  }
 }
