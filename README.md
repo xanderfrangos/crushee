@@ -21,7 +21,7 @@ Crushee was primarily built with [Electron](https://electronjs.org/), [Node.js](
 ## Usage
 
 - Download or clone
-- Additionally, download the [Crushee server](https://github.com/xanderfrangos/crushee) to the *crushee-server* folder. The Crushee server runs along side the Electron app at startup.
+- Additionally, download the [Crushee server](https://github.com/xanderfrangos/crushee-server) to the *crushee-server* folder. The Crushee server runs along side the Electron app at startup.
 - Run *npm install* in both the root folder and *crushee-server*.
 - If you're missing any image libraries (depending on your OS), get those and re-run *npm install* as needed
 - Run *npm start*
