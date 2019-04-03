@@ -18,17 +18,13 @@ layout: compress
         <meta property="og:image:height" content="1200"/>
         <script>
         var git = {
-            'latest_release': {{ site.github.latest_release }},
-            'owner': {{ site.github.owner }},
-            'site_ver': {{ site.github.build_revision }}
+            'latest_release': {{ site.github.latest_release | jsonify }}
         }
         </script>
     </head>
     <body>
         <script>document.documentElement.className="js";</script>
-         <p class="text-center">Crushee &copy; 2019 Alexander "Xander" Frangos. <a class="ver" href="{{ site.github.repository_url }}" target="_blank" rel="noopener">{{ site.github.source.branch }}-{{ site.github.build_revision }}</a></p>
+         <p class="text-center">Crushee &copy; 2019 Alexander "Xander" Frangos. &middot; <a href="{{ site.github.owner_url }}">Visit author's site</a> &middot; {{ site.github.source.branch }}-{{ site.github.build_revision | slice: 0, 7 }}</p>
         <pre>{{ site.github }}</pre>
-        <pre>{{ site.github.latest_release }}</pre>
-        <pre>{{ site.github.public_repositories }}</pre>
     </body>
 </html>

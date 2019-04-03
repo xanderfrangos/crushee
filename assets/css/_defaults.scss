@@ -1,0 +1,24 @@
+clear, .clear {
+    &:after,
+    &:before {
+        content: ' ';
+        display: block;
+        clear: both;
+    }
+}
+
+html, body {
+    font-family: "Open Sans Web", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+    line-height: 1;
+    background: #f9f9f9;
+    
+    @include appnav {
+        font-size: 15px;
+    }
+}
+
+body {
+    @extend clear;
+}
