@@ -16,6 +16,13 @@ layout: compress
         <meta property="og:image:secure_url" content=""/>
         <meta property="og:image:width" content="1200"/>
         <meta property="og:image:height" content="1200"/>
+        <script>
+        var git = {
+            'latest_release': {{ site.github.latest_release }},
+            'owner': {{ site.github.owner }},
+            'site_ver': {{ site.github.build_revision }}
+        }
+        </script>
     </head>
     <body>
         <script>document.documentElement.className="js";</script>
