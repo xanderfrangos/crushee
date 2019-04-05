@@ -6,16 +6,18 @@ layout: compress
     <head>
         <meta charset="UTF-8">
         <title>Crushee - An image squisher</title>
-        <link rel="canonical" href="https://xanderfrangos.com/crushee" />
+        <link rel="canonical" href="https://crushee.app" />
         <meta name="description" content=""/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#414575">
+        <meta name="theme-color" content="#eb358a">
         <meta property="og:title" content="Crushee" />
         <meta property="og:description" content="An image squisher" />
-        <meta property="og:image" content=""/>
-        <meta property="og:image:secure_url" content=""/>
+        <meta property="og:image" content="https://crushee.app/assets/img/open-graph.jpg"/>
+        <meta property="og:image:secure_url" content="https://crushee.app/assets/img/open-graph.jpg"/>
         <meta property="og:image:width" content="1200"/>
         <meta property="og:image:height" content="1200"/>
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+        <link rel="shortcut icon" href="assets/img/icon.ico">
         <script>
         var git = {
             'latest_release': {{ site.github.latest_release | jsonify }}
@@ -24,7 +26,37 @@ layout: compress
     </head>
     <body>
         <script>document.documentElement.className="js";</script>
-         <p class="text-center">Crushee &copy; 2019 Alexander "Xander" Frangos. &middot; <a href="{{ site.github.owner_url }}">Visit author's site</a> &middot; {{ site.github.source.branch }}-{{ site.github.build_revision | slice: 0, 7 }}</p>
-        <pre>{{ site.github }}</pre>
+        <main>
+            <div class="background">
+                <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 813 1080" width="100%" height="100%" preserveAspectRatio="none"><defs><linearGradient id="a" x1="406.61" y1="1126.11" x2="406.61" y2="-26" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#eb358a"/><stop offset="1" stop-color="#c22f73"/></linearGradient></defs><polygon points="813 -26 813 0 380.56 0 -0.17 1080.09 813 1080.09 813 1126.09 813.38 1126.11 813.38 -26 813 -26" fill="url(#a)"/></svg>
+            </div>
+            <div class="foreground">
+                <div class="inner">
+                    <div class="mob-screenshot">
+                        <img src="assets/img/screenshot-1.png" width="810" height="579" alt="Crushee screenshot" />
+                    </div>
+                    <div class="text">
+                        <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5615 1148"><path d="M1046,328v720H326V328h720m10-100H316a90,90,0,0,0-90,90v740a90,90,0,0,0,90,90h740a90,90,0,0,0,90-90V318a90,90,0,0,0-90-90Z" fill="#eb358a"/><path d="M138.5,318c0-97.87,79.63-177.5,177.5-177.5H920V90A90,90,0,0,0,830,0H90A90,90,0,0,0,0,90V830a90,90,0,0,0,90,90h48.5Z" fill="#484848"/><path d="M1707.27,847.93q-68.49-37.9-106-108.54T1563.83,574q0-93.89,37.48-164.54t106-108.55q68.48-37.89,159.8-37.9,109.38,0,192.1,57.72,14.64,10.33,21.11,22.4t6.46,31q0,26.72-15.08,45.22t-36.61,18.53a66,66,0,0,1-23.26-3.88,139.32,139.32,0,0,1-24.12-12.49q-30.17-18.09-56.86-25.85a197,197,0,0,0-55.13-7.75q-76.68,0-114.14,46.09t-37.48,140q0,94.77,37.48,140.84t114.14,46.09a154.31,154.31,0,0,0,50-8.18q24.12-8.18,62-25.41,18.09-9.48,26.7-12.93t20.68-3.44q21.53,0,36.61,18.52t15.08,45.23q0,18.09-6.46,30.58t-21.11,22.83q-82.7,57.72-192.1,57.71Q1775.74,885.83,1707.27,847.93Z" fill="#eb358a"/><path d="M2689.75,821.22q0,27.59-22.83,46.09t-53,18.52a82.39,82.39,0,0,1-38.76-9.47q-18.09-9.48-31-28.43l-112-163.68q-12.07-17.22-25.42-25.41t-31.44-8.18h-56v154.2q0,36.18-20.68,57.28t-56.86,21.11q-36.18,0-57.28-21.11t-21.11-57.28V344q0-35.33,18.95-54.27t54.28-19h216.22q110.27,0,165.83,47.81t55.57,138.27q0,68.93-37.91,116.73t-106.82,64.17q28.42,4.32,49.53,19t41.79,43.93l53.41,76.67Q2689.75,800.56,2689.75,821.22Zm-186.5-305.81Q2526.07,499,2526.07,462q0-37.9-22.82-54.71t-75.38-16.79H2317.6V531.77h110.27Q2480.4,531.77,2503.25,515.41Z" fill="#eb358a"/><path d="M2837.48,818.64Q2769,751.44,2769,622.23V344q0-35.33,21.11-56.43t56.42-21.1q35.33,0,56.43,21.1T2924.06,344V628.26q0,65.47,29.28,100.79t84.43,35.32q55.11,0,84.42-35.32t29.29-100.79V344q0-35.33,21.11-56.43t56.42-21.1q35.31,0,56.86,21.1T3307.4,344V622.23q0,128.37-69.34,196t-200.29,67.62Q2906,885.83,2837.48,818.64Z" fill="#eb358a"/><path d="M3514.58,870.76q-59-15.06-96.91-41.78-14.67-11.19-21.11-23.26t-6.46-31q0-25.85,15.51-44.8T3441.79,711a67.88,67.88,0,0,1,21.53,3.44q10.33,3.45,25.85,12.93,35.31,19.81,70.2,28.42t78.83,8.62q50.82,0,77.1-15.08t26.27-44.36q0-19.81-24.55-34t-93.47-28q-85.28-18.09-133.52-43.07t-67.63-59q-19.38-34-19.38-82.27,0-55.12,32.74-99.93t90-70.21Q3583.05,263,3654.57,263q62.86,0,112,13.78a281.75,281.75,0,0,1,89.59,43.08q15.49,11.2,22,23.69t6.46,30.58q0,25.85-15.07,44.79t-35.75,19a67.59,67.59,0,0,1-20.68-3q-9.48-3-26.7-13.35-4.32-2.58-24.55-13.35t-47.38-17.23a254.44,254.44,0,0,0-59-6.46q-43.93,0-70.64,16.79t-26.71,44.37q0,16.38,9.48,26.7t35.32,20.25q25.85,9.92,76.67,20.24,82.69,18.09,130.08,43.51t67.19,59q19.82,33.58,19.82,79.25,0,56.85-31.88,100.36t-89.16,67.19q-57.3,23.72-133.09,23.69Q3573.57,885.83,3514.58,870.76Z" fill="#eb358a"/><path d="M4523.33,287.55q21.1,21.12,21.11,56.43V804.86q0,35.32-21.11,56.85t-56.42,21.54q-35.34,0-56.43-21.11t-21.1-57.28V632.56h-248.1v172.3q0,35.32-21.11,56.85t-56.42,21.54q-35.34,0-56.43-21.11t-21.11-57.28V344q0-35.33,21.11-56.43t56.43-21.1q35.31,0,56.42,21.1T4141.28,344V506.79h248.1V344q0-35.33,21.1-56.43t56.43-21.1Q4502.22,266.45,4523.33,287.55Z" fill="#eb358a"/><path d="M4673.64,859.13q-18.95-18.95-19-54.27V344q0-35.33,19-54.27t54.28-19H5026q37,0,56,15.51t19,44.8q0,62-75,62H4808.89V508.52h199.86q75,0,74.95,61.16,0,29.3-18.95,44.79t-56,15.51H4808.89V755.75H5026q74.94,0,75,62,0,29.29-19,44.79t-56,15.51H4727.92Q4692.58,878.08,4673.64,859.13Z" fill="#eb358a"/><path d="M5187.92,859.13q-19-18.95-18.95-54.27V344q0-35.33,18.95-54.27t54.27-19h298.07q37,0,56,15.51t18.95,44.8q0,62-74.94,62H5323.17V508.52H5523q74.94,0,74.94,61.16,0,29.3-18.95,44.79T5523,630H5323.17V755.75h217.09q74.94,0,74.94,62,0,29.29-18.95,44.79t-56,15.51H5242.19Q5206.87,878.08,5187.92,859.13Z" fill="#eb358a"/><path d="M413.5,415.5V920H830a90,90,0,0,0,90-90V415.5Zm401.92,402a44.36,44.36,0,0,1-31.47,13H739.16v-.06l-116.38-.17a44.5,44.5,0,0,1,.06-89h.07l53.46.08-152-152.05a44.5,44.5,0,0,1,62.93-62.93L739.38,678.49l.07-53.66A44.5,44.5,0,0,1,784,580.39H784A44.5,44.5,0,0,1,828.45,625l-.22,156.64A44.42,44.42,0,0,1,815.42,817.47Z" fill="#484848"/></svg>
+                        <h1>Precisely compress, resize, and convert images.</h1>
+                        <p>Unlike other tools, Crushee offers finer control over how your images are compressed. Drag-and-drop images to quickly shave bytes and pixels off of your images.</p>
+                        <div class="download-info">
+                            <div class="buttons">
+                                <a href="https://github.com/xanderfrangos/crushee/releases/download/v1.0.0/Crushee-1.0.0-win-setup.zip" class="windows"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.434 21.5"><path d="M0,3.044,8.759,1.851l0,8.449-8.755.05Zm8.755,8.23.007,8.456-8.755-1.2V11.217l8.749.057ZM9.817,1.7,21.431,0V10.193l-11.614.092V1.7Zm11.617,9.658,0,10.147L9.817,19.861,9.8,11.334Z"/></svg></span><span>Windows 10</span></a>
+                                <a href="https://github.com/xanderfrangos/crushee/releases/download/v1.0.0/Crushee-1.0.0-mac.zip" class="mac"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.364 21.5"><path d="M12.172,3.49A4.735,4.735,0,0,0,13.212,0,5.048,5.048,0,0,0,9.945,1.768a4.379,4.379,0,0,0-1.069,3.4,4.261,4.261,0,0,0,3.3-1.683Zm6.192,12.284a15.734,15.734,0,0,1-1.389,2.607c-.9,1.382-2.171,3.1-3.747,3.115-1.4.015-1.759-.916-3.658-.9s-2.295.923-3.7.909C4.3,21.486,3.1,19.934,2.2,18.552-.325,14.691-.59,10.159.965,7.748A5.579,5.579,0,0,1,5.453,5.035c1.668,0,2.717.92,4.1.92,1.339,0,2.154-.923,4.084-.923a5.44,5.44,0,0,1,4.107,2.181A4.737,4.737,0,0,0,18.364,15.774Z"/></svg></span><span>MacOS</span></a>
+                            </div>
+                            <p>v1.0.0 <span>&middot;</span> <a href="https://github.com/xanderfrangos/crushee/releases">View all releases</a> <span>&middot;</span> Source code at <a href="https://github.com/xanderfrangos/crushee">GitHub</a></p>
+                        </div>
+                    </div>
+                    <div class="screenshot">
+                        <img src="assets/img/screenshot-1.png" width="810" height="579" alt="Crushee screenshot" />
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="left">Crushee © 2019 Alexander "Xander" Frangos <span>&middot;</span> <a target="_blank" href="https://xanderfrangos.com/">Visit author's site</a></div>
+                <div class="right">gh-pages-960db0f</div>
+            </div>
+        </main>
+        <!-- <script src="js/main.merged.min.js"></script> -->
     </body>
 </html>

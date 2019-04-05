@@ -9,16 +9,243 @@ clear, .clear {
 
 html, body {
     font-family: "Open Sans Web", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    color: #333;
+    font-size: 15px;
+    color: #515151;
     line-height: 1;
-    background: #f9f9f9;
+    background: #ffffff;
     
     @include appnav {
         font-size: 15px;
     }
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     @extend clear;
+}
+
+img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+h1 {
+    color: #161616;
+    font-size: 20px;
+    line-height: 1.1;
+}
+
+a {
+    color: inherit;
+    &:hover {
+        color: #333;
+    }
+    &:active {
+        color: #333;
+    }
+}
+
+main {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    svg {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 42.7%;
+        height: 100%;
+        
+        @include tablet {
+            top: 200px;
+            left: 0;
+            right: auto;
+            height: 100vw;
+            width: 200px;
+            transform-origin: 0% 0;
+            transform: rotate(-90deg);
+        }
+    }
+}
+
+.foreground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+    @include tablet {
+        display: block;
+        position: relative;
+        height: auto;
+    }
+    
+    .inner {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 1320px; 
+        padding-left: 20px;
+        box-sizing: content-box;
+        justify-content: space-between;
+        
+        @include tablet {
+            max-width: 400px;
+            display: block;
+            box-sizing: border-box;
+            margin: auto;
+            padding: 12px;
+        }
+    }
+    
+    .text {
+        width: 39%;
+        padding-right: 35px;
+        
+        @include tablet {
+            width: 100%;
+            padding: 0;
+        }
+        
+        .logo {
+            width: 336px;
+            height: 89px;
+            padding-bottom: 20px;
+            display: block;
+            
+            @include tablet {
+                margin: 15px auto 0;
+                width: 210px;
+                height: auto;
+            }
+        }
+        p {
+            line-height: 20px;
+        }
+        .buttons {
+            font-weight: bold;
+            a {
+                background: #EB358A;
+                border-radius: 100px;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+                color: white;
+                padding: 10px;
+                width: 190px;
+                display: inline-block;
+                text-align: center;
+                transition: background 0.1s;
+                @include tablet {
+                    width: 100%;
+                }
+                
+                &:hover {
+                    background: #484848;
+                }
+                &:active {
+                    background: #333;
+                }
+                
+                span {
+                    display: inline-block;
+                    vertical-align: middle;
+                    line-height: 1;
+                    & + span {
+                        padding-left: 10px;
+                    }
+                }
+                svg {
+                    width: 22px;
+                    height: 21px;
+                    fill: white;
+                }
+                
+                & + a {
+                    margin-left: 10px;
+                    @include tablet {
+                        margin: 10px 0 0 0;
+                    }
+                }
+            }
+        }
+    }
+    .download-info {
+        padding-top: 20px;
+        p {
+            width: 390px;
+            text-align: center;
+            font-size: 13px;
+            color: #707070;
+        }
+    }
+    .screenshot {
+        width: 61%;
+        margin-left: auto;
+        
+        @include tablet {
+            display: none;
+        }
+    }
+    .mob-screenshot {
+        display: none;
+        
+        @include tablet {
+            display: block;
+        }
+    }
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    
+    @include tablet {
+        position: relative;
+        display: block;
+        text-align: center;
+        padding: 20px 0;
+    }
+    
+    
+    & > div {
+        padding: 14px;
+        font-size: 12px;
+        @include tablet {
+            padding: 5px;
+        }
+    }
+    .left {
+        
+    }
+    .right {
+        color: #F9B1D3;
+        @include tablet {
+            color: inherit;
+        }
+    }
 }
