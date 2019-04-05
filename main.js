@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, systemPreferences } = require('electron')
 const path = require("path")
 const fs = require("fs")
+const { net } = require('electron')
 const { fork, spawn } = require("child_process")
 let mainWindow
 
@@ -47,7 +48,7 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', tryStart)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -65,7 +66,7 @@ app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow()
+    tryStart()
   }
 })
 
@@ -79,4 +80,25 @@ if (process.platform === 'darwin') {
   server = spawn(path.resolve(crusheeDir + "\/node"), ["index.js"], {cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false})
 } else {
   server = spawn(path.resolve(crusheeDir + "\\node.exe"), ["index.js"], {cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false})
+}
+
+// Make sure Express server is available before loading window
+let tryingConnection = false
+function tryStart() {
+  const connect = setInterval(() => {
+    if(!tryingConnection) {
+      tryingConnection = true
+      let request = net.request('http://localhost:1603/health')
+      request.on('response', (response) => {
+        response.on('data', (data) => {
+          if(data == "OK") {
+            createWindow()
+            clearInterval(connect)
+          }
+          tryingConnection = false 
+        })
+      })
+      request.end()
+    }
+  }, 100)
 }
