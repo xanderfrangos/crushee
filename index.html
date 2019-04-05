@@ -19,9 +19,16 @@ layout: compress
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link rel="shortcut icon" href="assets/img/icon.ico">
         <script>
-        var git = {
-            'latest_release': {{ site.github.latest_release | jsonify }}
-        }
+            var git = {
+                'latest_release': {{ site.github.latest_release | jsonify }}
+            }
+        </script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137776048-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-137776048-1');
         </script>
     </head>
     <body>
