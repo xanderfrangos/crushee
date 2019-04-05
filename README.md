@@ -1,4 +1,7 @@
-# Crushee for Desktop
+<p align="center">
+  <img src="https://crushee.app/assets/img/icon.svg">
+</p>
+<h1 align="center">Crushee for Desktop</h1>
 
 *An image squisher*
 
