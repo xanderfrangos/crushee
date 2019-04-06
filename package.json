@@ -1,7 +1,7 @@
 {
   "name": "crushee-desktop",
-  "version": "1.0.1",
-  "description": "Desktop App for Crushee",
+  "version": "1.0.2",
+  "description": "Crushee",
   "main": "main.js",
   "dependencies": {
     "uuid": "^3.3.2"

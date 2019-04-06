@@ -15,6 +15,7 @@ function createWindow() {
     webPreferences: {
       navigateOnDragDrop: false,
       webSecurity: false,
+      scrollBounce: true,
       experimentalFeatures: true,
       preload: path.resolve(__dirname, 'preload.js')
     },
@@ -25,7 +26,7 @@ function createWindow() {
   // and load the index.html of the app.
   
   setTimeout(() => {
-    mainWindow.loadURL('http://localhost:1603/')
+    mainWindow.loadURL('http://localhost:1603/', {"extraHeaders" : "pragma: no-cache\n"})
   }, 400)
 
   mainWindow.setMenuBarVisibility(false)
