@@ -10,7 +10,9 @@ if(!fs.existsSync(tmpFolder)) {
     fs.mkdirSync(tmpFolder)
 }
 
-const downloadFile = (url, dest, cb) => {
+const downloadFile = (url, dest, filename, cb) => {
+
+    let outPath = path.resolve(path.dirname(dest), filename);
 
     let uuid = uuidv1()
     let tmpFile = tmpFolder + uuid + ".dat"
@@ -34,11 +36,11 @@ const downloadFile = (url, dest, cb) => {
     // close() is async, call cb after close completes
     file.on('finish', () => {
         file.close()
-        if(fs.existsSync(dest)) {
-            fs.unlinkSync(dest)
+        if(fs.existsSync(outPath)) {
+            fs.unlinkSync(outPath)
         }
-        fs.copyFileSync(tmpFile, dest)
-        cb("Finished downloading to: " + dest)
+        fs.copyFileSync(tmpFile, outPath)
+        cb("Finished downloading to: " + outPath)
     });
 
     // check for request errors
