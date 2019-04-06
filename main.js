@@ -66,7 +66,11 @@ app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    tryStart()
+    try {
+      tryStart()
+    } catch(e) {
+      // Not sure what to do. It didn't work.
+    }
   }
 })
 
@@ -88,17 +92,22 @@ function tryStart() {
   const connect = setInterval(() => {
     if(!tryingConnection) {
       tryingConnection = true
-      let request = net.request('http://localhost:1603/health')
-      request.on('response', (response) => {
-        response.on('data', (data) => {
-          if(data == "OK") {
-            createWindow()
-            clearInterval(connect)
-          }
-          tryingConnection = false 
+      try {
+        let request = net.request('http://localhost:1603/health')
+        request.on('response', (response) => {
+          response.on('data', (data) => {
+            if(data == "OK") {
+              createWindow()
+              clearInterval(connect)
+            }
+            tryingConnection = false 
+          })
         })
-      })
-      request.end()
+        request.end()
+      } catch(e) {
+        tryingConnection = false
+      }
+      
     }
   }, 100)
 }
