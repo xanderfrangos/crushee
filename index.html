@@ -18,21 +18,14 @@ layout: compress
         <meta property="og:image:height" content="1200"/>
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link rel="shortcut icon" href="assets/img/icon.ico">
+    </head>
+    <body>
+        <script>document.documentElement.className="js";</script>
         <script>
             var git = {
                 'latest_release': {{ site.github.latest_release.assets | jsonify }}
             }
         </script>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137776048-1"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'UA-137776048-1');
-        </script>
-    </head>
-    <body>
-        <script>document.documentElement.className="js";</script>
         <main>
             <div class="background">
                 <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 813 1080" width="100%" height="100%" preserveAspectRatio="none"><defs><linearGradient id="a" x1="406.61" y1="1126.11" x2="406.61" y2="-26" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#eb358a"/><stop offset="1" stop-color="#c22f73"/></linearGradient></defs><polygon points="813 -26 813 0 380.56 0 -0.17 1080.09 813 1080.09 813 1126.09 813.38 1126.11 813.38 -26 813 -26" fill="url(#a)"/></svg>
@@ -84,6 +77,13 @@ layout: compress
             };
             document.getElementById("win-dl").href = downloads.win;
             document.getElementById("mac-dl").href = downloads.mac;
+        </script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137776048-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-137776048-1');
         </script>
     </body>
 </html>
