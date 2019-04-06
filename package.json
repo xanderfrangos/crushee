@@ -26,12 +26,12 @@
     ],
     "appId": "com.xanderfrangos.crushee",
     "mac": {
-      "icon": "assets/icon.icns",
+      "icon": "assets/icon-shadow.icns",
       "category": "",
       "darkModeSupport": true
     },
     "win": {
-      "icon": "assets/icon.ico"
+      "icon": "assets/icon-shadow.ico"
     },
     "files": [
       "./crushee-server/*",

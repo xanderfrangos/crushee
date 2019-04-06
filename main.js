@@ -10,7 +10,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 700,
-    icon: __dirname + '/assets/icon.ico', 
+    icon: __dirname + '/assets/icon-shadow.ico', 
     title: 'Crushee',
     webPreferences: {
       navigateOnDragDrop: false,
