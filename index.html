@@ -69,19 +69,19 @@ layout: compress
             var downloads = {
                 win: '{{ site.github.latest_release.html_url }}',
                 mac: '{{ site.github.latest_release.html_url }}'
-            }
+            };
             if (typeof String.prototype.endsWith !== 'function') {
                 String.prototype.endsWith = function(suffix) {
                     return this.indexOf(suffix, this.length - suffix.length) !== -1;
                 };
-            }
+            };
             for(var i = 0; i < git.latest_release.length; i++) {
                 var url = git.latest_release[i].browser_download_url;
                 if(git.latest_release[i].name.endsWith(".dmg")) downloads.mac = url;
                 else if(git.latest_release[i].name.endsWith("-mac.zip")) downloads.mac = url;
                 else if(git.latest_release[i].name.endsWith(".exe")) downloads.win = url;
                 else if(git.latest_release[i].name.endsWith("-win-setup.zip")) downloads.win = url;
-            }
+            };
             document.getElementById("win-dl").href = downloads.win;
             document.getElementById("mac-dl").href = downloads.mac;
         </script>
