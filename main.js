@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, systemPreferences } = require('electron')
+const { app, BrowserWindow, ipcMain, systemPreferences, Menu, MenuItem, Notification } = require('electron')
 const path = require("path")
 const fs = require("fs")
 const { net } = require('electron')
@@ -27,9 +27,12 @@ function createWindow() {
   
   setTimeout(() => {
     mainWindow.loadURL('http://localhost:1603/', {"extraHeaders" : "pragma: no-cache\n"})
+    mainWindow.webContents.openDevTools()
   }, 400)
 
-  mainWindow.setMenuBarVisibility(false)
+  //mainWindow.setMenuBarVisibility(false)
+  const menu = Menu.buildFromTemplate(menuTemplate);
+    Menu.setApplicationMenu(menu);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -112,3 +115,77 @@ function tryStart() {
     }
   }, 100)
 }
+
+
+const menuTemplate = [
+  {
+      label: 'File',
+      submenu: [
+        {
+          label: 'Add File(s)',
+          accelerator: 'CmdOrCtrl+A',
+          click: () => {
+            mainWindow.webContents.send('shortcut', {
+              shortcut: "add-files"
+            })
+              console.log('About Clicked');
+          }
+      },{
+        label: 'Save All Files',
+        accelerator: 'CmdOrCtrl+S',
+        click: () => {
+            console.log('About Clicked');
+        }
+    }, {
+              type: 'separator'
+          }, {
+              label: 'Quit',
+              click: () => {
+                  app.quit();
+              }
+          }
+      ]
+  },
+  {
+    label: 'Edit',
+    submenu: [
+      {
+        label: 'Recrush All Files',
+        accelerator: 'CmdOrCtrl+R',
+        click: () => {
+            console.log('About Clicked');
+        }
+    },
+    {
+      label: 'Clear All Files',
+      accelerator: 'CmdOrCtrl+C',
+      click: () => {
+          console.log('About Clicked');
+      }
+  }
+    ]
+},
+{
+  label: 'Help',
+  submenu: [
+      {
+          label: 'About Crushee',
+          click: () => {
+              console.log('About Clicked');
+          }
+      },
+      {
+        label: 'Reset App',
+        click: () => {
+            console.log('About Clicked');
+        }
+    },
+      {
+          label: 'Check For Updates',
+          click: () => {
+              app.quit();
+          }
+      }
+  ]
+}
+];

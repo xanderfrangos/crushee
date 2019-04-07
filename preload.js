@@ -1,8 +1,10 @@
-const { ipcRenderer: ipc, remote } = require('electron');
+const { ipcRenderer: ipc, remote, Menu, MenuItem, BrowserWindow, ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const uuidv1 = require('uuid/v1');
+
+console.log("preload.js running...")
 
 // Temporary downloads folder
 let tmpFolder = path.resolve(remote.app.getPath("userData"), "dl-tmp")
@@ -74,5 +76,4 @@ ipc.on('markAllComplete', () => {
     }
   }
 
-  console.log("PRELOAD SCRIPT")
-
+  ipcRenderer.on('shortcut' , function(event , data){ window.openFilePicker() });
