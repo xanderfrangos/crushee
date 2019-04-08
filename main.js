@@ -123,7 +123,7 @@ const menuTemplate = [
       submenu: [
         {
           label: 'Add File(s)',
-          accelerator: 'CmdOrCtrl+A',
+          accelerator: 'Shift+CmdOrCtrl+A',
           click: () => {
             mainWindow.webContents.send('shortcut', {
               shortcut: "add-files"
