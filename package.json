@@ -4,6 +4,7 @@
   "description": "Crushee",
   "main": "main.js",
   "dependencies": {
+    "request": "^2.88.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
