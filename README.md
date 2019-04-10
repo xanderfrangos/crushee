@@ -27,7 +27,7 @@ Crushee was primarily built with [Electron](https://electronjs.org/), [Node.js](
 - If you're using the git CLI, run *git submodule update --init* to set up the crushee-server submodule.
 - Run *npm install* in both the root folder and *crushee-server*.
 - If you're missing any image libraries (depending on your OS), get those and re-run *npm install* as needed.
-- Include the Node binary for your OS to the crushee-server directory.
+- Include the Node binary for your OS to the *crushee-server* directory.
 - Run *npm start*.
 
 
