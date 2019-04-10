@@ -76,4 +76,15 @@ function setDockBadge(count) {
     }
 }
 
-  ipcRenderer.on('shortcut' , function(event , data){ window.openFilePicker() });
+  ipcRenderer.on('shortcut' , function(event , data){ 
+      
+    switch(data.shortcut) {
+        case "recrush":
+        window.recrushAll();
+        break;
+        case "add-files":
+        window.openFilePicker();
+        break;
+    }
+
+});

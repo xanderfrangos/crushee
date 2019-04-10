@@ -159,7 +159,6 @@ const menuTemplate = [
             mainWindow.webContents.send('shortcut', {
               shortcut: "add-files"
             })
-              console.log('About Clicked');
           }
       },{
         label: 'Save All Files',
@@ -182,9 +181,11 @@ const menuTemplate = [
     submenu: [
       {
         label: 'Recrush All Files',
-        accelerator: 'CmdOrCtrl+R',
+        accelerator: 'Shift+CmdOrCtrl+R',
         click: () => {
-            console.log('About Clicked');
+          mainWindow.webContents.send('shortcut', {
+            shortcut: "recrush"
+          })
         }
     },
     {
