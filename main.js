@@ -4,14 +4,40 @@ const fs = require("fs")
 const { net } = require('electron')
 const { fork, spawn } = require("child_process")
 let mainWindow
+let splashWindow
+
+function createSplash() {
+  splashWindow = new BrowserWindow({
+    width: 320,
+    height: 320,
+    icon: __dirname + '/assets/icon-shadow.ico',
+    title: 'Crushee',
+    show: false,
+    frame: false,
+    transparent: true,
+    webPreferences: {
+      navigateOnDragDrop: false,
+      webSecurity: false,
+      scrollBounce: true,
+      experimentalFeatures: true,
+    },
+    titleBarStyle: "default"
+  })
+  splashWindow.setIgnoreMouseEvents(true)
+  splashWindow.loadURL(__dirname + '/assets/splash.html', { "extraHeaders": "pragma: no-cache\n" })
+  splashWindow.webContents.on('did-finish-load', function () {
+    splashWindow.show();
+  });
+}
 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 700,
-    icon: __dirname + '/assets/icon-shadow.ico', 
+    icon: __dirname + '/assets/icon-shadow.ico',
     title: 'Crushee',
+    show: false,
     webPreferences: {
       navigateOnDragDrop: false,
       webSecurity: false,
@@ -22,12 +48,19 @@ function createWindow() {
     titleBarStyle: "default"
   })
 
+  mainWindow.webContents.on('did-finish-load', function () {
+    splashWindow.hide();
+    mainWindow.show();
+  });
 
   // and load the index.html of the app.
-  
+
   setTimeout(() => {
-    mainWindow.loadURL('http://localhost:1603/', {"extraHeaders" : "pragma: no-cache\n"})
-  }, 400)
+    mainWindow.loadURL('http://localhost:1603/', { "extraHeaders": "pragma: no-cache\n" })
+  }, 600)
+
+
+
 
   mainWindow.setMenuBarVisibility(false)
 
@@ -69,7 +102,7 @@ app.on('activate', function () {
   if (mainWindow === null) {
     try {
       tryStart()
-    } catch(e) {
+    } catch (e) {
       // Not sure what to do. It didn't work.
     }
   }
@@ -77,38 +110,41 @@ app.on('activate', function () {
 
 
 let crusheeDir = path.resolve(__dirname, 'crushee-server')
-if(!fs.existsSync(crusheeDir)) {
+if (!fs.existsSync(crusheeDir)) {
   crusheeDir = path.resolve(__dirname, '../crushee-server')
 }
 let server
 if (process.platform === 'darwin') {
-  server = spawn(path.resolve(crusheeDir + "\/node"), ["index.js"], {cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false})
+  server = spawn(path.resolve(crusheeDir + "\/node"), ["index.js"], { cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false })
 } else {
-  server = spawn(path.resolve(crusheeDir + "\\node.exe"), ["index.js"], {cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false})
+  server = spawn(path.resolve(crusheeDir + "\\node.exe"), ["index.js"], { cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false })
 }
 
 // Make sure Express server is available before loading window
 let tryingConnection = false
 function tryStart() {
+  createSplash()
   const connect = setInterval(() => {
-    if(!tryingConnection) {
+    if (!tryingConnection) {
       tryingConnection = true
       try {
         let request = net.request('http://localhost:1603/health')
         request.on('response', (response) => {
           response.on('data', (data) => {
-            if(data == "OK") {
+            if (data == "OK") {
               createWindow()
               clearInterval(connect)
             }
-            tryingConnection = false 
+            tryingConnection = false
           })
         })
         request.end()
-      } catch(e) {
+      } catch (e) {
         tryingConnection = false
       }
-      
+
     }
   }, 100)
 }
+
+app.on("error", () => { app.quit() })

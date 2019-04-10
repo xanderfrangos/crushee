@@ -6,7 +6,7 @@ const uuidv1 = require('uuid/v1');
 
 // Temporary downloads folder
 let tmpFolder = path.resolve(remote.app.getPath("userData"), "dl-tmp")
-if(!fs.existsSync(tmpFolder)) {
+if (!fs.existsSync(tmpFolder)) {
     fs.mkdirSync(tmpFolder)
 }
 
@@ -16,7 +16,7 @@ const downloadFile = (url, dest, filename, cb) => {
 
     let uuid = uuidv1()
     let tmpFile = tmpFolder + uuid + ".dat"
-    while(fs.existsSync(tmpFile)) {
+    while (fs.existsSync(tmpFile)) {
         uuid = uuidv1()
         tmpFile = tmpFolder + uuid + ".dat"
     }
@@ -36,7 +36,7 @@ const downloadFile = (url, dest, filename, cb) => {
     // close() is async, call cb after close completes
     file.on('finish', () => {
         file.close()
-        if(fs.existsSync(outPath)) {
+        if (fs.existsSync(outPath)) {
             fs.unlinkSync(outPath)
         }
         fs.copyFileSync(tmpFile, outPath)
@@ -64,15 +64,15 @@ window.electron = {
 ipc.on('markAllComplete', () => {
     // the todo app defines this function
     window.electron.markAllComplete();
-  });
+});
 
 
-  function setDockBadge(count) {
-    if(process.platform === 'darwin') {
-      //Coerce count into a string. Passing an empty string makes the badge disappear.
-      remote.app.dock.setBadge('' + (count || ''));
+function setDockBadge(count) {
+    if (process.platform === 'darwin') {
+        //Coerce count into a string. Passing an empty string makes the badge disappear.
+        remote.app.dock.setBadge('' + (count || ''));
     }
-  }
+}
 
-  console.log("PRELOAD SCRIPT")
+console.log("PRELOAD SCRIPT")
 
