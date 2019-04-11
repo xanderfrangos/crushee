@@ -60,7 +60,7 @@ function createWindow() {
     mainWindow.webContents.openDevTools()
   }, 600)
 
-  //mainWindow.setMenuBarVisibility(false)
+  mainWindow.setMenuBarVisibility(false)
   const menu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(menu);
 
