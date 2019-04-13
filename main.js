@@ -1,8 +1,7 @@
 const { app, BrowserWindow, ipcMain, systemPreferences } = require('electron')
 const path = require("path")
 const fs = require("fs")
-const { net } = require('electron')
-const { fork, spawn } = require("child_process")
+const { spawn } = require("child_process")
 let mainWindow
 let splashWindow
 
@@ -30,6 +29,10 @@ function createSplash() {
   });
 }
 
+function loadCrusheePage() {
+  mainWindow.loadURL('http://127.0.0.1:1603/', { "extraHeaders": "pragma: no-cache\n" })
+}
+
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -55,9 +58,7 @@ function createWindow() {
 
   // and load the index.html of the app.
 
-  setTimeout(() => {
-    mainWindow.loadURL('http://localhost:1603/', { "extraHeaders": "pragma: no-cache\n" })
-  }, 600)
+  setTimeout(loadCrusheePage, 600)
 
 
 
@@ -104,6 +105,8 @@ app.on('activate', function () {
       tryStart()
     } catch (e) {
       // Not sure what to do. It didn't work.
+      server.kill()
+      app.quit()
     }
   }
 })
@@ -120,31 +123,18 @@ if (process.platform === 'darwin') {
   server = spawn(path.resolve(crusheeDir + "\\node.exe"), ["index.js"], { cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false })
 }
 
-// Make sure Express server is available before loading window
-let tryingConnection = false
+
+// Start up app
 function tryStart() {
   createSplash()
-  const connect = setInterval(() => {
-    if (!tryingConnection) {
-      tryingConnection = true
-      try {
-        let request = net.request('http://localhost:1603/health')
-        request.on('response', (response) => {
-          response.on('data', (data) => {
-            if (data == "OK") {
-              createWindow()
-              clearInterval(connect)
-            }
-            tryingConnection = false
-          })
-        })
-        request.end()
-      } catch (e) {
-        tryingConnection = false
-      }
-
+  // Wait for crushee-server to be ready
+  server.on('message', function(data) {
+    if(data.type == "ready") {
+      createWindow()
+      tryingConnection = false
     }
-  }, 100)
+  });
 }
 
-app.on("error", () => { app.quit() })
+// Kill everything if this process fails
+app.on("error", () => { server.kill(); app.quit() })
