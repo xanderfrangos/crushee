@@ -11,7 +11,7 @@ function createSplash() {
     height: 320,
     icon: __dirname + '/assets/icon-shadow.ico',
     title: 'Crushee',
-    show: false,
+    show: true,
     frame: false,
     transparent: true,
     webPreferences: {
