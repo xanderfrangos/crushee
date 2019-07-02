@@ -57,10 +57,10 @@ function createWindow() {
 
   setTimeout(() => {
     mainWindow.loadURL('http://localhost:1603/', {"extraHeaders" : "pragma: no-cache\n"})
-    mainWindow.webContents.openDevTools()
   }, 600)
 
   mainWindow.setMenuBarVisibility(false)
+  mainWindow.setMenuBarVisibility(true)
   const menu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(menu);
 
@@ -181,7 +181,7 @@ const menuTemplate = [
     submenu: [
       {
         label: 'Recrush All Files',
-        accelerator: 'Shift+CmdOrCtrl+R',
+        accelerator: 'CmdOrCtrl+R',
         click: () => {
           mainWindow.webContents.send('shortcut', {
             shortcut: "recrush"
@@ -190,7 +190,7 @@ const menuTemplate = [
     },
     {
       label: 'Clear All Files',
-      accelerator: 'CmdOrCtrl+C',
+      accelerator: 'CmdOrCtrl+D',
       click: () => {
           console.log('About Clicked');
       }
@@ -206,10 +206,21 @@ const menuTemplate = [
               console.log('About Clicked');
           }
       },
+    {
+      label: 'Open Inspector Window',
+      accelerator: 'CmdOrCtrl+I',
+      click: () => {
+        console.log('Inspector Clicked');
+        mainWindow.webContents.openDevTools()
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "inspector"
+        })
+      }
+    },
       {
         label: 'Reset App',
         click: () => {
-            console.log('About Clicked');
+            console.log('Reset Clicked');
         }
     },
       {
