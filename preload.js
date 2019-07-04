@@ -42,7 +42,11 @@ const downloadFile = (url, dest, filename, cb) => {
             fs.unlinkSync(outPath)
         }
         fs.copyFileSync(tmpFile, outPath)
-        cb("Finished downloading to: " + outPath)
+        cb({
+            status: "done",
+            filename: filename,
+            path: outPath
+        })
     });
 
     // check for request errors
@@ -53,7 +57,11 @@ const downloadFile = (url, dest, filename, cb) => {
 
     file.on('error', (err) => { // Handle errors
         fs.unlink(tmpFolder); // Delete the file async. (But we don't check the result)
-        return cb(err.message);
+        return cb({
+            status: "error",
+            filename: filename,
+            error: err.message
+        })
     });
 };
 
