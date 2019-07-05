@@ -181,7 +181,10 @@ const menuTemplate = [
       label: 'Clear All Files',
       accelerator: 'CmdOrCtrl+D',
       click: () => {
-          console.log('About Clicked');
+          console.log('Clear Clicked');
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "clear-all"
+        })
       }
   }
     ]
@@ -210,6 +213,9 @@ const menuTemplate = [
         label: 'Reset App',
         click: () => {
             console.log('Reset Clicked');
+          mainWindow.webContents.send('shortcut', {
+            shortcut: "reset-app"
+          })
         }
     },
       {

@@ -4,7 +4,34 @@ const path = require('path');
 const request = require('request');
 const uuidv1 = require('uuid/v1');
 
+const { dialog } = require('electron').remote
+
+
 console.log("preload.js running...")
+
+
+
+function openDialog() {
+    dialog.showOpenDialog({
+        title: "Select image(s)",
+        filters: [
+            { name: 'Images', extensions: ['jpg', 'png', 'gif', 'svg'] },
+            { name: 'All Files', extensions: ['*'] }
+        ],
+        buttonLabel: '+ Add File(s)',
+        properties: [
+            'openFile',
+            'multiSelections'
+        ]
+    },
+        (files) => {
+            if(files == undefined)
+                return false;
+
+            console.log(files)
+            window.addFiles(files)
+        })
+}
 
 // Temporary downloads folder
 let tmpFolder = path.resolve(remote.app.getPath("userData"), "dl-tmp")
@@ -88,11 +115,21 @@ function setDockBadge(count) {
       
     switch(data.shortcut) {
         case "recrush":
-        window.recrushAll();
-        break;
+            window.recrushAll();
+            break;
         case "add-files":
-        window.openFilePicker();
-        break;
+            //window.openFilePicker();
+            openDialog();
+            break;
+        case "clear-all":
+            window.clearAllFiles()
+            break;
+        case "reset-app":
+            window.setStatusBar("Resetting app preferences", "working")
+            window.localStorage.clear()
+            window.localStorage.setItem("appReset", "true")
+            window.location.reload()
+            break;
     }
 
 });
