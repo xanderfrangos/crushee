@@ -192,12 +192,12 @@ const menuTemplate = [
 {
   label: 'Help',
   submenu: [
-      {
+      /*{
           label: 'About Crushee',
           click: () => {
               console.log('About Clicked');
           }
-      },
+      },*/
     {
       label: 'Open Inspector Window',
       accelerator: 'CmdOrCtrl+I',
@@ -218,12 +218,12 @@ const menuTemplate = [
           })
         }
     },
-      {
+      /*{
           label: 'Check For Updates',
           click: () => {
               app.quit();
           }
-      }
+      }*/
   ]
 }
 ];
