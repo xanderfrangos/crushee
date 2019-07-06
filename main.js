@@ -153,14 +153,17 @@ const menuTemplate = [
         label: 'Save All Files',
         accelerator: 'CmdOrCtrl+S',
         click: () => {
-            console.log('About Clicked');
+            console.log('Save All Clicked');
+          mainWindow.webContents.send('shortcut', {
+            shortcut: "save-all"
+          })
         }
     }, {
               type: 'separator'
           }, {
               label: 'Quit',
               click: () => {
-                  app.quit();
+                  server.kill(); app.quit();
               }
           }
       ]
@@ -181,12 +184,22 @@ const menuTemplate = [
       label: 'Clear All Files',
       accelerator: 'CmdOrCtrl+D',
       click: () => {
-          console.log('Clear Clicked');
         mainWindow.webContents.send('shortcut', {
           shortcut: "clear-all"
         })
       }
-  }
+      }, {
+        type: 'separator'
+      }, {
+        label: 'Remove Unoptimized Files (<0%)',
+        accelerator: 'CmdOrCtrl+L',
+        click: () => {
+          console.log('Remove Larger Clicked');
+          mainWindow.webContents.send('shortcut', {
+            shortcut: "remove-large-files"
+          })
+        }
+      }
     ]
 },
 {

@@ -124,11 +124,21 @@ function setDockBadge(count) {
         case "clear-all":
             window.clearAllFiles()
             break;
+        case "save-all":
+            window.$(".action--download-all").click()
+            break;
         case "reset-app":
             window.setStatusBar("Resetting app preferences", "working")
             window.localStorage.clear()
             window.localStorage.setItem("appReset", "true")
             window.location.reload()
+            break;
+        case "remove-large-files":
+            window.files.list.forEach(file => {
+                if(file.status == "done" && file.endSize > file.startSize) {
+                    window.deleteUUID(file.uuid)
+                }
+            });
             break;
     }
 
