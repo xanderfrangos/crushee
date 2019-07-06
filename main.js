@@ -5,6 +5,9 @@ const { spawn } = require("child_process")
 let mainWindow
 let splashWindow
 
+// App version
+const crusheeVersion = require('./package.json').version
+
 function createSplash() {
   splashWindow = new BrowserWindow({
     width: 320,
@@ -236,7 +239,13 @@ const menuTemplate = [
           click: () => {
               app.quit();
           }
-      }*/
+      },*/
+    {
+      label: `Crushee v${crusheeVersion}`,
+      click: () => {
+        console.log('Version Clicked');
+      }
+    }
   ]
 }
 ];
