@@ -149,7 +149,7 @@ function setDockBadge(count) {
 ipcRenderer.on('version', (event, curVersion) => {
 
     // Get version number from server
-    fetch("https://crushee.app/version.txt").then((response) => {
+    fetch(`https://crushee.app/version.txt?${Date.now()}`).then((response) => {
         response.text().then((version) => {
             
             // Make sure valid response and check if version numbers are different
@@ -165,5 +165,7 @@ ipcRenderer.on('version', (event, curVersion) => {
 
         })
         
+    }).catch(() => {
+        // No connection, we don't care
     })
 })
