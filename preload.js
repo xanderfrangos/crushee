@@ -143,3 +143,27 @@ function setDockBadge(count) {
     }
 
 });
+
+
+// Current version number recieved
+ipcRenderer.on('version', (event, curVersion) => {
+
+    // Get version number from server
+    fetch("https://crushee.app/version.txt").then((response) => {
+        response.text().then((version) => {
+            
+            // Make sure valid response and check if version numbers are different
+            if(version.substring(0, 1) == 'v' && version != curVersion) {
+
+                // Display "New version" message
+                window.$(".elem--status-bar--right .new-version").click(() => {
+                    require("electron").shell.openExternal("https://crushee.app/?app")
+                })
+                window.$(".elem--status-bar--right .new-version").show()
+                
+            }
+
+        })
+        
+    })
+})

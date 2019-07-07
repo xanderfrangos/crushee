@@ -39,6 +39,7 @@
       "./crushee-server/node_modules/",
       "./main.js",
       "./preload.js",
+      "./assets/*",
       "*"
     ],
     "extraResources": [

@@ -57,6 +57,9 @@ function createWindow() {
   mainWindow.webContents.on('did-finish-load', function () {
     splashWindow.hide();
     mainWindow.show();
+
+    mainWindow.webContents.send('version', `v${crusheeVersion}`)
+
   });
 
   // and load the index.html of the app.
