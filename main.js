@@ -46,9 +46,9 @@ function createWindow() {
     show: false,
     webPreferences: {
       navigateOnDragDrop: false,
-      webSecurity: false,
+      //webSecurity: false,
       scrollBounce: true,
-      experimentalFeatures: true,
+      //experimentalFeatures: true,
       preload: path.resolve(__dirname, 'preload.js')
     },
     titleBarStyle: "default"
