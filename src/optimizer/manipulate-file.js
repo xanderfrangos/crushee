@@ -201,7 +201,6 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
         if(parseInt(settings.jpg.subsampling) <= 1) {
             jpgPlugin = imageminJPEGRecompress({
                 quality: "high",
-                accurate: true,
                 method: "ssim",
                 min: (parseInt(settings.jpg.quality) * 0.8),
                 subsample: "disable"
@@ -209,7 +208,6 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
         } else {
             jpgPlugin = imageminJPEGRecompress({
                 quality: "high",
-                accurate: true,
                 method: "smallfry",
                 min: (parseInt(settings.jpg.quality) * 0.8)
             })
