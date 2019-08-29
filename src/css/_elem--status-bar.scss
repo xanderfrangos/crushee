@@ -1,0 +1,64 @@
+.elem--status-bar {
+    height: 24px;
+    background: #484848;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 19;
+    width: 100%;
+    font-size: 11.5px;
+    padding: 5px 6px;
+    line-height: 1;
+    vertical-align: middle;
+    box-sizing: border-box;
+    font-family: "Open Sans", sans-serif;
+    font-weight: normal;
+    border-top: 1px solid #565656;
+    display: flex;
+    justify-content: space-between;
+    will-change: transform;
+
+    svg {
+        fill: #4fdc57;
+        fill: white;
+        height: 17px;
+        width: auto;
+        padding-right: 5px;
+    }
+
+    .text {
+        will-change: transform;
+    }
+
+    .icon {
+        display: none;
+        &.show {
+            display: block;
+        }
+        &.done {
+            fill: #4fdc57;
+        }
+        &.working {
+            animation: elem--status-bar--working 1.0s infinite;
+            transform-origin: 38.5% 50%;
+            @keyframes elem--status-bar--working {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        }
+        &.error {
+            fill: #ff4848;
+        }
+    }
+
+}
+
+.elem--status-bar--left {
+    display: flex;
+    align-items: center;
+}
+
+.elem--status-bar--right {
+    
+}

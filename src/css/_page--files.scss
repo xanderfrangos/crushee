@@ -1,0 +1,130 @@
+.page--files {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    height: calc(100% - 70px);
+    z-index: 2;
+    //box-shadow: 0 -15px 35px rgba(33,33,33,0.5);
+    box-sizing: border-box;
+    //padding-bottom: 100px;
+
+    will-change: transform;
+
+    //transition: transform 0.9s, box-shadow 0.9s;
+    transform: translateY(130%);
+
+    &.show {
+        transform: translateY(0%);
+        //box-shadow: 0 20px 35px rgba(33,33,33,0.5);
+
+        & ~ .floating-buttons {
+            display: block;
+        }
+    }
+
+    @include mobile {
+        @include elem--file--mode-small();
+    }
+    
+}
+
+.page--files--after-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-top: 1px solid var(--base-bg-alt);
+    position: sticky;
+    bottom: 0;
+    background: var(--base-bg);
+    box-shadow: 0 -3px 9px -5px rgba(0, 0, 0, 0.15);
+
+    & > * {
+        font-size: 13px;
+        font-weight: 700;
+        padding: 20px;
+        @include appnav {
+            padding: 15px;
+        }
+    }
+
+    .totals {
+        span {
+            color: var(--color-primary);
+            font-weight: 800;
+        }
+    }
+
+    .add-file {
+        display: block;
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+            opacity: 0.65;
+        }
+    }
+
+}
+
+
+
+.floating-buttons {
+    @extend shadow;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 8px;
+    box-sizing: border-box;
+    display: none;
+    z-index: 4;
+    background: var(--base-bg-alt);
+
+    @include mobile {
+        padding: 0;
+
+        .button {
+            border-radius: 0;
+            margin: 0;
+            box-shadow: none;
+            padding: 10px 16px;
+            flex-wrap: wrap;
+    
+            &.big {
+                font-size: 18px;
+            }
+    
+            .icon {
+                width: 100%;
+                margin-top: 7px;
+            }
+            .text {
+                font-size: 10px;
+                margin-top: 11px;
+                display: block;
+            }
+            span {
+                & + span {
+                    margin: 0;
+                }
+            }
+        }
+
+    }
+
+    & > .inner {
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
+        max-width: 700px;
+        margin: auto;
+    }
+
+    
+
+
+
+
+}

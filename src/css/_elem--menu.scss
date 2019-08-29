@@ -1,0 +1,87 @@
+.elem--menu {
+    position: fixed;
+    z-index: 25;
+    overflow: hidden;
+    padding: 5px;
+    display: none;
+    &.active {
+        display: block;
+        & ~ .bg {
+            display: block;
+        }
+    }
+}
+
+.elem--menu--inner {
+    @extend shadow;
+    width: 200px;
+    border-radius: 5px;
+    overflow: hidden;
+    transform-origin: 100% 0%;
+    animation: menuIn 0.05s;
+    @keyframes menuIn {
+        0% { transform: scale(0.9); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    .item {
+        font-size: 16px;
+        padding: 14px 12px;
+        line-height: 1;
+        font-weight: bold;
+        background: white;
+        color: black;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+
+        @include appnav {
+            padding: 20px 12px;
+        }
+
+        svg {
+            fill: black;
+            margin: -5px 0;
+            display: block
+        }
+
+        span {
+            display: block;
+            & + span {
+                margin-left: 12px;
+            }
+        }
+
+        & + .item {
+            border-top: 1px solid #EAEAEA;
+        }
+
+        &.primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        &:hover {
+            background: var(--color-primary);
+            color: white;
+            svg {
+                fill: white;
+            }
+        }
+    }
+}
+
+.page--menu-layer {
+    position: fixed;
+    z-index: 25;
+    top: 0;
+    left: 0;
+    .bg {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 24;
+    }
+}

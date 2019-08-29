@@ -1,0 +1,37 @@
+.base {
+    padding-right: 300px;
+    height: 100%;
+    box-sizing: border-box;
+    padding-bottom: 23px;
+    @include appnav {
+        padding-right: 0px;
+        padding-top: 56px;
+    }
+}
+
+.base--inner {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }

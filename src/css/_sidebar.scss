@@ -1,0 +1,383 @@
+:root {
+    --sidebar-text-color: white;
+    --sidebar-text-subhead-color: #A1A1A1;
+    --sidebar-section-color: #808080;
+    --sidebar-input-color: white;
+
+    --sidebar-input-bg: #545454;
+    --sidebar-input-border: #727272; 
+
+    --sidebar-input-focus-bg: #717171;
+    --sidebar-input-focus-border: #A5A5A5;
+
+    --sidebar-slider-inactive-thumb-bg: #777777;
+    --sidebar-slider-inactive-thumb-border: #858585;
+
+    --sidebar-slider-active-thumb-bg: #AA2060;
+    --sidebar-slider-active-thumb-border: #EB358A;
+}
+
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 300px;
+    box-sizing: border-box;
+    z-index: 4;
+    overflow: auto;
+
+    background: var(--sidebar-bg);
+
+    @include appnav {
+        top: 0px;
+        bottom: 0px;
+        height: 100%;
+        width: 100%;
+        box-shadow: none;
+        transform: translateX(100%);
+
+        & > .inner {
+            max-width: 420px;
+            margin: 56px auto;
+        }
+
+        &.animate {
+            //transition: transform 0.5s;
+        }
+
+
+    }
+
+    & > .inner {
+        height: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        position: relative;
+
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        
+        &.center {
+            justify-content: center;
+        }
+    }
+    .col {
+        padding: 10px 10px;
+        &.flex-1 {
+            flex: 1;
+        }
+    }
+    
+    input {
+        @extend shadow;
+        display: block;
+        width: 100%;
+        padding: 6px;
+        box-sizing: border-box;
+        background: var(--sidebar-input-bg);
+        border: 2px solid var(--sidebar-input-border);
+        border-radius: 2px;
+        color: var(--sidebar-input-color);
+        font-size: 14px;
+        transition: background 0.1s, border 0.1s;
+        
+        &[type=number] {
+            text-align: center;
+        }
+
+        &:hover {
+            border-color: var(--sidebar-input-focus-border);
+        }
+        &:focus {
+            outline: none;
+            background: var(--sidebar-input-focus-bg);
+            border-color: var(--sidebar-input-focus-border);
+        }
+    }
+    label {
+        display: block;
+        font-size: 16px;
+        color: var(--sidebar-text-color);
+        & + * {
+            margin-top: 5px;
+        }
+    }
+
+    .sublabel {
+        font-size: 13px;
+        color: var(--sidebar-text-subhead-color);
+        line-height: 1.25;
+    }
+
+
+
+}
+
+
+.sidebar--section {
+        padding-bottom: 10px;
+
+        .group {
+            &.hide {
+                display: none;
+            }
+        }
+        .app-only {
+            display: none;
+            @at-root {
+                body.is-app .app-only {
+                    display: flex;
+                }
+            }
+        }
+        .not-app-only {
+            @at-root {
+                body.is-app .not-app-only {
+                    display: none;
+                }
+            }
+        }
+}
+
+.sidebar--header {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--sidebar-section-color);
+    text-transform: uppercase;
+    display: block;
+    text-align: center;
+    padding: 15px 0;
+    width: 100%;
+    flex: 1;
+}
+
+.input--toggle {
+    position: relative;
+    width: 56px;
+    height: 30px;
+    
+    cursor: pointer;
+    
+
+    &:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--sidebar-input-bg);
+    border: 2px solid var(--sidebar-input-border);
+    box-sizing: border-box;
+    border-radius: 20px;
+    transition: background 0.1s, border 0.1s, opacity 0.1s;
+    z-index: 1;
+    opacity: 0.6;
+    }
+
+    & > div {
+        @extend shadow;
+        position: relative;
+        top: 4px;
+        left: 4px;
+        z-index: 2;
+        width: 22px;
+        height: 22px;
+        box-sizing: border-box;
+        background: var(--sidebar-slider-inactive-thumb-bg);
+        border: 2px solid var(--sidebar-slider-inactive-thumb-border);
+        border-radius: 20px;
+        transition: background 0.1s, border 0.1s, transform 0.1s;
+    }
+
+    &:hover {
+        &:before {
+            border-color: var(--sidebar-input-focus-border);
+        }
+    }
+    &:focus {
+        outline: none;
+        //background: var(--sidebar-input-focus-bg);
+        border-color: var(--sidebar-input-focus-border);
+        & > div {
+            //background: var(--sidebar-input-focus-bg);
+            border-color: var(--sidebar-input-focus-border);
+        }
+    }
+
+    
+
+    &[data-value="true"] {
+        &:before {
+            //opacity: 1;
+            background: var(--sidebar-slider-active-thumb-bg);
+        border-color: var(--sidebar-slider-active-thumb-border);
+        }
+            
+        & > div {
+            transform: translateX(26px);
+            background: var(--sidebar-input-focus-bg);
+        border-color: var(--sidebar-input-focus-border);
+        background: var(--sidebar-slider-active-thumb-bg);
+        border-color: var(--sidebar-slider-active-thumb-border);
+        }
+    }
+}
+
+
+
+.input--range {
+    display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        
+        .range {
+            flex: 2;
+            display: block;
+            appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin-right: 15px;
+
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+              }
+              &:focus {
+                outline: none; 
+              }
+              &::-ms-track {
+                width: 100%;
+                cursor: pointer;
+              
+                /* Hides the slider so custom styles can be added */
+                background: transparent; 
+                border-color: transparent;
+                color: transparent;
+              }
+              &::-webkit-slider-thumb {
+                @extend shadow;
+                -webkit-appearance: none;
+                border: 2px solid var(--sidebar-slider-active-thumb-border);
+                height: 22px;
+                width: 22px;
+                box-sizing: border-box;
+                border-radius: 20px;
+                background: var(--sidebar-slider-active-thumb-bg);
+                cursor: pointer;
+                margin-top: -8px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+              }
+              
+              /* All the same stuff for Firefox */
+              &::-moz-range-thumb {
+                box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+                border: 1px solid #000000;
+                height: 36px;
+                width: 16px;
+                border-radius: 3px;
+                background: #ffffff;
+                cursor: pointer;
+              }
+              
+              /* All the same stuff for IE */
+              &::-ms-thumb {
+                box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+                border: 1px solid #000000;
+                height: 36px;
+                width: 16px;
+                border-radius: 3px;
+                background: #ffffff;
+                cursor: pointer;
+              }
+
+
+              &::-webkit-slider-runnable-track {
+                width: 100%;
+                height: 4px;
+                cursor: pointer;
+                background: var(--sidebar-input-border);
+                border-radius: 3px;
+                transition: background 0.1s;
+              }
+              
+              &:focus::-webkit-slider-runnable-track {
+                background: var(--sidebar-input-focus-border);
+              }
+              
+              &::-moz-range-track {
+                width: 100%;
+                height: 8.4px;
+                cursor: pointer;
+                box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+                background: #3071a9;
+                border-radius: 1.3px;
+                border: 0.2px solid #010101;
+              }
+              
+              &::-ms-track {
+                width: 100%;
+                height: 8.4px;
+                cursor: pointer;
+                background: transparent;
+                border-color: transparent;
+                border-width: 16px 0;
+                color: transparent;
+              }
+              &::-ms-fill-lower {
+                background: #2a6495;
+                border: 0.2px solid #010101;
+                border-radius: 2.6px;
+                box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              }
+              &:focus::-ms-fill-lower {
+                background: #3071a9;
+              }
+              &::-ms-fill-upper {
+                background: #3071a9;
+                border: 0.2px solid #010101;
+                border-radius: 2.6px;
+                box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              }
+              &:focus::-ms-fill-upper {
+                background: #367ebd;
+              }
+
+        }
+        .val {
+            width: 52px;
+            box-sizing: border-box;
+        }
+}
+
+
+
+
+
+@include appnav {
+    body.display-settings {
+        .sidebar {
+            transform: translateX(0%);
+        }
+    }
+}
+
+
+
+
+#app.no-sidebar {
+    padding-right: 0;
+    .sidebar {
+        display: none;
+    }
+}

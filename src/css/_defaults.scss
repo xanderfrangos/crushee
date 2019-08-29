@@ -1,0 +1,128 @@
+clear, .clear {
+    &:after,
+    &:before {
+        content: ' ';
+        display: block;
+        clear: both;
+    }
+}
+
+html, body {
+    font-family: "Nunito", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: var(--text-base);
+    line-height: 1;
+    background: var(--base-bg);
+    user-select: none;
+    
+    @include appnav {
+        font-size: 15px;
+    }
+}
+
+body {
+    @extend clear;
+}
+
+#file {
+    display: none;
+}
+
+.page {
+    height: 100%;
+    width:100%;
+    background: var(--base-bg);
+    position: relative;
+    overflow: auto;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+
+shadow {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+
+
+
+
+
+.button {
+    @extend shadow;
+    background: var(--color-secondary);
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 800;
+    color: white;
+    border-radius: 50px;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0px 5px;
+    user-select: none;
+    cursor: pointer;
+    transition: background 0.1s;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.big {
+        font-size: 20px;
+        padding: 10px 30px;
+        flex: 1;
+    }
+    &.primary {
+        background: var(--color-primary);
+        &:hover {
+            @include appnav {
+                background: var(--color-primary);
+            }
+        }
+        &:active {
+            background: var(--color-button-hover);
+        }
+    }
+
+    &:hover {
+        background: var(--color-button-hover);
+        @include appnav {
+            background: var(--color-secondary);
+        }
+    }
+    &:active {
+        background: var(--color-button-hover);
+    }
+
+    span {
+        display: block;
+        & + span {
+            margin-left: 6px;
+        }
+    }
+
+    svg {
+        fill: white;
+        margin: -6px 0;
+    }
+
+    @include mobile {
+        padding: 12px 16px;
+        span.text {
+            display: none;
+        }
+    }
+
+}

@@ -1,0 +1,104 @@
+.elem--mobile-nav {
+    @extend shadow;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    background: var(--color-primary);
+    color: white;
+    z-index: 22;
+    display: none;
+    @include appnav {
+        display: block;
+    }
+
+    svg {
+        fill: white;
+        position: relative;
+        z-index: 2;
+    }
+
+    .inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 8px;
+
+        & > div {
+            display: flex;
+            align-items: center;
+            & > div {
+                padding: 16px 8px;
+            }
+        }
+    }
+
+    .text {
+        font-weight: 900;
+        font-size: 18px;
+        text-transform: uppercase;
+    }
+    .icon {
+        position: relative;
+        &:before {
+            content: ' ';
+            display: block;
+            position: absolute;
+            top: 8px;
+            left: 0px;
+            background: black;
+            width: 40px;
+            height: 40px;
+            z-index: 1;
+            border-radius: 100px;
+            opacity: 0;
+            transition: opacity 0.12s 0.01s;
+        }
+        &:active {
+            &:before {
+                opacity: 0.15;
+                transition: opacity 0s 0s;
+            }
+        }
+    }
+
+    .back-button {
+        transform: translateX(-30px); 
+        opacity: 0;
+
+        & + .text {
+            transform: translateX(-40px);
+        }
+        
+        &.animate {
+            transition: transform 0.23s, opacity 0.23s;
+            & + .text {
+                transition: transform 0.23s, opacity 0.23s;
+            }
+            @at-root {
+                body.show-back-button {
+
+                    .elem--mobile-nav .back-button.animate {
+                        & + .text {
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+        @at-root {
+            body.show-back-button {
+                .elem--mobile-nav .back-button {
+                    transform: translateX(0px); 
+                    opacity: 1;
+
+                    & + .text {
+                        transform: translateX(0px);
+                    }
+                }
+            }
+        }
+    }
+}

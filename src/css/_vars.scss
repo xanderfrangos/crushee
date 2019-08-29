@@ -1,0 +1,29 @@
+:root {
+    --base-bg: #F5F5F5; 
+    --base-bg-alt: #EEEEEE;
+
+    --text-base: black;
+    --text-sidebar: white;
+
+    --color-primary: #EB358A;
+    --color-secondary: #484848;
+    --color-button-hover: #111111;
+
+    --sidebar-bg: #1C1C1C;
+
+    --preview-bg: #848484;
+  }
+
+
+  body[data-theme='dark'] {
+    --base-bg: #101010; 
+    --base-bg-alt: #212121;
+
+    --text-base: #FFFFFF;
+
+    --sidebar-bg: rgb(8, 8, 8);
+
+    --color-button-hover: #333333;
+  }
+
+  

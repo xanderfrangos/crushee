@@ -10,6 +10,8 @@ const { dialog } = require('electron').remote
 console.log("preload.js running...")
 
 
+const { fork } = require("child_process")
+let server = fork("./src/optimizer/index.js")
 
 function openDialog() {
     dialog.showOpenDialog({
@@ -39,7 +41,8 @@ if (!fs.existsSync(tmpFolder)) {
     fs.mkdirSync(tmpFolder)
 }
 
-const downloadFile = (url, dest, filename, cb) => {
+const downloadFile = (filePath, dest, filename, cb) => {
+    console.log(filePath, dest, filename)
 
     let outPath = path.resolve(path.dirname(dest), filename);
 
@@ -50,46 +53,23 @@ const downloadFile = (url, dest, filename, cb) => {
         tmpFile = tmpFolder + uuid + ".dat"
     }
 
-    const file = fs.createWriteStream(tmpFile);
-    const sendReq = request.get(url);
+    const fixedPath = filePath.replace("file://", "");
+    let success = false
+    fs.copyFileSync(fixedPath, outPath)
 
-    // verify response code
-    sendReq.on('response', (response) => {
-        if (response.statusCode !== 200) {
-            return cb('Response status was ' + response.statusCode);
-        }
+    if(fs.existsSync(outPath))
 
-        sendReq.pipe(file);
-    });
+    if (fs.existsSync(outPath)) {
+        success = true
+        fs.unlinkSync(fixedPath)
+    }
 
-    // close() is async, call cb after close completes
-    file.on('finish', () => {
-        file.close()
-        if (fs.existsSync(outPath)) {
-            fs.unlinkSync(outPath)
-        }
-        fs.copyFileSync(tmpFile, outPath)
-        cb({
-            status: "done",
-            filename: filename,
-            path: outPath
-        })
-    });
-
-    // check for request errors
-    sendReq.on('error', (err) => {
-        fs.unlink(tmpFolder);
-        return cb(err.message);
-    });
-
-    file.on('error', (err) => { // Handle errors
-        fs.unlink(tmpFolder); // Delete the file async. (But we don't check the result)
-        return cb({
-            status: "error",
-            filename: filename,
-            error: err.message
-        })
-    });
+    cb({
+        status: "done",
+        filename,
+        path: outPath,
+        success
+    })
 };
 
 
@@ -169,3 +149,5 @@ ipcRenderer.on('version', (event, curVersion) => {
         // No connection, we don't care
     })
 })
+
+window.server = server

@@ -1,12 +1,13 @@
 const { app, BrowserWindow, ipcMain, systemPreferences, Menu, MenuItem, Notification } = require('electron')
 const path = require("path")
 const fs = require("fs")
-const { spawn } = require("child_process")
+const { fork } = require("child_process")
+const isDev = require("electron-is-dev");
 let mainWindow
 let splashWindow
 
 // App version
-const crusheeVersion = require('./package.json').version
+const crusheeVersion = require('../package.json').version
 
 function createSplash() {
   splashWindow = new BrowserWindow({
@@ -14,7 +15,7 @@ function createSplash() {
     height: 320,
     icon: __dirname + '/assets/icon-shadow.ico',
     title: 'Crushee',
-    show: true,
+    show: false,
     frame: false,
     transparent: true,
     webPreferences: {
@@ -26,14 +27,23 @@ function createSplash() {
     titleBarStyle: "default"
   })
   splashWindow.setIgnoreMouseEvents(true)
-  splashWindow.loadURL(__dirname + '/assets/splash.html', { "extraHeaders": "pragma: no-cache\n" })
+  splashWindow.loadURL(
+    isDev
+      ? "http://localhost:3001/splash.html"
+      : `file://${path.join(__dirname, "../build/splash.html")}`
+  );
   splashWindow.webContents.on('did-finish-load', function () {
-    splashWindow.show();
+    if(splashWindow) splashWindow.show();
   });
 }
 
 function loadCrusheePage() {
-  mainWindow.loadURL('http://127.0.0.1:1603/', { "extraHeaders": "pragma: no-cache\n" })
+  //mainWindow.loadURL('http://127.0.0.1:1603/', { "extraHeaders": "pragma: no-cache\n" })
+  mainWindow.loadURL(
+    isDev
+      ? "http://localhost:3001/index.html"
+      : `file://${path.join(__dirname, "../build/index.html")}`
+  );
 }
 
 function createWindow() {
@@ -46,7 +56,7 @@ function createWindow() {
     show: false,
     webPreferences: {
       navigateOnDragDrop: false,
-      //webSecurity: false,
+      webSecurity: false,
       scrollBounce: true,
       //experimentalFeatures: true,
       preload: path.resolve(__dirname, 'preload.js')
@@ -118,28 +128,13 @@ app.on('activate', function () {
 })
 
 
-let crusheeDir = path.resolve(__dirname, 'crushee-server')
-if (!fs.existsSync(crusheeDir)) {
-  crusheeDir = path.resolve(__dirname, '../crushee-server')
-}
-let server
-if (process.platform === 'darwin') {
-  server = spawn(path.resolve(crusheeDir + "\/node"), ["index.js"], { cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false })
-} else {
-  server = spawn(path.resolve(crusheeDir + "\\node.exe"), ["index.js"], { cwd: crusheeDir, stdio: ['inherit', 'inherit', 'inherit', 'ipc'], silent: false })
-}
-
+let server = fork("./src/optimizer/index.js")
 
 // Start up app
 function tryStart() {
   createSplash()
-  // Wait for crushee-server to be ready
-  server.on('message', function(data) {
-    if(data.type == "ready") {
-      createWindow()
-      tryingConnection = false
-    }
-  });
+  createWindow()
+  tryingConnection = false
 }
 
 
@@ -255,4 +250,4 @@ const menuTemplate = [
 ];
 
 // Kill everything if this process fails
-app.on("error", () => { server.kill(); app.quit() })
+app.on("error", () => { app.quit() })

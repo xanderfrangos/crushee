@@ -1,0 +1,36 @@
+.page--start {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    user-select: none;
+    cursor: pointer;
+    z-index: 1;
+
+    svg {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 20px;
+        fill: var(--color-primary);
+    }
+
+    .text {
+        font-size: 20px;
+        line-height: 1.4;
+    }
+
+    .line-bold {
+        font-weight: 800;
+    }
+
+}
+
+#app.drop-hover {
+    .page--start {
+        & > .inner {
+            opacity: 0.45;
+        }
+    }
+}
