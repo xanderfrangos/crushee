@@ -39,11 +39,7 @@ function createSplash() {
 
 function loadCrusheePage() {
   //mainWindow.loadURL('http://127.0.0.1:1603/', { "extraHeaders": "pragma: no-cache\n" })
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3001/index.html"
-      : `file://${path.join(__dirname, "../build/index.html")}`
-  );
+  
 }
 
 function createWindow() {
@@ -64,8 +60,15 @@ function createWindow() {
     titleBarStyle: "default"
   })
 
+  mainWindow.loadURL(
+    isDev
+      ? "http://localhost:3001/index.html"
+      : `file://${path.join(__dirname, "../build/index.html")}`
+  );
+
   mainWindow.webContents.on('did-finish-load', function () {
-    splashWindow.hide();
+    splashWindow.close();
+    splashWindow = null;
     mainWindow.show();
 
     mainWindow.webContents.send('version', `v${crusheeVersion}`)
@@ -74,7 +77,6 @@ function createWindow() {
 
   // and load the index.html of the app.
 
-  setTimeout(loadCrusheePage, 600)
 
   mainWindow.setMenuBarVisibility(false)
   mainWindow.setMenuBarVisibility(true)
@@ -90,7 +92,6 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
-    server.kill()
     app.quit()
   })
 }
@@ -106,10 +107,8 @@ app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    server.kill()
     app.quit()
   }
-  server.kill()
   app.quit()
 })
 
@@ -121,14 +120,10 @@ app.on('activate', function () {
       tryStart()
     } catch (e) {
       // Not sure what to do. It didn't work.
-      server.kill()
       app.quit()
     }
   }
 })
-
-
-let server = fork("./src/optimizer/index.js")
 
 // Start up app
 function tryStart() {
@@ -164,7 +159,7 @@ const menuTemplate = [
           }, {
               label: 'Quit',
               click: () => {
-                  server.kill(); app.quit();
+                  app.quit();
               }
           }
       ]

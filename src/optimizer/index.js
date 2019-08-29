@@ -39,7 +39,7 @@ function cleanUp() {
     console.log("Cleaning old output files")
 
     try {
-        del.sync([outPath + "**", "!" + outPath])
+        del.sync([outPath], {force: true})
     } catch (e) {
         console.log(e)
     }
