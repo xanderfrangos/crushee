@@ -185,15 +185,16 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
             sendGenericMessage("4:4:4 Chroma")
             jpgPlugin = imageminMozJPEG({
                 quality: settings.jpg.quality,
-                sample: ["1x1", "1x1"],
-                progressive: true
+                progressive: true,
+                arithmetic: true
             })
         } else {
             sendGenericMessage("4:2:0 (or lower) Chroma")
             jpgPlugin = imageminMozJPEG({
                 quality: settings.jpg.quality,
                 sample: [settings.jpg.subsampling + "x" + settings.jpg.subsampling, settings.jpg.subsampling + "x" + settings.jpg.subsampling],
-                progressive: true
+                progressive: true,
+                arithmetic: true
             })
         }
     } else {
