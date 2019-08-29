@@ -6,6 +6,7 @@ const del = require('del')
 const uuidv1 = require('uuid/v1')
 const EventEmitter = require('events');
 const appDataPath = require('appdata-path')
+const slash = require('slash');
 
 const sendMessage = (type, payload = {}) => {
     process.send({
@@ -39,14 +40,14 @@ function cleanUp() {
     console.log("Cleaning old output files")
 
     try {
-        del.sync([outPath], {force: true})
+        del.sync([slash(outPath)], {force: true})
     } catch (e) {
         console.log(e)
     }
 
     try {
-        if (!fs.existsSync(outPath)) {
-            fs.mkdirSync(outPath, { recursive: true })
+        if (!fs.existsSync(slash(outPath))) {
+            fs.mkdirSync(slash(outPath), { recursive: true })
         }
     } catch (e) {
         console.log(e)
@@ -228,9 +229,9 @@ const uploadFile = (pathName, settings = {}, id = -1) => {
         id,
         file
     })
-    const filePath = path.join(uuidDir , "source" + path.extname(pathName))
-    fs.writeFileSync(path.join(uuidDir , "filename"), path.basename(pathName))
-    fs.copyFileSync(pathName, filePath)
+    const filePath = slash(path.join(uuidDir , "source" + path.extname(pathName)))
+    fs.writeFileSync(slash(path.join(uuidDir, "filename")), path.basename(pathName))
+    fs.copyFileSync(slash(pathName), filePath)
 
         // Send off to a thread
         processFile(uuid, path.basename(pathName), filePath, outPath, settings)
@@ -362,11 +363,11 @@ const checkUUIDs = (uuids) => {
 const recrush = (oldUUID, options = {}) => {
     let uuid = getUUID()
     let settings = JSON.parse(options)
-    let original = fs.readFileSync(outPath + oldUUID + "/filename", "utf8")
+    let original = fs.readFileSync(slash(outPath + oldUUID + "/filename"), "utf8")
     const filePath = outPath + uuid + "/source" + path.extname(original)
-    fs.copyFileSync(outPath + oldUUID + "/source" + path.extname(original), filePath)
+    fs.copyFileSync(slash(outPath + oldUUID + "/source" + path.extname(original)), filePath)
 
-    fs.writeFileSync(outPath + uuid + "/filename", original)
+    fs.writeFileSync(slash(outPath + uuid + "/filename"), original)
 
     uploads[oldUUID].status = "crushing"
     fileUpdateEvent(oldUUID)
