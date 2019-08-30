@@ -463,6 +463,7 @@ process.on('message', (data) => {
     } else if (data.type == 'setThreadNum') {
         threadNum = data.result
     } else if (data.type == 'quit') {
+        sendGenericMessage("Shutting down...")
         process.exit(0)
     }
 })

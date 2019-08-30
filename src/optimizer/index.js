@@ -261,6 +261,7 @@ process.on('message', function (msg) {
                     thread.thread.send({ type: 'quit' })
                 }
                 cleanUp()
+                console.log("Optimizer shutting down...")
                 process.exit(0)
                 break;
             case "all-files":
