@@ -1,7 +1,12 @@
 var jquery = require("jquery");
 window.$ = window.jQuery = jquery;
 
-
+const sendMessage = (type, payload = {}) => {
+    window.server.send(JSON.stringify({
+        type,
+        payload
+    }))
+}
 
 
 parseBool = (value) => {
@@ -791,23 +796,19 @@ function downloadFile(file, doStatusBar = true) {
         console.log("File not ready to be downloaded!")
         return false
     }
-    //console.log(file)
-    if (settings.app.overwrite == "true" && typeof window.electron != "undefined" && typeof window.electron.download == "function") {
-        window.electron.download(file.url, file.path, file.name, (cb) => {
-            downloadBatchSize--
-            //console.log(cb)
-            if(downloadBatchSize == 0) {
-                if (cb.status == "done") {
-                    setStatusBar("Saved file(s)", "done")
-                } else {
-                    setStatusBar("Error saving file(s)", "error")
-                }
+    
+    window.electron.download(file.url, (settings.app.overwrite == "true" ? file.path : false), file.name, (cb) => {
+        downloadBatchSize--
+        //console.log(cb)
+        if(downloadBatchSize == 0) {
+            if (cb.status == "done") {
+                setStatusBar("Saved file(s)", "done")
+            } else {
+                setStatusBar("Error saving file(s)", "error")
             }
-            
-        })
-    } else {
-        window.location = file.url
-    }
+        }
+        
+    })
 }
 
 
@@ -987,13 +988,6 @@ function processMessage (ev) {
 
 
 window.server.on('message', processMessage)
-
-const sendMessage = (type, payload = {}) => {
-    window.server.send(JSON.stringify({
-        type,
-        payload
-    }))
-}
 
 
 function checkUUIDs(uuids) {

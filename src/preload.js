@@ -1,17 +1,18 @@
 const { ipcRenderer: ipc, remote, Menu, MenuItem, BrowserWindow, ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
-const request = require('request');
-const uuidv1 = require('uuid/v1');
-
-const { dialog } = require('electron').remote
-
-
-console.log("preload.js running...")
-
-
 const { fork } = require("child_process")
+const uuidv1 = require('uuid/v1');
+const { dialog } = require('electron').remote
+const slash = require('slash')
+
+
+console.log("Starting optimizer...")
 let server = fork("./src/optimizer/index.js")
+
+remote.app.on("will-quit", () => {
+    server.send(JSON.stringify({ type: "quit" }))
+})
 
 function openDialog() {
     dialog.showOpenDialog({
@@ -35,37 +36,32 @@ function openDialog() {
         })
 }
 
-// Temporary downloads folder
-let tmpFolder = path.resolve(remote.app.getPath("userData"), "dl-tmp")
-if (!fs.existsSync(tmpFolder)) {
-    fs.mkdirSync(tmpFolder)
-}
-
-const downloadFile = (filePath, dest, filename, cb) => {
-    console.log(filePath, dest, filename)
-
-    let outPath = path.resolve(path.dirname(dest), filename);
-
-    let uuid = uuidv1()
-    let tmpFile = tmpFolder + uuid + ".dat"
-    while (fs.existsSync(tmpFile)) {
-        uuid = uuidv1()
-        tmpFile = tmpFolder + uuid + ".dat"
+const saveFile = async (filePath, destination, filename, cb) => {
+    
+    let dest = destination
+    let outPath
+    if(destination == false) {
+        dest = await dialog.showSaveDialog({
+            title: "Save crushed image",
+            defaultPath: filename
+        })
+        outPath = dest
+    } else {
+        outPath = slash(path.resolve(path.dirname(dest), filename));
     }
 
-    const fixedPath = filePath.replace("file://", "");
+    const fixedPath = slash(filePath.replace("file://", ""));
     let success = false
-    fs.copyFileSync(fixedPath, outPath)
 
-    if(fs.existsSync(outPath))
-
-    if (fs.existsSync(outPath)) {
+    console.log(fixedPath, outPath)
+    try {
+        fs.copyFileSync(fixedPath, outPath)
         success = true
-        fs.unlinkSync(fixedPath)
+    } catch(e) {
+        console.error(e)
     }
-
     cb({
-        status: "done",
+        status: "error",
         filename,
         path: outPath,
         success
@@ -74,7 +70,7 @@ const downloadFile = (filePath, dest, filename, cb) => {
 
 
 window.electron = {
-    download: downloadFile,
+    download: saveFile,
     setDockBadge,
 }
 

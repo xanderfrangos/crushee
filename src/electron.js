@@ -67,8 +67,10 @@ function createWindow() {
   );
 
   mainWindow.webContents.on('did-finish-load', function () {
-    splashWindow.close();
-    splashWindow = null;
+    if(splashWindow) {
+      splashWindow.close();
+      splashWindow = null;
+    }
     mainWindow.show();
 
     mainWindow.webContents.send('version', `v${crusheeVersion}`)

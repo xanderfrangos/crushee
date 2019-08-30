@@ -6,7 +6,7 @@ const del = require('del')
 const uuidv1 = require('uuid/v1')
 const EventEmitter = require('events');
 const appDataPath = require('appdata-path')
-const slash = require('slash');
+const slash = require('slash')
 
 const sendMessage = (type, payload = {}) => {
     process.send({
@@ -15,16 +15,13 @@ const sendMessage = (type, payload = {}) => {
     })
 }
 
-const outPath = path.join(appDataPath("crushee-desktop"), "public/out/")
-
-console.log(outPath)
-
+const outPath = slash(path.normalize(path.join(appDataPath("crushee-desktop"), "public/out/")))
 
 let jobQueue = []
 let uploads = []
 
 // Limit extra threads
-let maxProcessingThreads = process.env.CRUSHEE_THREADS || os.cpus().length
+let maxProcessingThreads = os.cpus().length
 let fileProcessorThreads = []
 
 /*
@@ -84,7 +81,7 @@ function makeThread(threadNum) {
         if (data.type === "queueLength") {
             fileProcessorThreads[data.threadNum].queue = data.result
         } else if (data.type === "generic") {
-            console.log(`Thread ${data.threadNum} says "${data.message}"`)
+            console.log(`\x1b[35mThread ${data.threadNum} says\x1b[0m "${data.message}"`)
         } else if (data.type === "alive") {
             forked.lastAlive = Date.now()
         } else if (data.type === "jobRequest") {
@@ -259,6 +256,13 @@ process.on('message', function (msg) {
     let uuids
     if (typeof data.type != undefined)
         switch (data.type) {
+            case "quit":
+                for(let thread of fileProcessorThreads) {
+                    thread.thread.send({ type: 'quit' })
+                }
+                cleanUp()
+                process.exit(0)
+                break;
             case "all-files":
                 sendMessage("all-files", getAllFiles())
                 break;
@@ -388,10 +392,6 @@ const recrush = (oldUUID, options = {}) => {
         fileStatus.emit("replaceUUID", oldUUID, uploads[uuid])
     })
 }
-
-
-
-
 
 sendMessage({
     type: "ready"
