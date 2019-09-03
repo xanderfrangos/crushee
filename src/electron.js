@@ -51,15 +51,16 @@ function createWindow() {
     title: 'Crushee',
     show: false,
     frame: false,
-    backgroundColor: '#ffffff',
+    //backgroundColor: '#ffffff',
+    titleBarStyle: 'hidden',
+    vibrancy: 'light',
     webPreferences: {
       navigateOnDragDrop: false,
       webSecurity: false,
       scrollBounce: true,
       //experimentalFeatures: true,
       preload: path.resolve(__dirname, 'preload.js')
-    },
-    titleBarStyle: "default"
+    }
   })
 
   mainWindow.loadURL(

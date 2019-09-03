@@ -1,8 +1,9 @@
 .base {
-    padding-left: 300px;
+    margin-left: 300px;
     height: 100%;
     box-sizing: border-box;
     padding-top: 30px;
+    background: var(--base-bg);
     @include appnav {
         padding-left: 0px;
         padding-top: 56px;
