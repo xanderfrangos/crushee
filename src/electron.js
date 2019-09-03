@@ -50,6 +50,8 @@ function createWindow() {
     icon: __dirname + '/assets/icon-shadow.ico',
     title: 'Crushee',
     show: false,
+    frame: false,
+    backgroundColor: '#ffffff',
     webPreferences: {
       navigateOnDragDrop: false,
       webSecurity: false,

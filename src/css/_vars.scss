@@ -1,17 +1,22 @@
 :root {
-    --base-bg: #F5F5F5; 
+    --base-bg: #FFFFFF; 
     --base-bg-alt: #EEEEEE;
 
     --text-base: black;
-    --text-sidebar: white;
+    --text-sidebar: black;
 
     --color-primary: #EB358A;
     --color-secondary: #484848;
     --color-button-hover: #111111;
 
-    --sidebar-bg: #1C1C1C;
+    --sidebar-bg: #F1F1F1;
 
     --preview-bg: #848484;
+
+
+    --titlebar-icon: #888;
+    --titlebar-icon-hover: #000;
+
   }
 
 
@@ -24,6 +29,10 @@
     --sidebar-bg: rgb(8, 8, 8);
 
     --color-button-hover: #333333;
+
+    --titlebar-icon: #000;
+    --titlebar-icon-hover: #fff;
+
   }
 
   

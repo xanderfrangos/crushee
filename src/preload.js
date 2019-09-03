@@ -5,6 +5,7 @@ const { fork } = require("child_process")
 const uuidv1 = require('uuid/v1');
 const { dialog } = require('electron').remote
 const slash = require('slash')
+let browser = remote.getCurrentWindow()
 
 
 console.log("Starting optimizer...")
@@ -147,3 +148,4 @@ ipcRenderer.on('version', (event, curVersion) => {
 })
 
 window.server = server
+window.thisWindow = browser

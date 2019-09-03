@@ -1,10 +1,10 @@
 .base {
-    padding-right: 300px;
+    padding-left: 300px;
     height: 100%;
     box-sizing: border-box;
-    padding-bottom: 23px;
+    padding-top: 30px;
     @include appnav {
-        padding-right: 0px;
+        padding-left: 0px;
         padding-top: 56px;
     }
 }

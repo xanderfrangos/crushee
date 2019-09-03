@@ -38,7 +38,7 @@
     position: sticky;
     bottom: 0;
     background: var(--base-bg);
-    box-shadow: 0 -3px 9px -5px rgba(0, 0, 0, 0.15);
+    //box-shadow: 0 -3px 9px -5px rgba(0, 0, 0, 0.15);
 
     & > * {
         font-size: 13px;
@@ -71,7 +71,7 @@
 
 
 .floating-buttons {
-    @extend shadow;
+    //@extend shadow;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -80,7 +80,7 @@
     box-sizing: border-box;
     display: none;
     z-index: 4;
-    background: var(--base-bg-alt);
+    //background: var(--base-bg-alt);
 
     @include mobile {
         padding: 0;

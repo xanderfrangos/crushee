@@ -12,6 +12,7 @@
 
 <body>
     <script>var isApp = (typeof window.electron != "undefined"); if(isApp) window.document.body.classList.add("is-app");</script>
+    <div id="root"></div>
     <div class="base" id="app">
             <div class="elem--status-bar">
                 <div class="elem--status-bar--left">
@@ -386,6 +387,7 @@
     </div>
     <input type="file" id="file" name="file" multiple />
     <script src="./old-js/upload.js"></script>
+    <script src="./entry.js"></script>
     <script>if (window.module) module = window.module;</script>
 </body>
 

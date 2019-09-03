@@ -1,12 +1,8 @@
 .elem--file {
     user-select: none;
-
-    &:nth-of-type(odd) {
-        background: var(--base-bg-alt);
-    }
     
     & > .inner {
-        padding: 20px;
+        padding: 0px 20px 20px;
         width: 100%;
         display: flex;
         direction: row;
