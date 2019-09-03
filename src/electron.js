@@ -51,7 +51,7 @@ function createWindow() {
     title: 'Crushee',
     show: false,
     frame: false,
-    //backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',
     titleBarStyle: 'hidden',
     vibrancy: 'light',
     webPreferences: {
