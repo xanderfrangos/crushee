@@ -47,6 +47,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 700,
+    minWidth: 700,
+    minHeight: 600,
     icon: __dirname + '/assets/icon-shadow.ico',
     title: 'Crushee',
     show: false,
