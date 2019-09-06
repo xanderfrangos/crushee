@@ -62,6 +62,14 @@
     "win": {
       "icon": "src/assets/icon-shadow.ico"
     },
+    "appx": {
+      "publisherDisplayName": "Xander Frangos",
+      "applicationId": "Crushee",
+      "displayName": "Crushee",
+      "identityName": "38002AlexanderFrangos.Crushee",
+      "publisher": "CN=B8E9A58B-32A7-4C6C-A474-D4BE2A3CEAD8",
+      "showNameOnTiles": true
+    },
     "files": [
       "src/electron.js",
       "src/preload.js",
