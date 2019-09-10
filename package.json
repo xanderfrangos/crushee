@@ -38,8 +38,8 @@
     "wait-on": "3.2.0"
   },
   "scripts": {
-    "parcel": "parcel src/*.html --port 3001 --out-dir build",
-    "parcel-build": "parcel build src/*.html --out-dir build --public-url ./ --experimental-scope-hoisting",
+    "parcel": "parcel src/html/*.html --port 3001 --out-dir build",
+    "parcel-build": "parcel build src/html/*.html --out-dir build --public-url ./ --experimental-scope-hoisting",
     "electron-build": "electron-builder",
     "appx": "npm run parcel-build && electron-builder -w appx -c.extraMetadata.name=crushee-appx ",
     "appx-signed": "npm run parcel-build && electron-builder -w appx -c.win.certificateFile=cert.pfx -c.extraMetadata.name=crushee-appx",

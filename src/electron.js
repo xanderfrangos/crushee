@@ -61,14 +61,14 @@ function createWindow() {
       webSecurity: false,
       scrollBounce: true,
       //experimentalFeatures: true,
-      preload: path.resolve(__dirname, 'preload.js')
+      preload: path.resolve(__dirname, 'app.preload.js')
     }
   })
 
   mainWindow.loadURL(
     isDev
-      ? "http://localhost:3001/index.html"
-      : `file://${path.join(__dirname, "../build/index.html")}`
+      ? "http://localhost:3001/v2.html"
+      : `file://${path.join(__dirname, "../build/v2.html")}`
   );
 
   mainWindow.webContents.on('did-finish-load', function () {
