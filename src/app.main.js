@@ -1,5 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Titlebar } from "./components/Titlebar";
+import { App } from "./components/App";
 
-ReactDOM.render(<Titlebar />, document.getElementById("titlebar"));
+ReactDOM.render(<App />, document.getElementById("crushee"));

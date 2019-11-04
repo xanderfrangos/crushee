@@ -81,7 +81,7 @@ function makeThread(threadNum) {
         if (data.type === "queueLength") {
             fileProcessorThreads[data.threadNum].queue = data.result
         } else if (data.type === "generic") {
-            console.log(`\x1b[35mThread ${data.threadNum} says\x1b[0m "${data.message}"`)
+            console.log(`\x1b[35mThread ${data.threadNum} says\x1b[0m "${(typeof data.message === 'object' ? JSON.stringify(data.message) : data.message)}"`)
         } else if (data.type === "alive") {
             forked.lastAlive = Date.now()
         } else if (data.type === "jobRequest") {

@@ -37,6 +37,32 @@ function openDialog() {
         })
 }
 
+
+function addFiles(files) {
+    for (var i = 0, file; file = files[i]; i++) {
+        console.log(file)
+
+        window.sendMessage("upload", {
+            path: file,
+            settings: JSON.stringify(defaultSettings),
+            //id: files.list.indexOf(file)
+            id: 0
+        })
+
+    }
+}
+window.addFiles = addFiles
+
+
+const sendMessage = (type, payload = {}) => {
+    window.server.send(JSON.stringify({
+        type,
+        payload
+    }))
+}
+window.sendMessage = sendMessage
+
+
 const saveFile = async (filePath, destination, filename, cb) => {
     
     let dest = destination
@@ -127,5 +153,182 @@ ipcRenderer.on('version', (event, curVersion) => {
 
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const defaultSettings = {
+    resize: {
+        width: "",
+        height: "",
+        crop: false
+    },
+    jpg: {
+        quality: 95,
+        make: false,
+        subsampling: 1,
+        useOriginal: false
+    },
+    png: {
+        qualityMin: 50,
+        qualityMax: 95
+    },
+    gif: {
+        colors: 128
+    },
+    webp: {
+        quality: 90,
+        make: false,
+        only: false
+    },
+    app: {
+        qualityPreset: 4,
+        advancedQuality: "false",
+        overwite: false,
+        darkMode: false
+    }
+}
+window.defaultSettings = defaultSettings
+
+
+
+const qualityPresets = [
+    // Low
+    {
+        jpg: {
+            quality: 77,
+            subsampling: 3,
+            useOriginal: false
+        },
+        png: {
+            qualityMin: 1,
+            qualityMax: 75
+        },
+        webp: {
+            quality: 70
+        }
+    },
+    // Medium
+    {
+        jpg: {
+            quality: 85,
+            subsampling: 2,
+            useOriginal: false
+        },
+        png: {
+            qualityMin: 10,
+            qualityMax: 85
+        },
+        webp: {
+            quality: 88
+        }
+    },
+    // High
+    {
+        jpg: {
+            quality: 94,
+            subsampling: 2,
+            useOriginal: false
+        },
+        png: {
+            qualityMin: 15,
+            qualityMax: 95
+        },
+        webp: {
+            quality: 92
+        }
+    },
+    // Lossless-ish
+    {
+        jpg: {
+            quality: 95,
+            subsampling: 1,
+            useOriginal: false
+        },
+        png: {
+            qualityMin: 25,
+            qualityMax: 98
+        },
+        webp: {
+            quality: 95
+        }
+    },
+]
+window.qualityPresets = qualityPresets
+
+
+
+
+
+
+
+
+
+function processMessage (ev) {
+    console.log(ev)
+    var data = ev
+    //console.log(data)
+    if (typeof data.type != "undefined")
+        switch (data.type) {
+            case "check":
+                checkUUIDs(data.payload);
+                break;
+            case "update":
+                var id = files.getFileID(data.payload.uuid)
+                if (id !== false) {
+                    for (var key in data.payload.file) {
+                        files.list[id][key] = data.payload.file[key]
+                    }
+                    files.list[id].setStatus(data.payload.file.status)
+                }
+                break;
+            case "upload":
+                var id = data.payload.id;
+                for (var key in data.payload.file) {
+                    files.list[id][key] = data.payload.file[key]
+                }
+                files.list[id].setStatus(data.payload.file.status)
+                break;
+            case "replace":
+                var id = files.getFileID(data.payload.oldUUID)
+                for (var key in data.payload.file) {
+                    files.list[id][key] = data.payload.file[key]
+                }
+                files.list[id].setStatus(data.payload.file.status)
+                break;
+
+        }
+}
+
+
+server.on('message', processMessage)
+
+
+
+
+
+
 window.server = server
 window.thisWindow = browser
+window.openDialog = openDialog
+window.saveFile = saveFile
+
+window.server.on('message', processMessage)
