@@ -12,11 +12,11 @@ export const Sidebar = () => {
                     </div>
                     <div className="row">
                         <div className="col">
-                            <label>Width</label>
+                            <label>Max Width</label>
                             <input type="numeric" name="resize.width" />
                     </div>
                         <div className="col">
-                            <label>Height</label>
+                            <label>Max Height</label>
                             <input type="numeric" name="resize.height" />
                     </div>
                     </div>
@@ -41,23 +41,17 @@ export const Sidebar = () => {
                     </div>
                     <div className="row">
                         <div className="col">
-                            <label>Convert to WebP</label>
+                            <label>Convert to</label>
                         </div>
                         <div className="col">
-                            <div className="input--toggle" data-for="resizeCrop" tabIndex="0" data-linked="webp.make">
-                                <div></div>
-                                <input type="hidden" name="webp.make" id="resizeCrop" data-linked="webp.make" />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            <label>Convert to JPEG</label>
-                        </div>
-                        <div className="col">
-                            <div className="input--toggle" data-for="resizeCrop" tabIndex="0" data-linked="jpg.make">
-                                <div></div>
-                                <input type="hidden" name="jpg.make" id="resizeCrop" data-linked="jpg.make" />
+                            <div className="input--dropdown" data-for="resizeCrop" tabIndex="0" data-linked="webp.make">
+                                <select>
+                                    <option>Do not convert</option>
+                                    <option>JPEG</option>
+                                    <option>PNG</option>
+                                    <option>WebP</option>
+                                    <option>GIF</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -172,53 +166,6 @@ export const Sidebar = () => {
                     </div>
 
 
-
-
-
-
-
-
-
-                    <div className="sidebar--section">
-                        <div className="row center">
-                            <div className="col">
-                                <div className="sidebar--header">App</div>
-                            </div>
-                        </div>
-                        <div className="row app-only">
-                            <div className="col">
-                                <label>Overwrite Originals</label>
-                                <div className="sublabel">Automatically replace local files when saving.</div>
-                            </div>
-                            <div className="col">
-                                <div className="input--toggle" data-for="resizeCrop" tabIndex="0" data-linked="app.overwrite">
-                                    <div></div>
-                                    <input type="hidden" name="app.overwrite" id="resizeCrop" data-linked="app.overwrite" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col">
-                                <label>Dark Mode</label>
-                                <div className="sublabel">Dark as the night.</div>
-                            </div>
-                            <div className="col">
-                                <div className="input--toggle" data-for="resizeCrop" tabIndex="0" data-action="toggleDarkMode"
-                                    data-linked="app.darkMode">
-                                    <div></div>
-                                    <input type="hidden" name="app.darkMode" id="resizeCrop" data-linked="app.darkMode" />
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="sidebar--section">
-                        <div className="row center not-app-only">
-                            <div className="col">
-                                <div className="action--reset-settings button primary">Reset Settings</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
