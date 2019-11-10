@@ -1,7 +1,7 @@
 import React from "react";
-import {Component} from "react"
+import { PureComponent } from "react";
 
-export default class Slider extends Component {
+export default class InputSlider extends PureComponent {
 
     firingEvent = false
     handleChange = (event) => {

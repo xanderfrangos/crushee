@@ -1,5 +1,6 @@
 
 import React from 'react';
+import InputSlider from "./input/InputSlider";
 export const Sidebar = () => {
     return (
         <div className="sidebar">
@@ -77,6 +78,20 @@ export const Sidebar = () => {
                             </div>
                         </div>
                     </div>
+
+
+
+
+                    <div className="group quality-basic">
+                        <div className="row">
+                            <div className="col flex-1">
+                                <label>Quality Level</label>
+                                <InputSlider name="test" level={ window.Quality || 0 } min="0" max="99" onChange={ (a,b) => { window.Quality = a; } } />
+                            </div>
+                        </div>
+                    </div>
+
+
 
                     <div className="row">
                         <div className="col">

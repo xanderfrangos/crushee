@@ -1,7 +1,7 @@
 import React from 'react';
 export const FileList = () => {
     return (
-        <div class="page page--files show">
+        <div className="page page--files show">
             <div className="page--files--list">
                 <div className="elem--file" data-id="1" data-status="done">
                     <div className="inner">
