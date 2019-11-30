@@ -302,6 +302,7 @@ function processMessage (ev) {
                 break;
             case "upload":
                 var id = data.payload.id;
+                window.files[data.payload.newFileObj.UUID] = data.payload.newFileObj
                 for (var key in data.payload.file) {
                     files.list[id][key] = data.payload.file[key]
                 }

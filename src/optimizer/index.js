@@ -15,6 +15,42 @@ const sendMessage = (type, payload = {}) => {
     })
 }
 
+class File {
+    constructor(filePath) {
+        const base = path.basename(filePath)
+        const ext = path.extname(filePath)
+
+        this.UUID = getUUID()
+        this.Status = "pending"
+        this.LastEvent = Date.now()
+        this.Preview = false
+        this.In = {
+            Dir: path.dirname(filePath),
+            FileName: base.substr(0, base.length - ext.length),
+            Extension: ext,
+            FileSize: 0,
+            X: 0,
+            Y: 0
+        },
+            this.Out = {
+                Dir: false,
+                Filename: false,
+                Extension: false,
+                FileSize: 0,
+                X: 0,
+                Y: 0
+            }
+            
+        return this;
+    }
+    setStatus(status) {
+        this.Status = status;
+        console.log(this.LastEvent)
+        this.LastEvent = Date.now()
+        console.log(this.LastEvent)
+    }
+}
+
 const outPath = slash(path.normalize(path.join(appDataPath("crushee-desktop"), "public/out/")))
 
 let jobQueue = []
@@ -221,10 +257,15 @@ const uploadFile = (pathName, settings = {}, id = -1) => {
     const uuid = getUUID()
     const uuidDir = outPath + uuid + "\\"
 
+    const newFileObj = new File(pathName)
+    newFileObj.setStatus("processing")
+    console.log(newFileObj)
+
     const file = newFile(path.basename(pathName), uuid)
     sendMessage("upload", {
         id,
-        file
+        file,
+        newFileObj
     })
     const filePath = slash(path.join(uuidDir , "source" + path.extname(pathName)))
     fs.writeFileSync(slash(path.join(uuidDir, "filename")), path.basename(pathName))
