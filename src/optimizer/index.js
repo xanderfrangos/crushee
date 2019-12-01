@@ -23,24 +23,24 @@ class File {
         this.UUID = getUUID()
         this.Status = "pending"
         this.LastEvent = Date.now()
-        this.Preview = false
+        this.Path = slash(outPath + this.UUID + "/")
         this.In = {
-            Dir: path.dirname(filePath),
+            Source: filePath,
             FileName: base.substr(0, base.length - ext.length),
             Extension: ext,
+            Format: "",
             FileSize: 0,
             X: 0,
             Y: 0
-        },
-            this.Out = {
-                Dir: false,
-                Filename: false,
-                Extension: false,
-                FileSize: 0,
-                X: 0,
-                Y: 0
-            }
-            
+        }
+        this.Out = {
+            Crushed: false,
+            Extension: false,
+            FileSize: 0,
+            X: 0,
+            Y: 0
+        }
+        uploads[this.UUID] = this
         return this;
     }
     setStatus(status) {
@@ -73,7 +73,7 @@ function cleanUp() {
     console.log("Cleaning old output files")
 
     try {
-        del.sync([slash(outPath)], {force: true})
+        del.sync([slash(outPath)], { force: true })
     } catch (e) {
         console.log(e)
     }
@@ -191,8 +191,40 @@ printQueues = () => {
 
 
 
+async function analyzeFile(uuid, uploadName, inFile, outDir, options = {}) {
+    // Wait for response from thread
+    return new Promise((resolve, reject) => {
+
+        jobQueue.push({
+            uuid,
+            payload: [uuid, uploadName, inFile, outDir, options, "preview"],
+            callback: resolve
+        })
+
+    }).then((result) => {
+        if (result) {
+            // We did it!
+            uploads[uuid].In = Object.assign(uploads[uuid].In, result)
+            const crushed = processFile(uuid, uploadName, inFile, outDir, options)
+            return crushed
+        } else {
+            uploads[uuid].Status = "error"
+            fileUpdateEvent(uuid)
+        }
+
+    }).catch((e) => {
+        // Something bad went wrong with the job
+        console.log(e)
+        uploads[uuid].Status = "error"
+        fileUpdateEvent(uuid)
+        throw e
+    })
+}
+
+
+
 async function processFile(uuid, uploadName, inFile, outDir, options = {}) {
-    uploads[uuid].status = "crushing"
+    uploads[uuid].Status = "crushing"
     fileUpdateEvent(uuid)
 
     // Wait for response from thread
@@ -207,13 +239,14 @@ async function processFile(uuid, uploadName, inFile, outDir, options = {}) {
     }).then((result) => {
         // We did it!
         uploads[uuid] = Object.assign(uploads[uuid], result)
-        uploads[uuid].status = "done"
+        uploads[uuid].Status = "done"
+        uploads[uuid].Out = Object.assign(uploads[uuid].Out, result)
         fileUpdateEvent(uuid)
         return result
     }).catch((e) => {
         // Something bad went wrong with the job
         console.log(e)
-        uploads[uuid].status = "error"
+        uploads[uuid].Status = "error"
         fileUpdateEvent(uuid)
         throw e
     })
@@ -254,26 +287,23 @@ const fileUpdateEvent = (uuid) => {
 
 const uploadFile = (pathName, settings = {}, id = -1) => {
     // Process uploaded image
-    const uuid = getUUID()
-    const uuidDir = outPath + uuid + "\\"
 
-    const newFileObj = new File(pathName)
-    newFileObj.setStatus("processing")
-    console.log(newFileObj)
+    const file = new File(pathName)
+    file.setStatus("processing")
+    const uuidDir = file.Path
 
-    const file = newFile(path.basename(pathName), uuid)
     sendMessage("upload", {
         id,
-        file,
-        newFileObj
+        file
     })
-    const filePath = slash(path.join(uuidDir , "source" + path.extname(pathName)))
+
+    const filePath = slash(path.join(uuidDir, "source" + path.extname(pathName)))
     fs.writeFileSync(slash(path.join(uuidDir, "filename")), path.basename(pathName))
     fs.copyFileSync(slash(pathName), filePath)
 
-        // Send off to a thread
-        processFile(uuid, path.basename(pathName), filePath, outPath, settings)
-    
+    // Send off to a thread
+    analyzeFile(file.UUID, path.basename(pathName), filePath, outPath, settings)
+
 }
 
 fileStatus.on("update", (file) => {
@@ -298,7 +328,7 @@ process.on('message', function (msg) {
     if (typeof data.type != undefined)
         switch (data.type) {
             case "quit":
-                for(let thread of fileProcessorThreads) {
+                for (let thread of fileProcessorThreads) {
                     thread.thread.send({ type: 'quit' })
                 }
                 cleanUp()
@@ -328,26 +358,6 @@ process.on('message', function (msg) {
                 break;
         }
 });
-
-
-
-
-
-
-
-const newFile = (filename, uuid) => {
-    uploads[uuid] = {
-        uuid,
-        filename: filename,
-        status: 'crushing',
-        url: "",
-        endSize: 1,
-        original: filename,
-        preview: "",
-        startSize: 1
-    }
-    return uploads[uuid]
-}
 
 
 const getAllFiles = () => {
@@ -406,33 +416,9 @@ const checkUUIDs = (uuids) => {
 }
 
 
-const recrush = (oldUUID, options = {}) => {
-    let uuid = getUUID()
-    let settings = JSON.parse(options)
-    let original = fs.readFileSync(slash(outPath + oldUUID + "/filename"), "utf8")
-    const filePath = outPath + uuid + "/source" + path.extname(original)
-    fs.copyFileSync(slash(outPath + oldUUID + "/source" + path.extname(original)), filePath)
-
-    fs.writeFileSync(slash(outPath + uuid + "/filename"), original)
-
-    uploads[oldUUID].status = "crushing"
-    fileUpdateEvent(oldUUID)
-
-    uploads[uuid] = {
-        uuid,
-        filename: uploads[oldUUID].filename,
-        status: 'crushing',
-        url: "",
-        endSize: 1,
-        original: uploads[oldUUID].original,
-        preview: "",
-        startSize: 1
-    }
-
-    // Send off to a thread
-    processFile(uuid, original, filePath, outPath, settings).then((result) => {
-        fileStatus.emit("replaceUUID", oldUUID, uploads[uuid])
-    })
+const recrush = (UUID, options = "{}") => {
+    const file = uploads[UUID]
+    processFile(UUID, path.basename(file.In.Source), file.Path + "/source" + file.In.Extension, outPath, JSON.parse(options))
 }
 
 sendMessage({

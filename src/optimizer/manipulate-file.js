@@ -183,7 +183,8 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
         jpgPlugin = imageminMozJPEG({
             quality: 31 + (settings.jpg.quality / 1.5),
             sample,
-            progressive: true
+            progressive: true,
+            tune
         })
 
     } else {
@@ -251,193 +252,192 @@ async function makePreview(file, outFolder) {
     const outPath = path.join(outFolder, "preview.jpg")
     try {
         let image = sharp(file)
+        const metadata = await image.metadata()
+        let stats = fs.statSync(file)
         image.resize(200, 200, { fit: "cover" })
         image.flatten({
             background: { r: 255, g: 255, b: 255 }
         })
         image.jpeg({
-            quality: 90,
-            chromaSubsampling: '4:4:4'
+            quality: 75,
+            chromaSubsampling: '4:2:0',
+            trellisQuantisation: true
         })
         let promise = image.toFile(outPath)
             .then(() => {
                 // Preview made!
-                return outPath
+                return {
+                    Format: metadata.format,
+                    FileSize: stats["size"],
+                    X: metadata.width,
+                    Y: metadata.height
+                }
             }).catch((e) => {
                 // Preview failed to write
-                throw e
+                console.log(e)
                 return false
             })
         return promise
     } catch (e) {
         // Preview super failed
-        consoleLog(e)
+        return false
     }
 }
 
 //
 //   Process queued image
 //
-async function job(uuid, fn, f, o, options = {}) {
+async function job(uuid, fn, f, o, options = {}, mode = "compress") {
 
     let original = f
     let uuidDir = o + uuid + "/"
     const quality = parseInt(options.jpg.quality)
 
-    sendGenericMessage("Making previews...")
-    // Make thumbnails
-    fs.mkdirSync(slash(uuidDir + "preview/"), { recursive: true })
-    let preview = ""
-    try {
-        preview = await makePreview(f, uuidDir + "preview/")
-        process.send({
-            type: 'preview',
-            result: {
+    if (mode === "preview") {
+        sendGenericMessage("Making previews...")
+        // Make thumbnails
+        fs.mkdirSync(slash(uuidDir + "preview/"), { recursive: true })
+        try {
+            return await makePreview(f, uuidDir + "preview/")
+        } catch (e) {
+            sendGenericMessage("ERROR: Creating preview failed. " + e)
+            process.send({
+                type: 'failed',
                 uuid,
-                preview: "file://" + path.join(uuidDir, '/preview/' + path.basename(preview))
-            },
-            uuid,
-            threadNum
-        })
-    } catch (e) {
-        sendGenericMessage("ERROR: Creating preview failed." + e)
-        process.send({
-            type: 'failed',
-            uuid,
-            threadNum
-        })
-        return false;
-    }
-
-
-    // Process with sharp
-    sendGenericMessage("Processing...")
-    let resized = await processImage(f, uuidDir, options)
-    if (!resized) {
-        consoleLog("Failed processing! Returning original file :(")
-        resized = f;
-    }
-
-    // Determine if the original file is OK to use as-is. Must have been a JPEG and hasn't been resized.
-    let canUseOriginalImage = (path.extname(resized) == path.extname(f) && path.extname(resized) == ".jpg" && !(options.resize.width || options.resize.height) ? true : false)
-
-    // Use original file if wanted/able.
-    if (canUseOriginalImage) {
-        sendGenericMessage("Original JPEG image can be used.")
+                threadNum
+            })
+            return false;
+        }
     } else {
-
-    }
-
-    const results = {}
-
-    if (!(options.resize.width || options.resize.height)) {
-        results["original"] = original
-    }
-
-    // Use MozJPEG to adjust overall quality
-    // We'll use this on JPEGs that have been processed by sharp
-    let mozJPEG
-    if (path.extname(resized) == ".jpg" && quality < 95) {
-        sendGenericMessage("MozJPEG compressing...")
-        mozJPEG = await compressFile(resized, path.join(uuidDir, "moz"), options, "mozjpeg")
-        if (mozJPEG) {
-            results["mozJPEG"] = mozJPEG
+        // Process with sharp
+        sendGenericMessage("Processing...")
+        let resized = await processImage(f, uuidDir, options)
+        if (!resized) {
+            consoleLog("Failed processing! Returning original file :(")
+            resized = f;
         }
-    }
 
-    let mozOriginal
-    if (path.extname(resized) == ".jpg" && canUseOriginalImage && quality < 95) {
-        sendGenericMessage("MozJPEG compressing original...")
-        mozOriginal = await compressFile(f, path.join(uuidDir, "mozO"), options, "mozjpeg")
-        if (mozOriginal) {
-            results["mozOriginal"] = mozOriginal
+        // Determine if the original file is OK to use as-is. Must have been a JPEG and hasn't been resized.
+        let canUseOriginalImage = (path.extname(resized) == path.extname(f) && path.extname(resized) == ".jpg" && !(options.resize.width || options.resize.height) ? true : false)
+
+        // Use original file if wanted/able.
+        if (canUseOriginalImage) {
+            //sendGenericMessage("Original JPEG image can be used.")
+        } else {
+
         }
-    }
 
-    // Compress processed file
-    sendGenericMessage("Compressing...")
+        const results = {}
 
-    // Use original if possible, else resized
-    let compressed = await compressFile(resized, path.join(uuidDir, "compressed"), options)
-    if (compressed) {
-        results["compressed"] = compressed
-    }
-
-    // Compress original, if possible
-    if (canUseOriginalImage) {
-        let compressedOriginal = await compressFile(f, path.join(uuidDir, "compressedOriginal"), options)
-        if (compressedOriginal) {
-            results["compressedOriginal"] = compressedOriginal
+        if (!(options.resize.width || options.resize.height)) {
+            results["original"] = original
         }
-    }
 
+        // Use MozJPEG to adjust overall quality
+        // We'll use this on JPEGs that have been processed by sharp
+        let mozJPEG
+        if (path.extname(resized) == ".jpg" && quality < 95) {
+            sendGenericMessage("MozJPEG compressing...")
+            mozJPEG = await compressFile(resized, path.join(uuidDir, "moz"), options, "mozjpeg")
+            if (mozJPEG) {
+                results["mozJPEG"] = mozJPEG
+            }
+        }
 
-    if (mozJPEG && quality < 95) {
+        let mozOriginal
+        if (path.extname(resized) == ".jpg" && canUseOriginalImage && quality < 95) {
+            sendGenericMessage("MozJPEG compressing original...")
+            mozOriginal = await compressFile(f, path.join(uuidDir, "mozO"), options, "mozjpeg")
+            if (mozOriginal) {
+                results["mozOriginal"] = mozOriginal
+            }
+        }
+
         // Compress processed file
-        sendGenericMessage("Compressing mozJPEG...")
+        sendGenericMessage("Compressing...")
 
         // Use original if possible, else resized
-        let optionsCopy = Object.assign(options, {})
-        optionsCopy.jpg.subsampling = 3
-        let mozCompressed = await compressFile(mozJPEG, path.join(uuidDir, "mozCompressed"), options)
-        if (mozCompressed) {
-            results["mozCompressed"] = mozCompressed
+        let compressed = await compressFile(resized, path.join(uuidDir, "compressed"), options)
+        if (compressed) {
+            results["compressed"] = compressed
         }
-    }
 
-    const smallest = {
-        name: "original",
-        size: (canUseOriginalImage ? fs.statSync(f).size : -1)
-    }
-    consoleLog("===== RESULTS =====")
-    for (let result in results) {
-        let size = fs.statSync(results[result]).size
-        consoleLog(`\x1b[36m${result}:\x1b[0m ${size / 1000}kb`)
-        if (result != "original" && size > 0 && (size < smallest.size || smallest.size == -1)) {
-            smallest.name = result
-            smallest.size = size
+        // Compress original, if possible
+        if (canUseOriginalImage) {
+            let compressedOriginal = await compressFile(f, path.join(uuidDir, "compressedOriginal"), options)
+            if (compressedOriginal) {
+                results["compressedOriginal"] = compressedOriginal
+            }
         }
+
+
+        if (mozJPEG && quality < 95) {
+            // Compress processed file
+            sendGenericMessage("Compressing mozJPEG...")
+
+            // Use original if possible, else resized
+            let optionsCopy = Object.assign(options, {})
+            optionsCopy.jpg.subsampling = 3
+            let mozCompressed = await compressFile(mozJPEG, path.join(uuidDir, "mozCompressed"), options)
+            if (mozCompressed) {
+                results["mozCompressed"] = mozCompressed
+            }
+        }
+
+        const smallest = {
+            name: "original",
+            size: (canUseOriginalImage ? fs.statSync(f).size : -1)
+        }
+        consoleLog("===== RESULTS =====")
+        for (let result in results) {
+            let size = fs.statSync(results[result]).size
+            consoleLog(`\x1b[36m${result}:\x1b[0m ${size / 1000}kb`)
+            if (result != "original" && size > 0 && (size < smallest.size || smallest.size == -1)) {
+                smallest.name = result
+                smallest.size = size
+            }
+        }
+        consoleLog("===================")
+        consoleLog(`\x1b[36mSmallest size is\x1b[0m ${smallest.name} \x1b[36mat\x1b[0m ${smallest.size / 1000} kb\x1b[36m!\x1b[0m`)
+        consoleLog("===================")
+
+        // Collect sizes to send back
+        let finalSize = smallest.size
+
+        sendGenericMessage("Preparing final file...")
+        // Copy finished file to final location
+        fs.mkdirSync(uuidDir + "crushed/")
+        let finalFile = uuidDir + "crushed/" + path.basename(fn, path.extname(fn)) + path.extname(resized)
+
+        fs.copyFileSync(results[smallest.name], finalFile)
+
+
+
+        sendGenericMessage("Writing timestamp...")
+        // Write timestamp for cleanup
+        fs.writeFileSync(uuidDir + "ts", Date.now())
+
+        sendGenericMessage("Clearing temp files...")
+
+        // Build and send results
+        const metadata = await sharp(finalFile).metadata()
+        const result = {
+            Crushed: path.basename(finalFile),
+            Extension: path.extname(path.basename(finalFile)),
+            FileSize: finalSize,
+            X: metadata.width,
+            Y: metadata.height
+        }
+
+        sendGenericMessage("Done!")
+        // Congrats, job well done!
+        return result
     }
-    consoleLog("===================")
-    consoleLog(`\x1b[36mSmallest size is\x1b[0m ${smallest.name} \x1b[36mat\x1b[0m ${smallest.size / 1000} kb\x1b[36m!\x1b[0m`)
-    consoleLog("===================")
-
-    // Collect sizes to send back
-    let sourceSize = fs.statSync(f).size
-    let finalSize = smallest.size
-
-    sendGenericMessage("Preparing final file...")
-    // Copy finished file to final location
-    fs.mkdirSync(uuidDir + "crushed/")
-    let finalFile = uuidDir + "crushed/" + path.basename(fn, path.extname(fn)) + path.extname(resized)
-
-    fs.copyFileSync(results[smallest.name], finalFile)
 
 
 
-    sendGenericMessage("Writing timestamp...")
-    // Write timestamp for cleanup
-    fs.writeFileSync(uuidDir + "ts", Date.now())
 
-    sendGenericMessage("Clearing temp files...")
 
-    // Build and send results
-    let result = {
-        uuid: uuid,
-        filename: path.basename(finalFile, path.extname(finalFile)) + path.extname(finalFile),
-        originalPath: slash(f),
-        crushedPath: slash(finalFile),
-        name: path.basename(finalFile, path.extname(finalFile)) + path.extname(finalFile),
-        startSize: sourceSize,
-        endSize: finalSize,
-        url: "file://" + path.join(uuidDir, '/crushed/' + path.basename(finalFile)),
-        preview: "file://" + path.join(uuidDir, '/preview/' + path.basename(preview)),
-        originalURL: "file://" + path.join(uuidDir, '/source' + path.extname(f))
-    }
-
-    sendGenericMessage("Done!")
-    // Congrats, job well done!
-    return result
 }
 
 

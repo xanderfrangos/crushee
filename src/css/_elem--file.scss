@@ -244,6 +244,9 @@
                     100% { opacity:1; }
                 }
             }
+            img {
+                display: block;
+            }
             .progress-bar {
                 opacity: 0.85;
                 width: 100%;

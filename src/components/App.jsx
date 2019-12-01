@@ -13,7 +13,7 @@ export const App = (props) => {
             <div className="base" id="app">
                 <div className="base--inner">
                     <Empty />
-                    <FileList />
+                    <FileList data-counts={window.fileCounts} />
                     <SingleFile />
                     <div className="floating-buttons">
                         <div className="inner">

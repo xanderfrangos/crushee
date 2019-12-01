@@ -29,7 +29,7 @@ function openDialog() {
         ]
     },
         (files) => {
-            if(files == undefined)
+            if (files == undefined)
                 return false;
 
             console.log(files)
@@ -40,7 +40,7 @@ function openDialog() {
 
 function addFiles(files) {
     for (var i = 0, file; file = files[i]; i++) {
-        console.log(file)
+        console.log("upload", file)
 
         window.sendMessage("upload", {
             path: file,
@@ -64,10 +64,10 @@ window.sendMessage = sendMessage
 
 
 const saveFile = async (filePath, destination, filename, cb) => {
-    
+
     let dest = destination
     let outPath
-    if(destination == false) {
+    if (destination == false) {
         dest = await dialog.showSaveDialog({
             title: "Save crushed image",
             defaultPath: filename
@@ -84,7 +84,7 @@ const saveFile = async (filePath, destination, filename, cb) => {
     try {
         fs.copyFileSync(fixedPath, outPath)
         success = true
-    } catch(e) {
+    } catch (e) {
         console.error(e)
     }
     cb({
@@ -114,9 +114,10 @@ function setDockBadge(count) {
     }
 }
 
-  ipcRenderer.on('shortcut' , function(event , data){ 
-      
-    switch(data.shortcut) {
+ipcRenderer.on('shortcut', function (event, data) {
+    console.log(data)
+
+    switch (data.shortcut) {
         case "recrush":
             window.recrushAll();
             break;
@@ -137,8 +138,8 @@ function setDockBadge(count) {
             window.location.reload()
             break;
         case "remove-large-files":
-            window.files.list.forEach(file => {
-                if(file.status == "done" && file.endSize > file.startSize) {
+            window.files.forEach(file => {
+                if (file.status == "done" && file.endSize > file.startSize) {
                     window.deleteUUID(file.uuid)
                 }
             });
@@ -154,11 +155,31 @@ ipcRenderer.on('version', (event, curVersion) => {
 })
 
 
+window.fileCounts = {
+    total: 0,
+    error: 0,
+    crushing: 0,
+    saving: 0,
+}
 
+window.recrushAll = () => {
 
+}
 
+window.clearAllFiles = function () {
+    for (let file in window.files) {
+        window.deleteUUID(file)
+    }
+}
 
-
+window.deleteUUID = (UUID) => {
+    const file = files[UUID]
+    if(file.Status === "done" || file.Status === "error") {
+        file.Status = "deleted"
+        sendMessage("delete", UUID)
+        window.fileCounts.total--
+    }
+}
 
 
 
@@ -282,7 +303,7 @@ window.qualityPresets = qualityPresets
 
 
 
-function processMessage (ev) {
+function processMessage(ev) {
     console.log(ev)
     var data = ev
     //console.log(data)
@@ -292,21 +313,25 @@ function processMessage (ev) {
                 checkUUIDs(data.payload);
                 break;
             case "update":
-                var id = files.getFileID(data.payload.uuid)
-                if (id !== false) {
-                    for (var key in data.payload.file) {
-                        files.list[id][key] = data.payload.file[key]
-                    }
-                    files.list[id].setStatus(data.payload.file.status)
+                if(window.files[data.payload.file.UUID]) {
+                    window.files[data.payload.file.UUID] = data.payload.file
                 }
+                //var id = window.getFile(data.payload.uuid)
+                //if (id !== false) {
+                //for (var key in data.payload.file) {
+                //files.list[id][key] = data.payload.file[key]
+                //}
+                //id.Status = data.payload.file.status;
+                //}
                 break;
             case "upload":
                 var id = data.payload.id;
-                window.files[data.payload.newFileObj.UUID] = data.payload.newFileObj
+                window.files[data.payload.file.UUID] = data.payload.file
+                window.fileCounts.total++
                 for (var key in data.payload.file) {
-                    files.list[id][key] = data.payload.file[key]
+                    //files.list[id][key] = data.payload.file[key]
                 }
-                files.list[id].setStatus(data.payload.file.status)
+                //files.list[id].setStatus(data.payload.file.status)
                 break;
             case "replace":
                 var id = files.getFileID(data.payload.oldUUID)
@@ -324,12 +349,15 @@ server.on('message', processMessage)
 
 
 
-
-
-
 window.server = server
 window.thisWindow = browser
 window.openDialog = openDialog
 window.saveFile = saveFile
-
-window.server.on('message', processMessage)
+window.GlobalSettings = []
+window.getFile = (uuid) => {
+    for (file of files) {
+        if (file === uuid) {
+            return files[file]
+        }
+    }
+}

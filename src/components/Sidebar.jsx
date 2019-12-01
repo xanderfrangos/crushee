@@ -86,7 +86,7 @@ export const Sidebar = () => {
                         <div className="row">
                             <div className="col flex-1">
                                 <label>Quality Level</label>
-                                <InputSlider name="test" level={ window.Quality || 0 } min="0" max="99" onChange={ (a,b) => { window.Quality = a; } } />
+                                <InputSlider name="test" level={ window.GlobalSettings.Quality || 0 } onChange={ (a,b) => { window.GlobalSettings.Quality = a; console.log(a) } } />
                             </div>
                         </div>
                     </div>
