@@ -9,7 +9,7 @@ let browser = remote.getCurrentWindow()
 
 
 console.log("Starting optimizer...")
-let server = fork("./src/optimizer/index.js")
+let server = fork("./src/optimizer/server.js")
 
 remote.app.on("will-quit", () => {
     server.send(JSON.stringify({ type: "quit" }))
@@ -158,12 +158,24 @@ ipcRenderer.on('version', (event, curVersion) => {
 window.fileCounts = {
     total: 0,
     error: 0,
+    ready: 0,
     crushing: 0,
     saving: 0,
 }
 
 window.recrushAll = () => {
+    for (let file in window.files) {
+        window.crushFile(file)
+    }
+}
 
+window.crushFile = (UUID, options = defaultSettings) => {
+    const file = files[UUID]
+    if(file.Status === "done" || file.Status === "analyzed") {
+        file.Status = "crushing"
+        sendMessage("crush", {UUID, options: JSON.stringify(options)})
+        window.fileCounts.crushing++
+    }
 }
 
 window.clearAllFiles = function () {
@@ -174,7 +186,7 @@ window.clearAllFiles = function () {
 
 window.deleteUUID = (UUID) => {
     const file = files[UUID]
-    if(file.Status === "done" || file.Status === "error") {
+    if(file.Status === "done" || file.Status === "analyzed" || file.Status === "error") {
         file.Status = "deleted"
         sendMessage("delete", UUID)
         window.fileCounts.total--
@@ -183,7 +195,13 @@ window.deleteUUID = (UUID) => {
 
 
 
-
+window.popupMenu = (menu) => {
+    ipcRenderer.send("popupMenu", {
+        name: menu,
+        X: 100,
+        Y: 100
+    })
+}
 
 
 

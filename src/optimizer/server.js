@@ -98,7 +98,7 @@ for (let i = 0; i < maxProcessingThreads; i++) {
 }
 
 function makeThread(threadNum) {
-    let thread = fork('./src/optimizer/manipulate-file.js', [], { silent: false })
+    let thread = fork('./src/optimizer/file-thread.js', [], { silent: false })
 
     const forked = {
         queue: 0,
@@ -204,8 +204,11 @@ async function analyzeFile(uuid, uploadName, inFile, outDir, options = {}) {
     }).then((result) => {
         if (result) {
             // We did it!
+            uploads[uuid].Status = "analyzed"
             uploads[uuid].In = Object.assign(uploads[uuid].In, result)
-            const crushed = processFile(uuid, uploadName, inFile, outDir, options)
+            fileUpdateEvent(uuid)
+            //const crushed = processFile(uuid, uploadName, inFile, outDir, options)
+            return result
             return crushed
         } else {
             uploads[uuid].Status = "error"
@@ -344,6 +347,9 @@ process.on('message', function (msg) {
             case "upload":
                 uploadFile(data.payload.path, JSON.parse(data.payload.settings), data.payload.id)
                 break;
+            case "crush":
+                crush(data.payload.UUID, data.payload.options)
+                break;
             case "check":
                 uuids = checkUUIDs(data.payload)
                 sendMessage("check", uuids)
@@ -415,6 +421,10 @@ const checkUUIDs = (uuids) => {
     }
 }
 
+const crush = (UUID, options = "{}") => {
+    const file = uploads[UUID]
+    processFile(UUID, path.basename(file.In.Source), file.Path + "/source" + file.In.Extension, outPath, JSON.parse(options))
+}
 
 const recrush = (UUID, options = "{}") => {
     const file = uploads[UUID]

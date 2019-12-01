@@ -1,14 +1,27 @@
 .elem--file {
     user-select: none;
-    
+    position: relative;
+
     & > .inner {
-        padding: 0px 20px 20px;
+        padding: 10px 20px 10px;
         width: 100%;
         display: flex;
         direction: row;
         justify-content: space-between;
         align-items: center;
         box-sizing: border-box;
+    }
+
+    &[data-status="error"] {
+        background: rgba(255, 0, 0, 0.2);
+        .preview > .inner {
+            background-image: url('../assets/unknown.svg');
+        }
+
+        .subtitle {
+            color: red;
+            font-weight: bold;
+        }
     }
 
     .preview {
@@ -21,7 +34,7 @@
             border-radius: 3px;
             overflow: hidden;
             position: relative;
-            background: white url('../assets/unknown.svg') center center repeat;
+            background: white center center repeat;
             background-color: var(--preview-bg);
             background-size: cover;
         }
@@ -38,7 +51,7 @@
             left: 0;
             width: 0%;
             height: 100%;
-            background: var(--color-primary);
+            background: var(--bg-base);
             opacity: 0.9;
             transition: width 0.1s, opacity 0.3s 0.2s;
             z-index: 1;
@@ -113,7 +126,6 @@
             font-size: 26px;
             font-weight: 700;
             white-space: nowrap;
-            margin-bottom: 8px;
             max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis
@@ -121,6 +133,7 @@
 
         .subtitle {
             font-size: 13px;
+            margin-top: 8px;
             .bold {
                 color: var(--color-primary);
                 font-weight: 700;
@@ -218,13 +231,13 @@
     }
 
 
-    &[data-status='uploading'] {
+    &[data-status='processing'] {
         .preview {
             & > .inner {
                 animation: uploadingPulse 1s infinite;
                 @keyframes uploadingPulse {
                     0% { opacity:1; }
-                    50% { opacity:0.75; }
+                    50% { opacity:0.55; }
                     100% { opacity:1; }
                 }
             }
@@ -234,13 +247,20 @@
         }
     }
 
+    &[data-status='analyzed'] {
+
+            img {
+                display: block;
+            }
+    }
+
     &[data-status='crushing'] {
         .preview {
             & > .inner {
                 animation: uploadingPulse 0.5s infinite;
                 @keyframes uploadingPulse {
                     0% { opacity:1; }
-                    50% { opacity:0.75; }
+                    50% { opacity:0.55; }
                     100% { opacity:1; }
                 }
             }
@@ -248,7 +268,7 @@
                 display: block;
             }
             .progress-bar {
-                opacity: 0.85;
+                //opacity: 0.85;
                 width: 100%;
             }
         }

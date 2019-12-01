@@ -139,41 +139,39 @@ function tryStart() {
   tryingConnection = false
 }
 
+const menus = {
 
-const menuTemplate = [
-  {
-      label: 'File',
-      submenu: [
-        {
-          label: 'Add File(s)',
-          accelerator: 'Shift+CmdOrCtrl+A',
-          click: () => {
-            mainWindow.webContents.send('shortcut', {
-              shortcut: "add-files"
-            })
-          }
-      },{
-        label: 'Save All Files',
-        accelerator: 'CmdOrCtrl+S',
+
+  File: [
+      {
+        label: 'Add File(s)',
+        accelerator: 'Shift+CmdOrCtrl+A',
         click: () => {
-            console.log('Save All Clicked');
           mainWindow.webContents.send('shortcut', {
-            shortcut: "save-all"
+            shortcut: "add-files"
           })
         }
-    }, {
-              type: 'separator'
-          }, {
-              label: 'Quit',
-              click: () => {
-                  app.quit();
-              }
-          }
-      ]
-  },
-  {
-    label: 'Edit',
-    submenu: [
+    },{
+      label: 'Save All Files',
+      accelerator: 'CmdOrCtrl+S',
+      click: () => {
+          console.log('Save All Clicked');
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "save-all"
+        })
+      }
+  }, {
+            type: 'separator'
+        }, {
+            label: 'Quit',
+            click: () => {
+                app.quit();
+            }
+        }
+    ],
+
+
+    Edit: [
       {
         label: 'Recrush All Files',
         accelerator: 'CmdOrCtrl+R',
@@ -203,11 +201,10 @@ const menuTemplate = [
           })
         }
       }
-    ]
-},
-{
-  label: 'Help',
-  submenu: [
+    ],
+
+
+    Help: [
       /*{
           label: 'About Crushee',
           click: () => {
@@ -247,9 +244,35 @@ const menuTemplate = [
         require("electron").shell.openExternal("https://crushee.app/?app")
       }
     }
+  ],
+
+  RightClickFile: [
+
   ]
+
+}
+
+
+const menuTemplate = [
+  {
+      label: 'File',
+      submenu: menus.File
+  },
+  {
+    label: 'Edit',
+    submenu: menus.Edit
+},
+{
+  label: 'Help',
+  submenu: menus.Help
 }
 ];
+
+
+ipcMain.on('menuPop', (event, arg) => {
+  const menu2 = Menu.buildFromTemplate(menus.File);
+  menu2.popup()
+})
 
 // Kill everything if this process fails
 app.on("error", () => { app.quit() })
