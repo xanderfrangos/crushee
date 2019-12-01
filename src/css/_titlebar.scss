@@ -34,6 +34,7 @@
     .titlebar-menu {
         display: flex;
         align-items: center;
+        -webkit-app-region: no-drag;
         .logo-icon {
             margin-left: 12px;
         }
@@ -43,6 +44,9 @@
                 margin-left: 12px;
                 font-size: 12px;
                 font-family: 'Segoe UI', Helvetica, Tahoma, Geneva, Verdana, sans-serif;
+                &:hover, &:focus {
+                    background: rgba(123,123,123,0.35);
+                }
             }
         }
     }

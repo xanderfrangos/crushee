@@ -269,7 +269,7 @@ const menuTemplate = [
 ];
 
 
-ipcMain.on('menuPop', (event, arg) => {
+ipcMain.on('popupMenu', (event, arg) => {
   const menu2 = Menu.buildFromTemplate(menus.File);
   menu2.popup()
 })
