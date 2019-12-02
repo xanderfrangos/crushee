@@ -251,7 +251,32 @@ const menus = {
   ],
 
   RightClickFile: [
-
+    {
+      label: `Save`,
+      click: () => {
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "right-click-save"
+        })
+      }
+    },
+    {
+      label: `Crush`,
+      click: () => {
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "right-click-crush"
+        })
+      }
+    }, {
+      type: 'separator'
+    },
+    {
+      label: `Remove`,
+      click: () => {
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "right-click-remove"
+        })
+      }
+    }
   ]
 
 }
@@ -276,8 +301,8 @@ const menuTemplate = [
 ipcMain.on('popupMenu', (event, args) => {
   const menu2 = Menu.buildFromTemplate(menus[args.menu]);
   menu2.popup({
-    x: Math.round(args.x),
-    y: Math.round(args.y)
+    x: (args.x ? Math.round(args.x) : null),
+    y: (args.y ? Math.round(args.y) : null)
   })
 })
 

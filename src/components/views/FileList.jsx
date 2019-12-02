@@ -3,6 +3,13 @@ import { PureComponent } from "react";
 import { Empty } from "./Empty";
 const Utilities = require("../../Utilities")
 
+const rightClickFilter = (event) => {
+    const file = window.files[event.currentTarget.dataset.uuid]
+    if(file.Status === "done" || file.Status === "analyzed") {
+        window.rightClickTarget = file.UUID;
+        window.popupMenu("RightClickFile")
+    }
+}
 
 const makeFileItemImage = function (file) {
     if (file.In.Format) {
@@ -36,7 +43,7 @@ export default class FileList extends PureComponent {
 
     makeFileItem = function (file, idx) {
         if (file.Status !== "deleted") {
-            return (<div className="elem--file" data-id="1" data-status="done" key={file.UUID} data-status={file.Status}>
+            return (<div className="elem--file" key={file.UUID} data-uuid={file.UUID} data-status={file.Status} onContextMenu={rightClickFilter}>
                 <div className="inner">
 
                     <div className="preview">
