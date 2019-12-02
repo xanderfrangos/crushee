@@ -55,7 +55,7 @@ let jobQueue = []
 let uploads = []
 
 // Limit extra threads
-let maxProcessingThreads = (os.cpus().length > 1 ? os.cpus().length - 1 : 1)
+let maxProcessingThreads = (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1)
 let fileProcessorThreads = []
 
 /*
