@@ -39,17 +39,30 @@ function openDialog() {
 
 
 function addFiles(files) {
-    for (var i = 0, file; file = files[i]; i++) {
-        console.log("upload", file)
 
-        window.sendMessage("upload", {
-            path: file,
-            settings: JSON.stringify(defaultSettings),
-            //id: files.list.indexOf(file)
-            id: 0
+    // Loop through files async, find files, scan dirs
+    for (let i = 0, file; file = files[i]; i++) {
+        fs.stat(file, (err, stats) => {
+            if(stats.isFile()) {
+                // Is file: upload
+                window.sendMessage("upload", {
+                    path: file,
+                    settings: JSON.stringify(defaultSettings),
+                    id: 0
+                })
+            } else if(stats.isDirectory()) {
+                // Is directory: scan directory
+                fs.readdir(file, (err, dirFiles) => {
+                    let fileList = []
+                    for(let dirFile of dirFiles) {
+                        fileList.push(slash(file + "/" + dirFile))
+                    }
+                    addFiles(fileList)
+                  });
+            }
         })
-
     }
+
 }
 window.addFiles = addFiles
 

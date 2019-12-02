@@ -45,9 +45,7 @@ class File {
     }
     setStatus(status) {
         this.Status = status;
-        console.log(this.LastEvent)
         this.LastEvent = Date.now()
-        console.log(this.LastEvent)
     }
 }
 
@@ -57,7 +55,7 @@ let jobQueue = []
 let uploads = []
 
 // Limit extra threads
-let maxProcessingThreads = os.cpus().length
+let maxProcessingThreads = (os.cpus().length > 1 ? os.cpus().length - 1 : 1)
 let fileProcessorThreads = []
 
 /*
@@ -134,7 +132,10 @@ function makeThread(threadNum) {
                     payload: job.payload
                 }, (e) => {
                     if (e) {
+                        // If errored out, put back in to queue
                         console.log(e)
+                        delete forked.jobs[job.uuid]
+                        jobQueue.push(job)
                     }
                 })
             }
@@ -190,7 +191,7 @@ printQueues = () => {
 */
 
 
-
+// Reviews file, generates previews
 async function analyzeFile(uuid, uploadName, inFile, outDir, options = {}) {
     // Wait for response from thread
     return new Promise((resolve, reject) => {
@@ -207,9 +208,7 @@ async function analyzeFile(uuid, uploadName, inFile, outDir, options = {}) {
             uploads[uuid].Status = "analyzed"
             uploads[uuid].In = Object.assign(uploads[uuid].In, result)
             fileUpdateEvent(uuid)
-            //const crushed = processFile(uuid, uploadName, inFile, outDir, options)
             return result
-            return crushed
         } else {
             uploads[uuid].Status = "error"
             fileUpdateEvent(uuid)
@@ -289,7 +288,8 @@ const fileUpdateEvent = (uuid) => {
 
 
 const uploadFile = (pathName, settings = {}, id = -1) => {
-    // Process uploaded image
+    
+    console.log(`\x1b[34mAnalyzing\x1b[0m ${pathName}`)
 
     const file = new File(pathName)
     file.setStatus("processing")
