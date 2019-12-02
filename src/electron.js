@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, systemPreferences, Menu, MenuItem, Notification } = require('electron')
+const { app, BrowserWindow, ipcMain, systemPreferences, Menu, MenuItem, Notification, nativeTheme } = require('electron')
 const path = require("path")
 const fs = require("fs")
 const { fork } = require("child_process")
@@ -43,6 +43,10 @@ function loadCrusheePage() {
 }
 
 function createWindow() {
+
+  // Manually set to Light theme for now
+  nativeTheme.themeSource = 'light'
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1024,
