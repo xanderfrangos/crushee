@@ -269,9 +269,12 @@ const menuTemplate = [
 ];
 
 
-ipcMain.on('popupMenu', (event, arg) => {
-  const menu2 = Menu.buildFromTemplate(menus.File);
-  menu2.popup()
+ipcMain.on('popupMenu', (event, args) => {
+  const menu2 = Menu.buildFromTemplate(menus[args.menu]);
+  menu2.popup({
+    x: Math.round(args.x),
+    y: Math.round(args.y)
+  })
 })
 
 // Kill everything if this process fails

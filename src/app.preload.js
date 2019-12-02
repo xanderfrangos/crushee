@@ -195,11 +195,11 @@ window.deleteUUID = (UUID) => {
 
 
 
-window.popupMenu = (menu) => {
+window.popupMenu = (menu, x = null, y = null) => {
     ipcRenderer.send("popupMenu", {
-        name: menu,
-        X: 100,
-        Y: 100
+        menu,
+        x,
+        y
     })
 }
 
