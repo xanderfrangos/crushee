@@ -27,14 +27,14 @@ function openDialog() {
             'openFile',
             'multiSelections'
         ]
-    },
-        (files) => {
-            if (files == undefined)
-                return false;
+    }).then((returned) => {
+        const files = returned.filePaths
+        if (files == undefined)
+            return false;
 
-            console.log(files)
-            window.addFiles(files)
-        })
+        console.log(files)
+        window.addFiles(files)
+    })
 }
 
 
