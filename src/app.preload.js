@@ -44,12 +44,25 @@ function addFiles(files) {
     for (let i = 0, file; file = files[i]; i++) {
         fs.stat(file, (err, stats) => {
             if(stats.isFile()) {
+                
+                // If setting enabled, skip invalid extensions
+                let skipFile = false
+                if (window.GlobalSettings.FilterUsingExtension) {
+                    const ext = path.extname(file).toLowerCase()
+                    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".svg" && ext !== ".webp" && ext !== ".gif") {
+                        console.log("Invalid extension. Skipping " + file)
+                        skipFile = true
+                    }
+                }
+
                 // Is file: upload
-                window.sendMessage("upload", {
-                    path: file,
-                    settings: JSON.stringify(defaultSettings),
-                    id: 0
-                })
+                if (!skipFile) {
+                    window.sendMessage("upload", {
+                        path: file,
+                        settings: JSON.stringify(defaultSettings),
+                        id: 0
+                    })
+                }
             } else if(stats.isDirectory()) {
                 // Is directory: scan directory
                 fs.readdir(file, (err, dirFiles) => {
@@ -346,6 +359,9 @@ function processMessage(ev) {
             case "update":
                 if(window.files[data.payload.file.UUID]) {
                     window.files[data.payload.file.UUID] = data.payload.file
+                    if (window.GlobalSettings.RemoveErroredFiles && data.payload.file.Status === "error") {
+                        deleteUUID(data.payload.file.UUID)
+                    }
                 }
                 //var id = window.getFile(data.payload.uuid)
                 //if (id !== false) {
@@ -384,7 +400,13 @@ window.server = server
 window.thisWindow = browser
 window.openDialog = openDialog
 window.saveFile = saveFile
-window.GlobalSettings = []
+
+window.GlobalSettings = {
+    FilterUsingExtension: true,
+    RemoveErroredFiles: true,
+    NumberOfThreads: 2
+}
+
 window.getFile = (uuid) => {
     for (file of files) {
         if (file === uuid) {
