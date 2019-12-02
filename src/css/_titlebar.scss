@@ -41,12 +41,14 @@
         align-items: center;
         -webkit-app-region: no-drag;
             align-self: start;
+            height: 100%;
         .logo-icon {
             margin-left: 12px;
             margin-right: 12px;
         }
         .menu {
             display: flex;
+            height: 100%;
             .topLevel {
                     padding: 0 8px;
     height: 100%;
