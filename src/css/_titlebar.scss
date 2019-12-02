@@ -140,3 +140,12 @@
     }
 
 }
+
+body[data-platform="MacIntel"] {
+    .window-titlebar {
+        height: 22px;
+        .titlebar-menu, .window-controls-container {
+            display: none;
+        }
+    }
+}
