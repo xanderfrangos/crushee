@@ -70,7 +70,7 @@ export default class InputSlider extends PureComponent {
     render() {
         const min = (this.props.min || 0) * 1
         const max = (this.props.max || 100) * 1
-        const level = this.cap(this.props.level)
+        const level = this.cap(this.state.level)
         return (
             <div className="monitor-item">
                 {this.getName()}
