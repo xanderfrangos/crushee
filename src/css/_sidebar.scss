@@ -254,6 +254,11 @@
     justify-content: space-between;
     align-items: center;
 
+    .rangeGroup {
+        width: 100%;
+        padding-right: 15px;
+    }
+
     .range {
         flex: 2;
         display: block;
@@ -263,7 +268,6 @@
         background: transparent;
         border: none;
         padding: 0;
-        margin-right: 15px;
 
         &:focus {
             outline: none;
