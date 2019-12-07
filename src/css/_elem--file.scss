@@ -293,9 +293,20 @@
         }
     }
 
-    
+    // Hover states 
+&[data-status='analyzed'], &[data-status='done'] {
+    cursor: pointer;
+    &:hover {
+        background: rgba(122,122,122,0.3);
+    }
+    &:focus {
+        background: rgba(122,122,122,0.5);
+    }
+}
 
 }
+
+
 
 
 @mixin elem--file--mode-small() {

@@ -72,8 +72,6 @@ export default class InputSlider extends PureComponent {
         const max = (this.props.max || 100) * 1
         const level = this.cap(this.state.level)
         return (
-            <div className="monitor-item">
-                {this.getName()}
                 <div className="input--range">
                     <div className="rangeGroup">
                         <input type="range" min={min} max={max} value={level} data-percent={level + "%"} onChange={this.handleChange} onWheel={this.handleWheel} className="range" />
@@ -81,7 +79,6 @@ export default class InputSlider extends PureComponent {
                     </div>
                     <input type="number" min={min} max={max} value={level} onChange={this.handleChange} onWheel={this.handleWheel} className="val" />
                 </div>
-            </div>
         );
     }
 

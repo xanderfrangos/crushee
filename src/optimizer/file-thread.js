@@ -184,7 +184,7 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
             quality: 31 + (settings.jpg.quality / 1.5),
             sample,
             progressive: true,
-            tune
+            tune: "hvs-psnr"
         })
 
     } else {
@@ -406,8 +406,15 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
 
         sendGenericMessage("Preparing final file...")
         // Copy finished file to final location
-        fs.mkdirSync(uuidDir + "crushed/")
+        if(!fs.existsSync(uuidDir + "crushed/")) {
+            fs.mkdirSync(uuidDir + "crushed/")
+        }
+        
         let finalFile = uuidDir + "crushed/" + path.basename(fn, path.extname(fn)) + path.extname(resized)
+
+        if(fs.existsSync(finalFile)) {
+            fs.unlinkSync(finalFile)
+        }
 
         fs.copyFileSync(results[smallest.name], finalFile)
 

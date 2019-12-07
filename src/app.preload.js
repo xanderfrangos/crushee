@@ -38,95 +38,6 @@ function openDialog() {
 }
 
 
-function addFiles(files) {
-
-    // Loop through files async, find files, scan dirs
-    for (let i = 0, file; file = files[i]; i++) {
-        fs.stat(file, (err, stats) => {
-            if(stats.isFile()) {
-                
-                // If setting enabled, skip invalid extensions
-                let skipFile = false
-                if (window.GlobalSettings.FilterUsingExtension) {
-                    const ext = path.extname(file).toLowerCase()
-                    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".svg" && ext !== ".webp" && ext !== ".gif") {
-                        console.log("Invalid extension. Skipping " + file)
-                        skipFile = true
-                    }
-                }
-
-                // Is file: upload
-                if (!skipFile) {
-                    window.sendMessage("upload", {
-                        path: file,
-                        settings: JSON.stringify(defaultSettings),
-                        id: 0
-                    })
-                }
-            } else if(stats.isDirectory()) {
-                // Is directory: scan directory
-                fs.readdir(file, (err, dirFiles) => {
-                    let fileList = []
-                    for(let dirFile of dirFiles) {
-                        fileList.push(slash(file + "/" + dirFile))
-                    }
-                    addFiles(fileList)
-                  });
-            }
-        })
-    }
-
-}
-window.addFiles = addFiles
-
-
-const sendMessage = (type, payload = {}) => {
-    window.server.send(JSON.stringify({
-        type,
-        payload
-    }))
-}
-window.sendMessage = sendMessage
-
-
-const saveFile = async (filePath, destination, filename, cb) => {
-
-    let dest = destination
-    let outPath
-    if (destination == false) {
-        dest = await dialog.showSaveDialog({
-            title: "Save crushed image",
-            defaultPath: filename
-        })
-        outPath = dest
-    } else {
-        outPath = slash(path.resolve(path.dirname(dest), filename));
-    }
-
-    const fixedPath = slash(filePath.replace("file://", ""));
-    let success = false
-
-    console.log(fixedPath, outPath)
-    try {
-        fs.copyFileSync(fixedPath, outPath)
-        success = true
-    } catch (e) {
-        console.error(e)
-    }
-    cb({
-        status: "error",
-        filename,
-        path: outPath,
-        success
-    })
-};
-
-
-window.electron = {
-    download: saveFile,
-    setDockBadge,
-}
-
 ipc.on('markAllComplete', () => {
     // the todo app defines this function
     window.electron.markAllComplete();
@@ -170,6 +81,15 @@ ipcRenderer.on('shortcut', function (event, data) {
                 }
             });
             break;
+        case "right-click-save":
+            //window.crushFile(window.rightClickTarget, window.GlobalSettings.Quality)
+            break;
+        case "right-click-crush":
+            window.crushFile(window.rightClickTarget, window.GlobalSettings.Quality)
+            break;
+        case "right-click-remove":
+            window.deleteUUID(window.rightClickTarget)
+            break;
     }
 
 });
@@ -179,6 +99,122 @@ ipcRenderer.on('shortcut', function (event, data) {
 ipcRenderer.on('version', (event, curVersion) => {
 
 })
+
+
+window.popupMenu = (menu, x = null, y = null) => {
+    ipcRenderer.send("popupMenu", {
+        menu,
+        x,
+        y
+    })
+}
+
+
+const saveFile = async (filePath, destination, filename, cb) => {
+
+    let dest = destination
+    let outPath
+    if (destination == false) {
+        dest = await dialog.showSaveDialog({
+            title: "Save crushed image",
+            defaultPath: filename
+        })
+        outPath = dest
+    } else {
+        outPath = slash(path.resolve(path.dirname(dest), filename));
+    }
+
+    const fixedPath = slash(filePath.replace("file://", ""));
+    let success = false
+
+    console.log(fixedPath, outPath)
+    try {
+        fs.copyFileSync(fixedPath, outPath)
+        success = true
+    } catch (e) {
+        console.error(e)
+    }
+    cb({
+        status: "error",
+        filename,
+        path: outPath,
+        success
+    })
+};
+
+
+
+
+
+
+function addFiles(files) {
+
+    // Loop through files async, find files, scan dirs
+    for (let i = 0, file; file = files[i]; i++) {
+        fs.stat(file, (err, stats) => {
+            if (stats.isFile()) {
+
+                // If setting enabled, skip invalid extensions
+                let skipFile = false
+                if (window.GlobalSettings.FilterUsingExtension) {
+                    const ext = path.extname(file).toLowerCase()
+                    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".svg" && ext !== ".webp" && ext !== ".gif") {
+                        console.log("Invalid extension. Skipping " + file)
+                        skipFile = true
+                    }
+                }
+
+                // Is file: upload
+                if (!skipFile) {
+                    window.sendMessage("upload", {
+                        path: file,
+                        settings: JSON.stringify(window.GlobalSettings.Quality),
+                        id: 0
+                    })
+                }
+            } else if (stats.isDirectory()) {
+                // Is directory: scan directory
+                fs.readdir(file, (err, dirFiles) => {
+                    let fileList = []
+                    for (let dirFile of dirFiles) {
+                        fileList.push(slash(file + "/" + dirFile))
+                    }
+                    addFiles(fileList)
+                });
+            }
+        })
+    }
+
+}
+window.addFiles = addFiles
+
+
+const sendMessage = (type, payload = {}) => {
+    window.server.send(JSON.stringify({
+        type,
+        payload
+    }))
+}
+window.sendMessage = sendMessage
+
+
+
+server.on('message', processMessage)
+
+
+
+window.server = server
+window.thisWindow = browser
+window.openDialog = openDialog
+window.saveFile = saveFile
+
+
+
+
+
+
+
+
 
 
 window.fileCounts = {
@@ -197,9 +233,9 @@ window.recrushAll = () => {
 
 window.crushFile = (UUID, options = defaultSettings) => {
     const file = files[UUID]
-    if(file.Status === "done" || file.Status === "analyzed") {
+    if (file.Status === "done" || file.Status === "analyzed") {
         file.Status = "crushing"
-        sendMessage("crush", {UUID, options: JSON.stringify(options)})
+        sendMessage("crush", { UUID, options: JSON.stringify(options) })
         window.fileCounts.crushing++
     }
 }
@@ -212,21 +248,11 @@ window.clearAllFiles = function () {
 
 window.deleteUUID = (UUID) => {
     const file = files[UUID]
-    if(file.Status === "done" || file.Status === "analyzed" || file.Status === "error") {
+    if (file.Status === "done" || file.Status === "analyzed" || file.Status === "error") {
         file.Status = "deleted"
         sendMessage("delete", UUID)
         window.fileCounts.total--
     }
-}
-
-
-
-window.popupMenu = (menu, x = null, y = null) => {
-    ipcRenderer.send("popupMenu", {
-        menu,
-        x,
-        y
-    })
 }
 
 
@@ -346,7 +372,6 @@ window.qualityPresets = qualityPresets
 
 
 
-
 function processMessage(ev) {
     console.log(ev)
     var data = ev
@@ -357,7 +382,7 @@ function processMessage(ev) {
                 checkUUIDs(data.payload);
                 break;
             case "update":
-                if(window.files[data.payload.file.UUID]) {
+                if (window.files[data.payload.file.UUID]) {
                     window.files[data.payload.file.UUID] = data.payload.file
                     if (window.GlobalSettings.RemoveErroredFiles && data.payload.file.Status === "error") {
                         deleteUUID(data.payload.file.UUID)
@@ -392,21 +417,6 @@ function processMessage(ev) {
 }
 
 
-server.on('message', processMessage)
-
-
-
-window.server = server
-window.thisWindow = browser
-window.openDialog = openDialog
-window.saveFile = saveFile
-
-window.GlobalSettings = {
-    FilterUsingExtension: true,
-    RemoveErroredFiles: true,
-    NumberOfThreads: 2
-}
-
 window.getFile = (uuid) => {
     for (file of files) {
         if (file === uuid) {
@@ -414,3 +424,14 @@ window.getFile = (uuid) => {
         }
     }
 }
+
+
+
+
+window.GlobalSettings = {
+    FilterUsingExtension: true,
+    RemoveErroredFiles: true,
+    NumberOfThreads: 2,
+    Quality: Object.assign({}, defaultSettings)
+}
+
