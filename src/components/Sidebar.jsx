@@ -47,12 +47,13 @@ export const Sidebar = () => {
                         </div>
                         <div className="col">
                             <div className="input--dropdown" data-for="resizeCrop" tabIndex="0" data-linked="webp.make">
-                                <select>
-                                    <option>Do not convert</option>
-                                    <option>JPEG</option>
-                                    <option>PNG</option>
-                                    <option>WebP</option>
-                                    <option>GIF</option>
+                                <select onChange={(e) => {
+                                    window.GlobalSettings.Quality.app.convert = e.target.value
+                                }}>
+                                    <option value="none">Do not convert</option>
+                                    <option value="jpg">JPEG</option>
+                                    <option value="png">PNG</option>
+                                    <option value="webp">WebP</option>
                                 </select>
                             </div>
                         </div>

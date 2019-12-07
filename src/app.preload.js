@@ -294,7 +294,8 @@ const defaultSettings = {
         qualityPreset: 4,
         advancedQuality: "false",
         overwite: false,
-        darkMode: false
+        darkMode: false,
+        convert: "none"
     }
 }
 window.defaultSettings = defaultSettings

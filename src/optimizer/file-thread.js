@@ -109,12 +109,8 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
             )
         }
 
-        if (parseBool(settings.jpg.make)) {
-            ext = ".jpg"
-        }
-
-        if (parseBool(settings.webp.make)) {
-            ext = ".webp"
+        if (settings.app.convert === "jpg" || settings.app.convert === "png" || settings.app.convert === "webp") {
+            ext = "." + settings.app.convert
         }
 
         if (ext === ".jpg" || ext === ".jpeg") {
