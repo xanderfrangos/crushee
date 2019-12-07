@@ -15,11 +15,15 @@ export const Sidebar = () => {
                     <div className="row">
                         <div className="col">
                             <label>Max Width</label>
-                            <input type="numeric" name="resize.width" />
+                            <input type="numeric" name="resize.width" onChange={(e) => {
+                                window.GlobalSettings.Quality.resize.width = e.target.value
+                            }} />
                         </div>
                         <div className="col">
                             <label>Max Height</label>
-                            <input type="numeric" name="resize.height" />
+                            <input type="numeric" name="resize.height" onChange={ (e) => {
+                                window.GlobalSettings.Quality.resize.height = e.target.value
+                            }} />
                         </div>
                     </div>
                     <div className="row">
