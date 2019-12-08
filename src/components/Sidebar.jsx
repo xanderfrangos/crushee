@@ -1,6 +1,6 @@
 
 import React from 'react';
-import InputSlider from "./input/InputSlider";
+import InputToggle from "./input/InputToggle";
 import { FormattedSlider } from "./input/FormattedSlider";
 export const Sidebar = () => {
     return (
@@ -21,23 +21,17 @@ export const Sidebar = () => {
                         </div>
                         <div className="col">
                             <label>Max Height</label>
-                            <input type="numeric" name="resize.height" onChange={ (e) => {
+                            <input type="numeric" name="resize.height" onChange={(e) => {
                                 window.GlobalSettings.Quality.resize.height = e.target.value
                             }} />
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col">
-                            <label>Crop</label>
-                            <div className="sublabel">Width and height required</div>
-                        </div>
-                        <div className="col">
-                            <div className="input--toggle" data-for="resizeCrop" tabIndex="0" data-linked="resize.crop">
-                                <div></div>
-                                <input type="hidden" name="resize.crop" id="resizeCrop" data-linked="resize.crop" />
-                            </div>
-                        </div>
-                    </div>
+                    <InputToggle
+                        label="Crop"
+                        description="Width and height required"
+                        path="resize.crop"
+                        value={window.GlobalSettings.Quality.resize.crop}
+                    />
                 </div>
                 <div className="sidebar--section">
                     <div className="row center">
@@ -70,27 +64,17 @@ export const Sidebar = () => {
                         </div>
                     </div>
 
-                    
+
                     <FormattedSlider name="Quality Level" path="app.qualityPreset" min="0" max="3" />
 
+                
 
 
-                    <div className="row">
-                        <div className="col">
-                            <label>Advanced Options</label>
-                        </div>
-                        <div className="col">
-                            <div className="input--toggle" data-for="resizeCrop" tabIndex="0" data-linked="app.advancedQuality"
-                                data-action="toggleAdvancedQuality">
-                                <div></div>
-                                <input type="hidden" name="app.advancedQuality" id="resizeCrop"
-                                    data-linked="app.advancedQuality" />
-                            </div>
-                        </div>
-                    </div>
-
-                    
-                    <FormattedSlider name="Advanced Options" path="app.advancedQuality" min="0" max="1" />
+                    <InputToggle
+                        label="Advanced Options"
+                        path="app.advancedQuality"
+                        value={window.GlobalSettings.Quality.resize.crop}
+                    />
 
 
                     <div className="group quality-advanced">
@@ -100,6 +84,12 @@ export const Sidebar = () => {
                         <FormattedSlider name="WebP Quality" path="webp.quality" min="0" max="99" />
                         <FormattedSlider name="Chroma Subsampling Level" path="jpg.subsampling" min="1" max="3" />
                         <FormattedSlider name="Prefer Original JPEG" path="jpg.useOriginal" min="0" max="1" />
+                        <InputToggle
+                            label="Prefer Original JPEG"
+                            description="If possible, do not resave JPEG. Increases file size."
+                            path="jpg.useOriginal"
+                            value={window.GlobalSettings.Quality.resize.crop}
+                        />
                     </div>
 
 

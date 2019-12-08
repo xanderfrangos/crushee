@@ -1,21 +1,54 @@
-// <input onChange={this.startupChanged} checked={window.settings.openAtLogin || false} data-checked={window.settings.openAtLogin || false} type="checkbox" id="theme" />
+import React from "react";
+import { PureComponent } from "react";
+
+
+const makeLabel = (label) => {
+    if (label) {
+        return (
+            <label>{label}</label>
+        )
+    }
+}
+
+const makeDescription = (label) => {
+    if (label) {
+        return (
+            <div class="sublabel">{label}</div>
+        )
+    }
+}
+
+export default class InputToggle extends PureComponent {
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: false
+        }
+    }
 
 
 
+    render() {
+        const keys = this.props.path.split(".")
+        return (
+            <div className="row">
+                <div className="col">
+                    {makeLabel(this.props.label)}
+                    {makeDescription(this.props.description)}
+                </div>
+                <div className="col">
+                    <div className="input--toggle" data-value={window.GlobalSettings.Quality[keys[0]][keys[1]] || false} onClick={(e) => {
+                        window.GlobalSettings.Quality[keys[0]][keys[1]] = (window.GlobalSettings.Quality[keys[0]][keys[1]] === false ? true : false)
+                        this.setState({ value: window.GlobalSettings.Quality[keys[0]][keys[1]] })
+                    }}>
+                        <div></div>
+                        <input type="hidden" value={window.GlobalSettings.Quality[keys[0]][keys[1]] || false} />
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
-
-
-<div className="row">
-    <div className="col">
-        <label>Crop</label>
-        <div className="sublabel">Width and height required</div>
-    </div>
-    <div className="col">
-        <div className="input--toggle" data-for="resizeCrop" tabIndex="0" data-linked="resize.crop" onClick={ (e) => {
-            
-        }}>
-            <div></div>
-            <input type="hidden" name="resize.crop" id="resizeCrop" data-linked="resize.crop" />
-        </div>
-    </div>
-</div>
+};
