@@ -25,7 +25,8 @@ function openDialog() {
         buttonLabel: '+ Add File(s)',
         properties: [
             'openFile',
-            'multiSelections'
+            'multiSelections',
+            'openDirectory'
         ]
     }).then((returned) => {
         const files = returned.filePaths
