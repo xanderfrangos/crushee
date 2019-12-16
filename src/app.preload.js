@@ -15,8 +15,9 @@ remote.app.on("will-quit", () => {
     server.send(JSON.stringify({ type: "quit" }))
 })
 
-function openDialog() {
-    dialog.showOpenDialog({
+function openDialog(isFolder = false) {
+
+    const params = {
         title: "Select image(s)",
         filters: [
             { name: 'Images', extensions: ['jpg', 'png', 'gif', 'svg'] },
@@ -25,10 +26,15 @@ function openDialog() {
         buttonLabel: '+ Add File(s)',
         properties: [
             'openFile',
-            'multiSelections',
-            'openDirectory'
+            'multiSelections'
         ]
-    }).then((returned) => {
+    }
+
+    if(isFolder == true) {
+        params.properties.push('openDirectory')
+    }
+
+    dialog.showOpenDialog(params).then((returned) => {
         const files = returned.filePaths
         if (files == undefined)
             return false;
@@ -60,8 +66,10 @@ ipcRenderer.on('shortcut', function (event, data) {
             window.recrushAll();
             break;
         case "add-files":
-            //window.openFilePicker();
-            openDialog();
+            openDialog(false);
+            break;
+        case "add-folders":
+            openDialog(true);
             break;
         case "clear-all":
             window.clearAllFiles()
