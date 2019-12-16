@@ -13,7 +13,7 @@ const makeLabel = (label) => {
 const makeDescription = (label) => {
     if (label) {
         return (
-            <div class="sublabel">{label}</div>
+            <div className="sublabel">{label}</div>
         )
     }
 }
