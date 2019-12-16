@@ -155,16 +155,25 @@ const menus = {
             shortcut: "add-files"
           })
         }
-    },{
+    }, {
       label: 'Save All Files',
       accelerator: 'CmdOrCtrl+S',
       click: () => {
-          console.log('Save All Clicked');
+        console.log('Save All Clicked');
         mainWindow.webContents.send('shortcut', {
           shortcut: "save-all"
         })
       }
-  }, {
+    }, {
+      label: 'Save To Folder',
+      accelerator: 'CmdOrCtrl+F',
+      click: () => {
+        console.log('Save To Folder Clicked');
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "save-to-folder"
+        })
+      }
+    }, {
             type: 'separator'
         }, {
             label: 'Quit',
