@@ -156,6 +156,13 @@ const menus = {
           })
         }
     }, {
+      label: 'Add Folder(s)',
+      click: () => {
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "add-folders"
+        })
+      }
+    }, {
       label: 'Save All Files',
       accelerator: 'CmdOrCtrl+S',
       click: () => {
