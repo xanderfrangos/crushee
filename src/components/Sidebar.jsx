@@ -67,15 +67,11 @@ export const Sidebar = () => {
 
                     <FormattedSlider name="Quality Level" path="app.qualityPreset" min="0" max="3" />
 
-                
-
-
                     <InputToggle
                         label="Advanced Options"
                         path="app.advancedQuality"
                         value={window.GlobalSettings.Quality.resize.crop}
                     />
-
 
                     <div className="group quality-advanced">
                         <FormattedSlider name="JPEG Quality" path="jpg.quality" min="0" max="99" />
@@ -83,7 +79,6 @@ export const Sidebar = () => {
                         <FormattedSlider name="PNG Max Quality" path="png.qualityMax" min="0" max="99" />
                         <FormattedSlider name="WebP Quality" path="webp.quality" min="0" max="99" />
                         <FormattedSlider name="Chroma Subsampling Level" path="jpg.subsampling" min="1" max="3" />
-                        <FormattedSlider name="Prefer Original JPEG" path="jpg.useOriginal" min="0" max="1" />
                         <InputToggle
                             label="Prefer Original JPEG"
                             description="If possible, do not resave JPEG. Increases file size."
