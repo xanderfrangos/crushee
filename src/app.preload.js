@@ -120,7 +120,8 @@ window.popupMenu = (menu, x = null, y = null) => {
 
 
 const saveFile = async (filePath, destination, filename, cb) => {
-
+    console.log(filePath, destination, filename, cb)
+    /*
     let dest = destination
     let outPath
     if (destination == false) {
@@ -149,6 +150,7 @@ const saveFile = async (filePath, destination, filename, cb) => {
         path: outPath,
         success
     })
+    */
 };
 
 
@@ -264,6 +266,17 @@ window.deleteUUID = (UUID) => {
     }
 }
 
+window.saveAllFiles = (folder = false) => {
+    if(folder != false) {
+
+    } 
+    for (let UUID in window.files) {
+        const file = window.files[UUID]
+        if(file.Status == "done") {
+            console.log(file.Out.Crushed)
+        }
+    }
+}
 
 
 
