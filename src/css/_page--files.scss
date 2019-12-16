@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    height: calc(100% - 70px);
+    height: calc(100% - 100px);
     z-index: 2;
     //box-shadow: 0 -15px 35px rgba(33,33,33,0.5);
     box-sizing: border-box;
@@ -20,7 +20,7 @@
         //box-shadow: 0 20px 35px rgba(33,33,33,0.5);
 
         & ~ .floating-buttons {
-            display: block;
+            display: flex;
         }
     }
 
@@ -73,53 +73,44 @@
 .floating-buttons {
     //@extend shadow;
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 15px 8px;
-    box-sizing: border-box;
     display: none;
     z-index: 4;
     //background: var(--base-bg-alt);
 
-    @include mobile {
-        padding: 0;
 
-        .button {
-            border-radius: 0;
-            margin: 0;
-            box-shadow: none;
-            padding: 10px 16px;
-            flex-wrap: wrap;
-    
-            &.big {
-                font-size: 18px;
-            }
-    
-            .icon {
-                width: 100%;
-                margin-top: 7px;
-            }
-            .text {
-                font-size: 10px;
-                margin-top: 11px;
-                display: block;
-            }
-            span {
-                & + span {
-                    margin: 0;
-                }
-            }
-        }
 
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    border-top: 1px solid rgba(99, 99, 99, 0.25);
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .text {
+        font-size: 14px;
+        text-align: left;
+        font-weight: 500;
+        box-sizing: border-box;
+        padding: 0 10px 8px;
+        width: 100%;
     }
 
-    & > .inner {
+
+
+
+
+    .buttons {
         display: flex;
         flex-direction: row;
         justify-content: stretch;
-        max-width: 700px;
-        margin: auto;
+        //max-width: 700px;
+        margin: 0;
+        width: 100%;
     }
 
     

@@ -16,26 +16,30 @@ export const App = (props) => {
                     <FileList data-counts={window.fileCounts} />
                     <SingleFile />
                     <div className="floating-buttons">
-                        <div className="inner">
-                            <div className="button primary big action--download-all">Save All</div>
-                            <div className="button action--recompress">
-                                <span className="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                        <path
-                                            d="M12 5V2.21c0-.45-.54-.67-.85-.35l-3.8 3.79c-.2.2-.2.51 0 .71l3.79 3.79c.32.31.86.09.86-.36V7c3.73 0 6.68 3.42 5.86 7.29-.47 2.27-2.31 4.1-4.57 4.57-3.57.75-6.75-1.7-7.23-5.01-.07-.48-.49-.85-.98-.85-.6 0-1.08.53-1 1.13.62 4.39 4.8 7.64 9.53 6.72 3.12-.61 5.63-3.12 6.24-6.24C20.84 9.48 16.94 5 12 5z" />
+                        <div className="text">
+                            Total saved: 120MB · 67% smaller
+    
+                        </div>
+                        <div className="buttons">
+                            <div className="button big action--download-all">
+                                <span>
+                                    <svg id="_24px_1_" data-name="24px (1)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        <path id="Path_37" data-name="Path 37" d="M0,0H24V24H0Z" fill="none" />
+                                        <path id="Path_38" data-name="Path 38" d="M17.59,3.59A2.006,2.006,0,0,0,16.17,3H5A2,2,0,0,0,3,5V19a2.006,2.006,0,0,0,2,2H19a2.006,2.006,0,0,0,2-2V7.83a1.966,1.966,0,0,0-.59-1.41L17.59,3.59ZM12,19a3,3,0,1,1,3-3A3,3,0,0,1,12,19ZM13,9H7A2,2,0,0,1,7,5h6a2,2,0,0,1,0,4Z" fill="#fff" />
                                     </svg>
+
                                 </span>
-                                <span className="text">Re-Crush</span>
-                            </div>
-                            <div className="button action--add-file">
-                                <span className="icon">
+                                <span>Save All</span></div>
+
+                            <div className="button big transparent action--add-file">
+                                <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                         <path fill="none" d="M0 0h24v24H0V0z" />
                                         <path
                                             d="M12 7c-.55 0-1 .45-1 1v3H8c-.55 0-1 .45-1 1s.45 1 1 1h3v3c0 .55.45 1 1 1s1-.45 1-1v-3h3c.55 0 1-.45 1-1s-.45-1-1-1h-3V8c0-.55-.45-1-1-1zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
                                     </svg>
                                 </span>
-                                <span className="text">Add file(s)</span>
+                                <span>Add file(s)</span>
                             </div>
                         </div>
                     </div>

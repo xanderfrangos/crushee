@@ -64,10 +64,10 @@ input[type=number]::-webkit-outer-spin-button {
     @extend shadow;
     background: var(--color-secondary);
     padding: 12px 30px;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 800;
     color: white;
-    border-radius: 50px;
+    border-radius: 5px;
     text-align: center;
     text-transform: uppercase;
     margin: 0px 5px;
@@ -79,9 +79,10 @@ input[type=number]::-webkit-outer-spin-button {
     justify-content: center;
     align-items: center;
 
+    height: 20px;
+    line-height: 1;
+
     &.big {
-        font-size: 20px;
-        padding: 10px 30px;
         flex: 1;
     }
     &.primary {
@@ -95,15 +96,31 @@ input[type=number]::-webkit-outer-spin-button {
             background: var(--color-button-hover);
         }
     }
+    &.transparent {
+        background: none;
+        color: var(--color-secondary);
+        box-shadow: none;
+        svg {
+            fill: var(--color-secondary);
+        }
+    }
 
     &:hover {
         background: var(--color-button-hover);
+        color: white;
+        svg {
+            fill: white;
+        }
         @include appnav {
             background: var(--color-secondary);
         }
     }
     &:active {
         background: var(--color-button-hover);
+        color: white;
+        svg {
+            fill: white;
+        }
     }
 
     span {
