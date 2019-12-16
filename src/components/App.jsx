@@ -17,11 +17,13 @@ export const App = (props) => {
                     <SingleFile />
                     <div className="floating-buttons">
                         <div className="text">
-                            Total saved: 120MB · 67% smaller
+                            Total saved: 120MB · <b>67% smaller</b>
     
                         </div>
                         <div className="buttons">
-                            <div className="button big action--download-all">
+                            <div className="button big action--download-all" onClick={ (e) => {
+                                window.saveAllFiles()
+                            }}>
                                 <span>
                                     <svg id="_24px_1_" data-name="24px (1)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                         <path id="Path_37" data-name="Path 37" d="M0,0H24V24H0Z" fill="none" />
@@ -31,7 +33,9 @@ export const App = (props) => {
                                 </span>
                                 <span>Save All</span></div>
 
-                            <div className="button big transparent action--add-file">
+                            <div className="button big transparent action--add-file" onClick={ (e) => {
+                                window.openDialog(false)
+                            }}>
                                 <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                         <path fill="none" d="M0 0h24v24H0V0z" />

@@ -75,9 +75,6 @@
     position: absolute;
     display: none;
     z-index: 4;
-    //background: var(--base-bg-alt);
-
-
 
     position: absolute;
     bottom: 0;
@@ -98,6 +95,12 @@
         box-sizing: border-box;
         padding: 0 10px 8px;
         width: 100%;
+
+        b, strong {
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+
     }
 
 
