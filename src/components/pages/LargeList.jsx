@@ -19,7 +19,7 @@ export const LargeList = () => {
 
                         <div class="details">
                             <div class="title">IMG_20190925_144028-01_2.jpg</div>
-                            <div class="subtitle"><span>971.9KB</span><span>·</span><span class="bold">43% smaller</span></div>
+                            <div class="subtitle"><span>971.9KB</span><span>&middot;</span><span class="bold">43% smaller</span></div>
                         </div>
 
                         <div class="actions">

@@ -9,7 +9,7 @@ let browser = remote.getCurrentWindow()
 
 
 console.log("Starting optimizer...")
-let server = fork("./src/optimizer/server.js")
+let server = fork(path.join(__dirname, "../src/optimizer/server.js"))
 
 remote.app.on("will-quit", () => {
     server.send(JSON.stringify({ type: "quit" }))

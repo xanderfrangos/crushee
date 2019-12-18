@@ -17,7 +17,7 @@ export const App = (props) => {
                     <SingleFile />
                     <div className="floating-buttons">
                         <div className="text">
-                            Total saved: 120MB · <b>67% smaller</b>
+                            Total saved: 120MB &middot; <b>67% smaller</b>
     
                         </div>
                         <div className="buttons">

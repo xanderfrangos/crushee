@@ -40,7 +40,7 @@
   },
   "scripts": {
     "parcel": "parcel src/html/v2.html --port 3001 --out-dir build",
-    "parcel-build": "parcel build src/html/v2.html --out-dir build --public-url ./ --experimental-scope-hoisting",
+    "parcel-build": "parcel build src/html/v2.html --out-dir build --public-url ./ --no-minify",
     "electron-build": "electron-builder",
     "appx": "npm run parcel-build && electron-builder -w appx -c.extraMetadata.name=crushee-appx ",
     "appx-signed": "npm run parcel-build && electron-builder -w appx -c.win.certificateFile=cert.pfx -c.extraMetadata.name=crushee-appx",
@@ -52,6 +52,7 @@
   "build": {
     "productName": "Crushee",
     "appId": "com.xanderfrangos.crushee",
+    "asar": false,
     "directories": {
       "buildResources": "resources"
     },
@@ -73,8 +74,11 @@
     },
     "files": [
       "src/electron.js",
-      "src/preload.js",
+      "src/app.preload.js",
       "src/assets/*",
+      "src/optimizer/server.js",
+      "src/optimizer/file-thread.js",
+      "src/**/*",
       "build/**/*"
     ]
   }

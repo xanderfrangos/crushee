@@ -98,7 +98,7 @@ for (let i = 0; i < maxProcessingThreads; i++) {
 }
 
 function makeThread(threadNum) {
-    let thread = fork('./src/optimizer/file-thread.js', [], { silent: false })
+    let thread = fork(path.join(__dirname, 'file-thread.js'), [], { silent: false })
 
     const forked = {
         queue: 0,

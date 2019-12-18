@@ -31,11 +31,11 @@ const makeFileItemImage = function (file) {
 const makeFileItemInfoRow = function (file) {
     switch (file.Status) {
         case "done":
-            return (<div className="subtitle"><span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span>·</span><span className="bold">{Utilities.getFormattedPercent(file.In.FileSize, file.Out.FileSize)}</span></div>);
+            return (<div className="subtitle"><span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span>&middot;</span><span className="bold">{Utilities.getFormattedPercent(file.In.FileSize, file.Out.FileSize)}</span></div>);
         case "crushing":
-            return (<div className="subtitle"><span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span>·</span><span className="bold">Crushing...</span></div>);
+            return (<div className="subtitle"><span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span>&middot;</span><span className="bold">Crushing...</span></div>);
         case "analyzed":
-            return (<div className="subtitle"><span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span>·</span><span className="bold">Ready to crush</span></div>);
+            return (<div className="subtitle"><span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span>&middot;</span><span className="bold">Ready to crush</span></div>);
         case "error":
             return (<div className="subtitle"><span className="error">File not compatible.</span></div>);
     }
