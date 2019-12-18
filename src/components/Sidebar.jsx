@@ -70,22 +70,18 @@ export const Sidebar = () => {
                         path="app.qualityPreset"
                         min="0"
                         max="3"
-                        description="Use this if you don't want to fiddle with Advanced Options."
+                        description="Use this if you don't want to fiddle with the options below."
                     />
+
+
+
 
                     <div className="row center">
                         <div className="col">
-                            <div className="sidebar--header">Advanced Options</div>
+                            <div className="sidebar--header">JPEG Options</div>
                         </div>
                     </div>
-
-
-
-                    <div className="group quality-advanced">
                         <FormattedSlider name="JPEG Quality" path="jpg.quality" min="0" max="99" />
-                        <FormattedSlider name="PNG Min Quality" path="png.qualityMin" min="0" max="99" />
-                        <FormattedSlider name="PNG Max Quality" path="png.qualityMax" min="0" max="99" />
-                        <FormattedSlider name="WebP Quality" path="webp.quality" min="0" max="99" />
                         <FormattedSlider 
                         name="Chroma Subsampling Level" 
                         description="Sacrifice color accuracy for smaller files."
@@ -99,7 +95,26 @@ export const Sidebar = () => {
                             path="jpg.useOriginal"
                             value={window.GlobalSettings.Quality.jpg.useOriginal}
                         />
+
+
+                    <div className="row center">
+                        <div className="col">
+                            <div className="sidebar--header">PNG Options</div>
+                        </div>
                     </div>
+                        <FormattedSlider name="PNG Min Quality" path="png.qualityMin" min="0" max="99" />
+                        <FormattedSlider name="PNG Max Quality" path="png.qualityMax" min="0" max="99" />
+
+
+                    <div className="row center">
+                        <div className="col">
+                            <div className="sidebar--header">Other Options</div>
+                        </div>
+                    </div>
+                        <FormattedSlider name="WebP Quality" path="webp.quality" min="0" max="99" />
+                        <FormattedSlider name="GIF Colors" path="gif.colors" min="2" max="256" />
+
+
 
 
                 </div>
