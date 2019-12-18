@@ -8,6 +8,8 @@ const EventEmitter = require('events');
 const appDataPath = require('appdata-path')
 const slash = require('slash')
 
+
+let Settings = {}
 const sendMessage = (type, payload = {}) => {
     process.send({
         type,
@@ -192,13 +194,13 @@ printQueues = () => {
 
 
 // Reviews file, generates previews
-async function analyzeFile(uuid, uploadName, inFile, outDir, options = {}) {
+async function analyzeFile(uuid, uploadName, inFile, outDir) {
     // Wait for response from thread
     return new Promise((resolve, reject) => {
 
         jobQueue.push({
             uuid,
-            payload: [uuid, uploadName, inFile, outDir, options, "preview"],
+            payload: [uuid, uploadName, inFile, outDir, {}, "preview"],
             callback: resolve
         })
 
@@ -284,10 +286,45 @@ const fileUpdateEvent = (uuid) => {
 
 
 
+const scanFiles = (inFiles) => {
+
+    const files = (typeof inFiles == "object" ? inFiles : [inFiles])
+
+    // Loop through files async, find files, scan dirs
+    for (let i = 0, file; file = files[i]; i++) {
+        fs.stat(file, (err, stats) => {
+            if (stats && stats.isFile()) {
+
+                // If setting enabled, skip invalid extensions
+                let skipFile = false
+                if (Settings.FilterUsingExtension) {
+                    const ext = path.extname(file).toLowerCase()
+                    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".svg" && ext !== ".webp" && ext !== ".gif") {
+                        console.log("Invalid extension. Skipping " + file)
+                        skipFile = true
+                    }
+                }
+
+                // Is file: upload
+                if (!skipFile) {
+                    uploadFile(file)
+                }
+            } else if (stats.isDirectory()) {
+                // Is directory: scan directory
+                fs.readdir(file, (err, dirFiles) => {
+                    let fileList = []
+                    for (let dirFile of dirFiles) {
+                        fileList.push(slash(file + "/" + dirFile))
+                    }
+                    scanFiles(fileList)
+                });
+            }
+        })
+    }
+}
 
 
-
-const uploadFile = (pathName, settings = {}, id = -1) => {
+const uploadFile = (pathName) => {
     
     console.log(`\x1b[34mAnalyzing\x1b[0m ${pathName}`)
 
@@ -296,7 +333,7 @@ const uploadFile = (pathName, settings = {}, id = -1) => {
     const uuidDir = file.Path
 
     sendMessage("upload", {
-        id,
+        id: file.UUID,
         file
     })
 
@@ -305,7 +342,7 @@ const uploadFile = (pathName, settings = {}, id = -1) => {
     fs.copyFileSync(slash(pathName), filePath)
 
     // Send off to a thread
-    analyzeFile(file.UUID, path.basename(pathName), filePath, outPath, settings)
+    analyzeFile(file.UUID, path.basename(pathName), filePath, outPath)
 
 }
 
@@ -345,7 +382,8 @@ process.on('message', function (msg) {
                 removeFiles(data.payload)
                 break;
             case "upload":
-                uploadFile(data.payload.path, JSON.parse(data.payload.settings), data.payload.id)
+                //uploadFile(data.payload.path, JSON.parse(data.payload.settings), data.payload.id)
+                scanFiles(data.payload.path)
                 break;
             case "crush":
                 crush(data.payload.UUID, data.payload.options)
@@ -353,6 +391,9 @@ process.on('message', function (msg) {
             case "check":
                 uuids = checkUUIDs(data.payload)
                 sendMessage("check", uuids)
+                break;
+            case "settings":
+                Settings = data.payload.settings;
                 break;
             case "recrush":
                 uuids = data.payload.uuids

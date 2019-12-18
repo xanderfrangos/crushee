@@ -160,6 +160,10 @@ const saveFile = async (filePath, destination, filename, cb) => {
 
 function addFiles(files) {
 
+    window.sendMessage("upload", {
+        path: files
+    })
+/*
     // Loop through files async, find files, scan dirs
     for (let i = 0, file; file = files[i]; i++) {
         fs.stat(file, (err, stats) => {
@@ -177,11 +181,7 @@ function addFiles(files) {
 
                 // Is file: upload
                 if (!skipFile) {
-                    window.sendMessage("upload", {
-                        path: file,
-                        settings: JSON.stringify(window.GlobalSettings.Quality),
-                        id: 0
-                    })
+                    
                 }
             } else if (stats.isDirectory()) {
                 // Is directory: scan directory
@@ -195,6 +195,7 @@ function addFiles(files) {
             }
         })
     }
+    */
 
 }
 window.addFiles = addFiles
@@ -458,3 +459,6 @@ window.GlobalSettings = {
     Quality: Object.assign({}, defaultSettings)
 }
 
+window.sendMessage("settings", {
+    settings: window.GlobalSettings
+})

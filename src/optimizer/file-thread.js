@@ -287,7 +287,6 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
 
     let original = f
     let uuidDir = o + uuid + "/"
-    const quality = parseInt(options.jpg.quality)
 
     if (mode === "preview") {
         sendGenericMessage("Making previews...")
@@ -305,6 +304,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
             return false;
         }
     } else {
+        const quality = parseInt(options.jpg.quality)
         // Process with sharp
         sendGenericMessage("Processing...")
         let resized = await processImage(f, uuidDir, options)
