@@ -434,3 +434,5 @@ const recrush = (UUID, options = "{}") => {
 sendMessage({
     type: "ready"
 })
+
+console.log(`\x1b[34mServer Ready!\x1b[0m`)
