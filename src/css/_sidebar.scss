@@ -314,13 +314,13 @@
             width: 100%;
             height: 4px;
             cursor: pointer;
-            background: rgba(235, 53, 138, 0.4);
-            border-radius: 3px;
+            background: var(--sidebar-input-focus-border);
+            border-radius: 6px;
             transition: background 0.1s;
         }
 
         &:focus::-webkit-slider-runnable-track {
-            background: var(--sidebar-input-focus-border);
+            background: var(--color-secondar);
         }
 
     }

@@ -65,25 +65,39 @@ export const Sidebar = () => {
                     </div>
 
 
-                    <FormattedSlider name="Quality Level" path="app.qualityPreset" min="0" max="3" />
-
-                    <InputToggle
-                        label="Advanced Options"
-                        path="app.advancedQuality"
-                        value={window.GlobalSettings.Quality.resize.crop}
+                    <FormattedSlider
+                        name="Quality Level"
+                        path="app.qualityPreset"
+                        min="0"
+                        max="3"
+                        description="Use this if you don't want to fiddle with Advanced Options."
                     />
+
+                    <div className="row center">
+                        <div className="col">
+                            <div className="sidebar--header">Advanced Options</div>
+                        </div>
+                    </div>
+
+
 
                     <div className="group quality-advanced">
                         <FormattedSlider name="JPEG Quality" path="jpg.quality" min="0" max="99" />
                         <FormattedSlider name="PNG Min Quality" path="png.qualityMin" min="0" max="99" />
                         <FormattedSlider name="PNG Max Quality" path="png.qualityMax" min="0" max="99" />
                         <FormattedSlider name="WebP Quality" path="webp.quality" min="0" max="99" />
-                        <FormattedSlider name="Chroma Subsampling Level" path="jpg.subsampling" min="1" max="3" />
+                        <FormattedSlider 
+                        name="Chroma Subsampling Level" 
+                        description="Sacrifice color accuracy for smaller files."
+                        path="jpg.subsampling" 
+                        min="1" 
+                        max="3" 
+                        />
                         <InputToggle
-                            label="Prefer Original JPEG"
-                            description="If possible, do not resave JPEG. Increases file size."
+                            label="High Quality Mode"
+                            description="Prioritize quality over smaller file sizes."
                             path="jpg.useOriginal"
-                            value={window.GlobalSettings.Quality.resize.crop}
+                            value={window.GlobalSettings.Quality.jpg.useOriginal}
                         />
                     </div>
 
