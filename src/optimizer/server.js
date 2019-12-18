@@ -323,6 +323,30 @@ const scanFiles = (inFiles) => {
     }
 }
 
+const saveFiles = (inFiles, inDirectory = false, fileName = false) => {
+    const files = (typeof inFiles == "object" ? inFiles : [inFiles])
+    for (let i = 0, UUID; UUID = files[i]; i++) {
+        if(uploads[UUID]) {
+            const file = uploads[UUID]
+            const directory = (inDirectory || path.dirname(file.In.Source))
+            const inPath = slash(path.join(file.Path, "\\crushed\\", file.Out.Crushed))
+            const outPath = (fileName ? slash(path.join(directory, "\\", fileName)) : slash(path.join(directory, "\\", file.Out.Crushed)))
+            fs.copyFile(inPath, outPath, (err) => {
+                if(!err) {
+                    console.log(`\x1b[34mSaved\x1b[0m ${UUID}`)
+                    sendMessage("saved", { saved: true, UUID })
+                } else {
+                    console.log(`\x1b[34mERROR: Could not save\x1b[0m ${UUID}`)
+                    sendMessage("saved", { saved: false, UUID })
+                }
+            })
+        } else {
+            console.log(`\x1b[34mERROR: Invalid UUID for saving\x1b[0m ${UUID}`)
+            sendMessage("saved", { saved: false, UUID })
+        }
+    }
+
+}
 
 const uploadFile = (pathName) => {
     
@@ -394,6 +418,9 @@ process.on('message', function (msg) {
                 break;
             case "settings":
                 Settings = data.payload.settings;
+                break;
+            case "save-files":
+                saveFiles(data.payload.files, data.payload.directory, data.payload.filename);
                 break;
             case "recrush":
                 uuids = data.payload.uuids

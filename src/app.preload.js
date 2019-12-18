@@ -44,6 +44,30 @@ function openDialog(isFolder = false) {
     })
 }
 
+function saveDialog(isFolder = false) {
+    if(isFolder) {
+        dialog.showOpenDialog({
+        title: "Select folder",
+        buttonLabel: 'Select folder',
+        properties: [
+            'openDirectory'
+        ]
+        }).then((returned) => {
+            const files = returned.filePaths
+            if (files == undefined)
+                return false;
+
+            console.log(files)
+            if(files.length === 1) {
+                window.saveAllFiles(files[0])
+            } else {
+                console.log("Length not 1")
+                return false;
+            }
+        })
+    }
+}
+
 
 ipc.on('markAllComplete', () => {
     // the todo app defines this function
@@ -75,7 +99,11 @@ ipcRenderer.on('shortcut', function (event, data) {
             window.clearAllFiles()
             break;
         case "save-all":
-            window.$(".action--download-all").click()
+            //window.$(".action--download-all").click()
+            window.saveAllFiles()
+            break;
+        case "save-to-folder":
+            saveDialog(true);
             break;
         case "reset-app":
             window.setStatusBar("Resetting app preferences", "working")
@@ -91,7 +119,7 @@ ipcRenderer.on('shortcut', function (event, data) {
             });
             break;
         case "right-click-save":
-            //window.crushFile(window.rightClickTarget, window.GlobalSettings.Quality)
+            window.saveFiles(window.rightClickTarget)
             break;
         case "right-click-crush":
             window.crushFile(window.rightClickTarget, window.GlobalSettings.Quality)
@@ -152,7 +180,6 @@ const saveFile = async (filePath, destination, filename, cb) => {
     })
     */
 };
-
 
 
 
@@ -267,16 +294,23 @@ window.deleteUUID = (UUID) => {
     }
 }
 
-window.saveAllFiles = (folder = false) => {
-    if(folder != false) {
+window.saveFiles = (files, directory = false, filename = false) => {
+    window.sendMessage("save-files", {
+        files,
+        directory,
+        filename
+    })
+}
 
-    } 
+window.saveAllFiles = (folder = false) => {
+    const fileList = []
     for (let UUID in window.files) {
         const file = window.files[UUID]
         if(file.Status == "done") {
-            console.log(file.Out.Crushed)
+            fileList.push(UUID)
         }
     }
+    window.saveFiles(fileList, folder)
 }
 
 
