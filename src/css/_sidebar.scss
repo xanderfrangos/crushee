@@ -317,11 +317,11 @@
             cursor: pointer;
             background: var(--sidebar-input-focus-border);
             border-radius: 6px;
-            transition: background 0.1s;
+            transition: background 0.3s;
         }
 
         &:focus::-webkit-slider-runnable-track {
-            background: var(--color-secondar);
+            background: var(--color-secondary);
         }
 
     }
