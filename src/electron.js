@@ -163,6 +163,8 @@ const menus = {
         })
       }
     }, {
+      type: 'separator'
+    }, {
       label: 'Save All Files',
       accelerator: 'CmdOrCtrl+S',
       click: () => {
@@ -257,7 +259,10 @@ const menus = {
               app.quit();
           }
       },*/
-    {
+      {
+        type: 'separator'
+      },
+      {
       label: `Crushee v${crusheeVersion}`,
       click: () => {
         console.log('Version Clicked');
@@ -268,6 +273,15 @@ const menus = {
 
   RightClickFile: [
     {
+      label: `Crush`,
+      click: () => {
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "right-click-crush"
+        })
+      }
+    }, {
+      type: 'separator'
+    },{
       label: `Save`,
       click: () => {
         mainWindow.webContents.send('shortcut', {
@@ -276,13 +290,15 @@ const menus = {
       }
     },
     {
-      label: `Crush`,
+      label: `Save As...`,
+      enabled: false,
       click: () => {
         mainWindow.webContents.send('shortcut', {
-          shortcut: "right-click-crush"
+          shortcut: "right-click-save-as"
         })
       }
-    }, {
+    },
+     {
       type: 'separator'
     },
     {
@@ -315,7 +331,18 @@ const menuTemplate = [
 
 
 ipcMain.on('popupMenu', (event, args) => {
-  const menu2 = Menu.buildFromTemplate(menus[args.menu]);
+
+  const popupMenu = menus[args.menu]
+
+  if(args.disable) {
+    popupMenu[2].enabled = false
+    popupMenu[3].enabled = false
+  } else {
+    popupMenu[2].enabled = true
+    popupMenu[3].enabled = true
+  }
+
+  const menu2 = Menu.buildFromTemplate(popupMenu);
   menu2.popup({
     x: (args.x ? Math.round(args.x) : null),
     y: (args.y ? Math.round(args.y) : null)

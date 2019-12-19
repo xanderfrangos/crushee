@@ -138,11 +138,12 @@ ipcRenderer.on('version', (event, curVersion) => {
 })
 
 
-window.popupMenu = (menu, x = null, y = null) => {
+window.popupMenu = (menu, x = null, y = null, disable = false) => {
     ipcRenderer.send("popupMenu", {
         menu,
         x,
-        y
+        y,
+        disable
     })
 }
 
@@ -446,22 +447,13 @@ function processMessage(ev) {
                         deleteUUID(data.payload.file.UUID)
                     }
                 }
-                //var id = window.getFile(data.payload.uuid)
-                //if (id !== false) {
-                //for (var key in data.payload.file) {
-                //files.list[id][key] = data.payload.file[key]
-                //}
-                //id.Status = data.payload.file.status;
-                //}
+                sendUpdate()
                 break;
             case "upload":
                 var id = data.payload.id;
                 window.files[data.payload.file.UUID] = data.payload.file
                 window.fileCounts.total++
-                for (var key in data.payload.file) {
-                    //files.list[id][key] = data.payload.file[key]
-                }
-                //files.list[id].setStatus(data.payload.file.status)
+                sendUpdate()
                 break;
             case "replace":
                 var id = files.getFileID(data.payload.oldUUID)
@@ -469,9 +461,20 @@ function processMessage(ev) {
                     files.list[id][key] = data.payload.file[key]
                 }
                 files.list[id].setStatus(data.payload.file.status)
+                sendUpdate()
                 break;
 
         }
+}
+
+
+const sendUpdate = () => {
+    console.log("SEND UPDATE")
+    window.dispatchEvent(new CustomEvent('filesUpdated', {
+        detail: {
+          ts: Date.now()
+        }
+      }))
 }
 
 

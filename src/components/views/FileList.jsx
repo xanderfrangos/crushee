@@ -7,7 +7,7 @@ const rightClickFilter = (event) => {
     const file = window.files[event.currentTarget.dataset.uuid]
     if(file.Status === "done" || file.Status === "analyzed") {
         window.rightClickTarget = file.UUID;
-        window.popupMenu("RightClickFile")
+        window.popupMenu("RightClickFile", null, null, (file.Status !== "done"))
     }
 }
 
@@ -16,7 +16,7 @@ const moreMenuButton = (event) => {
     console.log(event.currentTarget.parentElement.parentElement.parentElement)
     if(file.Status === "done" || file.Status === "analyzed") {
         window.rightClickTarget = file.UUID;
-        window.popupMenu("RightClickFile")
+        window.popupMenu("RightClickFile", null, null, (file.Status !== "done"))
     }
 }
 
@@ -45,9 +45,14 @@ export default class FileList extends PureComponent {
 
     constructor(props) {
         super(props)
-        setInterval(() => { this.forceUpdate() }, 300)
     }
 
+
+    componentDidMount() {
+        window.addEventListener('filesUpdated', () => {
+            this.forceUpdate()
+        })
+    }
 
 
     makeFileItem = function (file, idx) {
