@@ -10,6 +10,9 @@ export function getFormattedSize(size) {
     } else if (absSize < 1000 * 1000 * 1000) {
         // MB
         outSize = (size / (1000 * 1000)).toFixed(1) + "MB"
+    } else if (absSize < 1000 * 1000 * 1000 * 1000) {
+        // MB
+        outSize = (size / (1000 * 1000 * 1000)).toFixed(1) + "GB"
     }
     return outSize
 }
