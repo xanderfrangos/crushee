@@ -23,7 +23,7 @@ export function getFormattedPercent(start, end) {
     else if (start < end) {
         return ((100 + ((end / start) * 100)).toFixed(0) + "% larger")
     } else {
-        return ((100 - ((end / start) * 100)).toFixed(0) + "% smaller")
+        return (Math.floor(100 - ((end / start) * 100)) + "% smaller")
     }
 
 }
