@@ -1,7 +1,13 @@
 import React from "react";
 
 const topLevelClick = (e) => {
-  window.popupMenu(e.currentTarget.textContent, e.currentTarget.getBoundingClientRect().left, e.currentTarget.getBoundingClientRect().bottom);
+  let disable = true
+  for(let UUID in window.files) {
+    if(window.files[UUID].Status === "done") {
+      disable = false
+    }
+  }
+  window.popupMenu(e.currentTarget.textContent, e.currentTarget.getBoundingClientRect().left, e.currentTarget.getBoundingClientRect().bottom, disable);
 }
 
 export const Titlebar = (props) => {

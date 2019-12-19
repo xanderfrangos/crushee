@@ -335,11 +335,31 @@ ipcMain.on('popupMenu', (event, args) => {
   const popupMenu = menus[args.menu]
 
   if(args.disable) {
-    popupMenu[2].enabled = false
-    popupMenu[3].enabled = false
+    switch(args.menu) {
+      case "RightClick":
+          popupMenu[2].enabled = false
+          popupMenu[3].enabled = false
+        break;
+      case "File":
+          popupMenu[3].enabled = false
+          popupMenu[4].enabled = false
+        break;
+      case "Edit":
+        break;
+    }
   } else {
-    popupMenu[2].enabled = true
-    popupMenu[3].enabled = true
+    switch(args.menu) {
+      case "RightClick":
+          popupMenu[2].enabled = true
+          popupMenu[3].enabled = true
+        break;
+      case "File":
+          popupMenu[3].enabled = true
+          popupMenu[4].enabled = true
+        break;
+      case "Edit":
+        break;
+    }
   }
 
   const menu2 = Menu.buildFromTemplate(popupMenu);
