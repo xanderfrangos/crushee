@@ -119,6 +119,11 @@
     &[data-crushed="true"] {
         .action--download-all {
             display: flex;
+            animation: floatingButtonIn 0.3s;
+            @keyframes floatingButtonIn {
+                0% { transform: translateY(150px); }
+                100% { transform: translateY(0px); }
+            }
         }
     }
 
@@ -131,6 +136,7 @@
         //max-width: 700px;
         margin: 0;
         width: 100%;
+        animation: floatingButtonIn 0.3s;
     }
 
     

@@ -138,6 +138,8 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        //transform: translateY(100%);
+        transition: transform 0.3s;
 
         .text {
             font-size: 14px;
@@ -371,5 +373,18 @@
 
     .sidebar {
         display: none;
+    }
+}
+
+#app-base {
+    &[data-any="true"] .sidebar .bottom {
+        //transform: translateY(0%);
+    }
+
+    &[data-crushed="true"] .sidebar .bottom {
+        .button > span + span:before {
+            content: "re";
+            display: inline;
+        }
     }
 }

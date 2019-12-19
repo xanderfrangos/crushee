@@ -79,7 +79,7 @@ export default class App extends PureComponent {
         window.stats = stats
 
         return (
-            <div id="app-base">
+            <div id="app-base" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0)}>
                 <Titlebar />
                 <Sidebar />
                 <div className="base" id="app">
