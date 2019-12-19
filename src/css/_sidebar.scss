@@ -291,6 +291,7 @@
         background: transparent;
         border: none;
         padding: 0;
+        z-index: 10;
 
         &:focus {
             outline: none;
@@ -307,7 +308,7 @@
             background: var(--sidebar-slider-active-thumb-bg);
             cursor: pointer;
             margin-top: -8px;
-            /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+            z-index: 10;
         }
 
 
@@ -324,6 +325,13 @@
             background: var(--color-secondary);
         }
 
+    }
+
+    .progress {
+        background: #EB358A;
+        height: 4px;
+        position: relative;
+        top: -4px;
     }
 
     input.val {

@@ -47,7 +47,7 @@ export default class InputSlider extends PureComponent {
     progressStyle = () => {
         const min = (this.props.min || 0) * 1
         const max = (this.props.max || 100) * 1
-        const level = this.cap((this.props.level || 0) * 1)
+        const level = this.state.level
         return { width: (0 + (((level - min) * (100 / (max - min))))) + "%" }
     }
 
