@@ -125,7 +125,7 @@ ipcRenderer.on('shortcut', function (event, data) {
             window.crushFile(window.rightClickTarget, window.GlobalSettings.Quality)
             break;
         case "right-click-remove":
-            window.deleteUUID(window.rightClickTarget)
+            window.deleteUUID(window.rightClickTarget, true)
             break;
     }
 
@@ -232,7 +232,7 @@ window.deleteUUID = (UUID, sendUpdate = true) => {
     }
     delete files[UUID]
     if(sendUpdate) {
-        sendUpdate();
+        window.sendUpdate()
     }
 }
 
@@ -417,6 +417,7 @@ const sendUpdate = () => {
         }
       }))
 }
+window.sendUpdate = sendUpdate
 
 
 window.getFile = (uuid) => {
