@@ -282,17 +282,22 @@ window.crushFile = (UUID, options = defaultSettings) => {
 
 window.clearAllFiles = function () {
     for (let file in window.files) {
-        window.deleteUUID(file)
+        window.deleteUUID(file, false)
     }
+    sendUpdate()
 }
 
-window.deleteUUID = (UUID) => {
+window.deleteUUID = (UUID, sendUpdate = true) => {
     const file = files[UUID]
     if (file.Status === "done" || file.Status === "analyzed" || file.Status === "error") {
         file.Status = "deleted"
         sendMessage("delete", UUID)
         window.fileCounts.total--
     }
+    if(sendUpdate) {
+        sendUpdate();
+    }
+    
 }
 
 window.saveFiles = (files, directory = false, filename = false) => {
