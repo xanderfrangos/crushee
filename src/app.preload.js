@@ -450,7 +450,6 @@ function processMessage(ev) {
                 sendUpdate()
                 break;
             case "upload":
-                var id = data.payload.id;
                 window.files[data.payload.file.UUID] = data.payload.file
                 window.fileCounts.total++
                 sendUpdate()
