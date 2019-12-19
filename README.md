@@ -7,7 +7,7 @@
 
 Crushee is an image compression tool, powered by Electron and Node.js. It accepts JPEG, PNG, GIF, SVG, and WebP files, and will output to JPEG, PNG, or WebP. It's useful for batch optimization and resizing images. You can carefully tune your images to meet your needs without having to re-upload or restart every time.
 
-Crushee was primarily built with [Electron](https://electronjs.org/), [Node.js](https://nodejs.org/), [Express](https://expressjs.com/), [sharp](https://github.com/lovell/sharp/), and [compress-images](https://github.com/semiromid/compress-images).
+Crushee was primarily built with [Electron](https://electronjs.org/), [Node.js](https://nodejs.org/), [Express](https://expressjs.com/), [sharp](https://github.com/lovell/sharp/), and [imagemin](https://github.com/imagemin/imagemin).
 
 
 
