@@ -291,7 +291,7 @@
         background: transparent;
         border: none;
         padding: 0;
-        z-index: 10;
+        position: relative;
 
         &:focus {
             outline: none;
@@ -308,7 +308,8 @@
             background: var(--sidebar-slider-active-thumb-bg);
             cursor: pointer;
             margin-top: -8px;
-            z-index: 10;
+            z-index: 3;
+            position: relative;
         }
 
 
