@@ -8,7 +8,7 @@ import { SingleFile } from "./views/SingleFile";
 const Utilities = require("../Utilities")
 
 const getTotalFiles = (stats) => {
-    const total = stats.analyzed + stats.crushing + stats.done + stats.error
+    const total = stats.processing + stats.analyzed + stats.crushing + stats.done + stats.error
     return `${total} Files`
 }
 
@@ -25,6 +25,7 @@ const getStatusBar = () => {
     const files = window.files
 
     const stats = {
+        processing: 0,
         analyzed: 0,
         crushing: 0,
         done: 0,
@@ -36,6 +37,9 @@ const getStatusBar = () => {
     for (let UUID in files) {
         const file = files[UUID]
         switch(file.Status) {
+            case "processing":
+                stats.processing++;
+                break;
             case "analyzed":
                 stats.analyzed++;
                 break;
