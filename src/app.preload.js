@@ -468,7 +468,6 @@ function processMessage(ev) {
 
 
 const sendUpdate = () => {
-    console.log("SEND UPDATE")
     window.dispatchEvent(new CustomEvent('filesUpdated', {
         detail: {
           ts: Date.now()
