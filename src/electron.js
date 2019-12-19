@@ -291,7 +291,6 @@ const menus = {
     },
     {
       label: `Save As...`,
-      enabled: false,
       click: () => {
         mainWindow.webContents.send('shortcut', {
           shortcut: "right-click-save-as"

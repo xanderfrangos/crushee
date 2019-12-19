@@ -4,6 +4,7 @@ import App from "./components/App";
 
 const files = []
 window.files = files
+window.stats = {}
 
 ReactDOM.render(<App />, document.getElementById("crushee"));
 

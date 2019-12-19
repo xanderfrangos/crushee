@@ -150,36 +150,6 @@ window.popupMenu = (menu, x = null, y = null, disable = false) => {
 
 const saveFile = async (filePath, destination, filename, cb) => {
     console.log(filePath, destination, filename, cb)
-    /*
-    let dest = destination
-    let outPath
-    if (destination == false) {
-        dest = await dialog.showSaveDialog({
-            title: "Save crushed image",
-            defaultPath: filename
-        })
-        outPath = dest
-    } else {
-        outPath = slash(path.resolve(path.dirname(dest), filename));
-    }
-
-    const fixedPath = slash(filePath.replace("file://", ""));
-    let success = false
-
-    console.log(fixedPath, outPath)
-    try {
-        fs.copyFileSync(fixedPath, outPath)
-        success = true
-    } catch (e) {
-        console.error(e)
-    }
-    cb({
-        status: "error",
-        filename,
-        path: outPath,
-        success
-    })
-    */
 };
 
 
@@ -191,40 +161,6 @@ function addFiles(files) {
     window.sendMessage("upload", {
         path: files
     })
-/*
-    // Loop through files async, find files, scan dirs
-    for (let i = 0, file; file = files[i]; i++) {
-        fs.stat(file, (err, stats) => {
-            if (stats.isFile()) {
-
-                // If setting enabled, skip invalid extensions
-                let skipFile = false
-                if (window.GlobalSettings.FilterUsingExtension) {
-                    const ext = path.extname(file).toLowerCase()
-                    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".svg" && ext !== ".webp" && ext !== ".gif") {
-                        console.log("Invalid extension. Skipping " + file)
-                        skipFile = true
-                    }
-                }
-
-                // Is file: upload
-                if (!skipFile) {
-                    
-                }
-            } else if (stats.isDirectory()) {
-                // Is directory: scan directory
-                fs.readdir(file, (err, dirFiles) => {
-                    let fileList = []
-                    for (let dirFile of dirFiles) {
-                        fileList.push(slash(file + "/" + dirFile))
-                    }
-                    addFiles(fileList)
-                });
-            }
-        })
-    }
-    */
-
 }
 window.addFiles = addFiles
 
@@ -294,10 +230,10 @@ window.deleteUUID = (UUID, sendUpdate = true) => {
         sendMessage("delete", UUID)
         window.fileCounts.total--
     }
+    delete files[UUID]
     if(sendUpdate) {
         sendUpdate();
     }
-    
 }
 
 window.saveFiles = (files, directory = false, filename = false) => {
@@ -447,7 +383,9 @@ function processMessage(ev) {
                 break;
             case "update":
                 if (window.files[data.payload.file.UUID]) {
-                    window.files[data.payload.file.UUID] = data.payload.file
+                    if(data.payload.file.Status !== "deleted") {
+                        window.files[data.payload.file.UUID] = data.payload.file
+                    }
                     if (window.GlobalSettings.RemoveErroredFiles && data.payload.file.Status === "error") {
                         deleteUUID(data.payload.file.UUID)
                     }

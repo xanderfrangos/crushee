@@ -20,49 +20,12 @@ const getPercentSaved = (inSize = 0, outSize = 0) => {
     return `${Utilities.getFormattedPercent(inSize, outSize)}`
 }
 
-
-const getStatusBar = () => {
-    const files = window.files
-
-    const stats = {
-        processing: 0,
-        analyzed: 0,
-        crushing: 0,
-        done: 0,
-        error: 0,
-        inSize: 0,
-        outSize: 0
-    }
-
-    for (let UUID in files) {
-        const file = files[UUID]
-        switch(file.Status) {
-            case "processing":
-                stats.processing++;
-                break;
-            case "analyzed":
-                stats.analyzed++;
-                break;
-            case "crushing":
-                stats.crushing++;
-                break;
-            case "done":
-                stats.done++;
-                stats.inSize += file.In.FileSize;
-                stats.outSize += file.Out.FileSize;
-                break;
-            case "error":
-                stats.error++;
-                break;
-        }
-    }
-    console.log(stats)
-
-return (<div>{ getTotalFiles(stats) } &middot; Total saved: { getTotalFileSize(stats.inSize, stats.outSize) } &middot; <b>{ getPercentSaved(stats.inSize, stats.outSize) }</b></div>)
+const getStatusBar = (stats) => {
+    return (<div>{getTotalFiles(stats)} &middot; Total saved: {getTotalFileSize(stats.inSize, stats.outSize)} &middot; <b>{getPercentSaved(stats.inSize, stats.outSize)}</b></div>)
 }
 
 export default class App extends PureComponent {
-    
+
     constructor(props) {
         super(props)
     }
@@ -74,6 +37,47 @@ export default class App extends PureComponent {
     }
 
     render() {
+        const files = window.files
+        const stats = {
+            total: 0,
+            processing: 0,
+            analyzed: 0,
+            crushing: 0,
+            done: 0,
+            error: 0,
+            inSize: 0,
+            outSize: 0
+        }
+    
+        for (let UUID in files) {
+            const file = files[UUID]
+            switch (file.Status) {
+                case "processing":
+                    stats.total++;
+                    stats.processing++;
+                    break;
+                case "analyzed":
+                    stats.total++;
+                    stats.analyzed++;
+                    break;
+                case "crushing":
+                    stats.total++;
+                    stats.crushing++;
+                    break;
+                case "done":
+                    stats.total++;
+                    stats.done++;
+                    stats.inSize += file.In.FileSize;
+                    stats.outSize += file.Out.FileSize;
+                    break;
+                case "error":
+                    stats.total++;
+                    stats.error++;
+                    break;
+            }
+        }
+        window.stats = stats
+
         return (
             <div id="app-base">
                 <Titlebar />
@@ -83,24 +87,24 @@ export default class App extends PureComponent {
                         <Empty />
                         <FileList data-counts={window.fileCounts} />
                         <SingleFile />
-                        <div className="floating-buttons" id="file-list-actions">
+                        <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0)}>
                             <div className="text">
-                            { getStatusBar() }
+                                { getStatusBar(stats) }
                             </div>
                             <div className="buttons">
-                                <div className="button big action--download-all" onClick={ (e) => {
-                                    window.saveAllFiles()
+                                <div className="button big action--download-all" onClick={(e) => {
+                                    window.saveAllFiles(stats)
                                 }}>
                                     <span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                             <path id="Path_37" data-name="Path 37" d="M0,0H24V24H0Z" fill="none" />
                                             <path id="Path_38" data-name="Path 38" d="M17.59,3.59A2.006,2.006,0,0,0,16.17,3H5A2,2,0,0,0,3,5V19a2.006,2.006,0,0,0,2,2H19a2.006,2.006,0,0,0,2-2V7.83a1.966,1.966,0,0,0-.59-1.41L17.59,3.59ZM12,19a3,3,0,1,1,3-3A3,3,0,0,1,12,19ZM13,9H7A2,2,0,0,1,7,5h6a2,2,0,0,1,0,4Z" fill="#fff" />
                                         </svg>
-    
+
                                     </span>
                                     <span>Save All</span></div>
-    
-                                <div className="button big transparent action--add-file" onClick={ (e) => {
+
+                                <div className="button big transparent action--add-file" onClick={(e) => {
                                     window.openDialog(false)
                                 }}>
                                     <span>
@@ -114,9 +118,9 @@ export default class App extends PureComponent {
                                 </div>
                             </div>
                         </div>
-    
+
                     </div>
-    
+
                     <div className="page--menu-layer">
                         <div className="elem--menu single-file">
                             <div className="elem--menu--inner">
