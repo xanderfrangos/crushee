@@ -3,6 +3,7 @@ import { PureComponent } from "react";
 import { Titlebar } from "./Titlebar";
 import { Sidebar } from "./Sidebar";
 import { Empty } from "./views/Empty";
+import { Scanning } from "./views/Scanning";
 import FileList from "./views/FileList";
 import { SingleFile } from "./views/SingleFile";
 const Utilities = require("../Utilities")
@@ -28,11 +29,21 @@ export default class App extends PureComponent {
 
     constructor(props) {
         super(props)
+        this.state = {
+            activeScans: 0
+        }
     }
 
     componentDidMount() {
         window.addEventListener('filesUpdated', () => {
             this.forceUpdate()
+        })
+        window.addEventListener('scanUpdated', (e) => {
+            const count = e.detail.count
+            this.setState({
+                activeScans: count
+            })
+            console.log('count', count)
         })
     }
 
@@ -84,8 +95,7 @@ export default class App extends PureComponent {
                 <Sidebar />
                 <div className="base" id="app">
                     <div className="base--inner">
-                        <Empty />
-                        <FileList data-counts={window.fileCounts} />
+                        <FileList data-counts={window.fileCounts} scans={this.state.activeScans} stats={stats} />
                         <SingleFile />
                         <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0)}>
                             <div className="text">

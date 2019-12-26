@@ -1,6 +1,7 @@
 import React from "react";
 import { PureComponent } from "react";
 import { Empty } from "./Empty";
+import { Scanning } from "./Scanning";
 const Utilities = require("../../Utilities")
 
 const rightClickFilter = (event) => {
@@ -90,17 +91,28 @@ export default class FileList extends PureComponent {
     }
 
     render() {
-        if (window.fileCounts.total > 0) {
-            return (
-                <div className="page page--files show">
-                    <div className="page--files--list">
-                        {Object.values(window.files).slice(0).reverse().map(this.makeFileItem)}
-                    </div>
-                </div>
-            )
-        }
-        else {
-            return (<Empty />)
+        if(this.props.scans > 0) {
+            return (<Scanning title="Scanning..." />)
+        } else {
+            if (this.props.stats.processing > 0) {
+                return (<Scanning title="Analyzing..." description={`${this.props.stats.processing} files`} />)
+            } else if(this.props.stats.crushing > 0 && this.props.stats.total > 10) {
+                return (<Scanning title="Crushing..." description={ `${this.props.stats.crushing} files` } />)
+            } else {
+                if (window.fileCounts.total > 0) {
+                    return (
+                        <div className="page page--files show">
+                            <div className="page--files--list">
+                                {Object.values(window.files).slice(0).reverse().map(this.makeFileItem)}
+                            </div>
+                        </div>
+                    )
+                }
+                else {
+                    return (<Empty />)
+                }
+            }
+            
         }
 
     }

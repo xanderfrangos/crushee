@@ -290,6 +290,10 @@ const scanFiles = (inFiles) => {
 
     const files = (typeof inFiles == "object" ? inFiles : [inFiles])
 
+    const scanID = getUUID()
+
+    sendMessage("scanStart", scanID)
+
     // Loop through files async, find files, scan dirs
     for (let i = 0, file; file = files[i]; i++) {
         fs.stat(file, (err, stats) => {
@@ -321,6 +325,9 @@ const scanFiles = (inFiles) => {
             }
         })
     }
+
+    sendMessage("scanEnd", scanID)
+
 }
 
 const saveFiles = (inFiles, inDirectory = false, fileName = false) => {

@@ -370,7 +370,7 @@ window.qualityPresets = qualityPresets
 
 
 
-
+let scanList = 0
 
 function processMessage(ev) {
     console.log(ev)
@@ -405,6 +405,14 @@ function processMessage(ev) {
                 files.list[id].setStatus(data.payload.file.status)
                 sendUpdate()
                 break;
+            case "scanStart":
+                scanList++
+                sendScanUpdate()
+                break;
+            case "scanEnd":
+                delete scanList--
+                sendScanUpdate()
+                break;
 
         }
 }
@@ -419,6 +427,14 @@ const sendUpdate = () => {
 }
 window.sendUpdate = sendUpdate
 
+
+const sendScanUpdate = () => {
+    window.dispatchEvent(new CustomEvent('scanUpdated', {
+        detail: {
+            count: scanList
+        }
+    }))
+}
 
 window.getFile = (uuid) => {
     for (file of files) {
