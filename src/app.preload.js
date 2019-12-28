@@ -405,6 +405,12 @@ function processMessage(ev) {
                 files.list[id].setStatus(data.payload.file.status)
                 sendUpdate()
                 break;
+            case "saved":
+                if(window.files[data.payload.UUID]) {
+                    window.files[data.payload.UUID].Status = (data.payload.saved ? "done" : "error")
+                }
+                sendUpdate()
+                break;
             case "scanStart":
                 scanList++
                 sendScanUpdate()

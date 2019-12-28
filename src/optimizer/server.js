@@ -335,6 +335,8 @@ const saveFiles = (inFiles, inDirectory = false, fileName = false) => {
     for (let i = 0, UUID; UUID = files[i]; i++) {
         if(uploads[UUID]) {
             const file = uploads[UUID]
+            file.Status = "saving"
+            fileUpdateEvent(UUID)
             const directory = (inDirectory || path.dirname(file.In.Source))
             const inPath = slash(path.join(file.Path, "\\crushed\\", file.Out.Crushed))
             const outPath = (fileName ? slash(path.join(directory, "\\", fileName)) : slash(path.join(directory, "\\", file.Out.Crushed)))

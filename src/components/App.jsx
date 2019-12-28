@@ -59,7 +59,7 @@ export default class App extends PureComponent {
             inSize: 0,
             outSize: 0
         }
-    
+
         for (let UUID in files) {
             const file = files[UUID]
             switch (file.Status) {
@@ -74,6 +74,10 @@ export default class App extends PureComponent {
                 case "crushing":
                     stats.total++;
                     stats.crushing++;
+                    break;
+                case "saving":
+                    stats.total++;
+                    stats.saving++;
                     break;
                 case "done":
                     stats.total++;
@@ -99,11 +103,11 @@ export default class App extends PureComponent {
                         <SingleFile />
                         <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0)}>
                             <div className="text">
-                                { getStatusBar(stats) }
+                                {getStatusBar(stats)}
                             </div>
                             <div className="buttons">
                                 <div className="button big action--download-all" onClick={(e) => {
-                                    window.saveAllFiles(stats)
+                                    window.saveAllFiles()
                                 }}>
                                     <span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
