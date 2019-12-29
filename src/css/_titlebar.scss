@@ -150,4 +150,9 @@ body[data-platform="MacIntel"] {
             display: none;
         }
     }
+
+    .base, .sidebar {
+        padding-top: 22px;
+    }
+
 }
