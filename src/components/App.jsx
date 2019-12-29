@@ -22,7 +22,7 @@ const getPercentSaved = (inSize = 0, outSize = 0) => {
 }
 
 const getStatusBar = (stats) => {
-    return (<div>{getTotalFiles(stats)} &middot; Total saved: {getTotalFileSize(stats.inSize, stats.outSize)} &middot; <b>{getPercentSaved(stats.inSize, stats.outSize)}</b></div>)
+    return (<div>{getTotalFiles(stats)} <span className="dot">&middot;</span> Total saved: {getTotalFileSize(stats.inSize, stats.outSize)} <span className="dot">&middot;</span> <b>{getPercentSaved(stats.inSize, stats.outSize)}</b></div>)
 }
 
 export default class App extends PureComponent {
