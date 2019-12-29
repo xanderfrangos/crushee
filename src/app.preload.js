@@ -390,8 +390,18 @@ const qualityPresets = [
 ]
 window.qualityPresets = qualityPresets
 
+const changeQualityLevel = (level) => {
+    if(level != window.GlobalSettings.Quality.app.qualityPreset) {
+        window.GlobalSettings.Quality.app.qualityPreset = level
+        window.GlobalSettings.Quality.jpg = Object.assign(window.GlobalSettings.Quality.jpg, qualityPresets[level].jpg)
+        window.GlobalSettings.Quality.png = Object.assign(window.GlobalSettings.Quality.png, qualityPresets[level].png)
+        window.GlobalSettings.Quality.webp = Object.assign(window.GlobalSettings.Quality.webp, qualityPresets[level].webp)
+        window.GlobalSettings.Quality.gif = Object.assign(window.GlobalSettings.Quality.gif, qualityPresets[level].gif)
+        window.sendUpdate()
+    }
+}
 
-
+window.changeQualityLevel = changeQualityLevel
 
 
 

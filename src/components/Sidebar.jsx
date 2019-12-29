@@ -71,6 +71,7 @@ export const Sidebar = () => {
                         min="0"
                         max="3"
                         description="Use this if you don't want to fiddle with the options below."
+                        onChange={ window.changeQualityLevel }
                     />
 
 

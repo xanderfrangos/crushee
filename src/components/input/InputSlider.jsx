@@ -60,10 +60,14 @@ export default class InputSlider extends PureComponent {
     }
 
     componentDidUpdate(oldProps) {
-        if(oldProps.max != this.props.max || oldProps.min != this.props.min) {
+        if(oldProps.max != this.props.max || oldProps.min != this.props.min || oldProps.level != this.props.level) {
             this.setState({
                 level: this.cap(this.props.level)
-            }, this.fireChange())
+            }, () => {
+                if(oldProps.level === this.props.level) {
+                    this.fireChange()
+                }
+            })
         }
     }
 
