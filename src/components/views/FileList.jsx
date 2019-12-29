@@ -86,7 +86,7 @@ export default class FileList extends PureComponent {
 
     render() {
         if(this.props.scans > 0) {
-            return (<Scanning title="Scanning..." />)
+            return (<Scanning title="Scanning..." description={`${this.props.scans} folders`} />)
         } else {
             if (this.props.stats.processing > 0) {
                 return (<Scanning title="Analyzing..." description={`${this.props.stats.processing} files`} />)
