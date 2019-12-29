@@ -128,11 +128,15 @@ ipcRenderer.on('shortcut', function (event, data) {
             window.location.reload()
             break;
         case "remove-large-files":
-            window.files.forEach(file => {
-                if (file.status == "done" && file.endSize > file.startSize) {
-                    window.deleteUUID(file.uuid)
+            for (let UUID in window.files) {
+                const file = window.files[UUID]
+                console.log(file)
+                if ((file.Status == "done" && file.In.FileSize <= file.Out.FileSize) || file.Status == "analyzed" || file.Status == "error") {
+                    console.log(UUID)
+                    window.deleteUUID(UUID, false)
                 }
-            });
+            }
+            window.sendUpdate()
             break;
         case "right-click-save":
             window.saveFiles(window.rightClickTarget)
