@@ -374,7 +374,7 @@ const qualityPresets = [
         jpg: {
             quality: 95,
             subsampling: 1,
-            useOriginal: false
+            useOriginal: true
         },
         png: {
             qualityMin: 25,
