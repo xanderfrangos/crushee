@@ -237,6 +237,16 @@ window.deleteUUID = (UUID, sendUpdate = true) => {
 }
 
 window.saveFiles = (files, directory = false, filename = false) => {
+    // Force the "saving" screen on early to prevent the rendering thread from getting too busy
+    let first = true
+    for (let UUID of files) {
+        window.files[UUID].Status = "saving"
+        if(first) {
+            first = false
+            sendUpdate()
+        }
+    }
+    sendUpdate()
     window.sendMessage("save-files", {
         files,
         directory,

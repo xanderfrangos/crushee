@@ -54,6 +54,7 @@ export default class App extends PureComponent {
             processing: 0,
             analyzed: 0,
             crushing: 0,
+            saving: 0,
             done: 0,
             error: 0,
             inSize: 0,
