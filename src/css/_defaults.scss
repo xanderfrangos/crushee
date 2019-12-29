@@ -128,12 +128,13 @@ input[type=number]::-webkit-outer-spin-button {
 
     span {
         display: block;
+        display: inline-flex;
         svg {
             margin-left: -4px;
         }
         & + span {
             margin-left: 6px;
-            //margin-bottom: -2px
+            margin-bottom: -1px;
         }
     }
 
