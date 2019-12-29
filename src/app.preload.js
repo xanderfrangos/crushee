@@ -68,7 +68,8 @@ function saveDialog(isFolder = false, extension = null) {
     } else {
         let settings = {
             title: "Save as",
-            buttonLabel: 'Save file'
+            buttonLabel: 'Save file',
+            defaultPath: window.files[window.rightClickTarget].In.FileName
         }
         if (extension) {
             settings.filters = [{
