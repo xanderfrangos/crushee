@@ -356,7 +356,7 @@ const qualityPresets = [
         jpg: {
             quality: 94,
             subsampling: 2,
-            useOriginal: false
+            useOriginal: true
         },
         png: {
             qualityMin: 15,
@@ -402,7 +402,6 @@ const changeQualityLevel = (level) => {
 }
 
 window.changeQualityLevel = changeQualityLevel
-
 
 
 let scanList = 0

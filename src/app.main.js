@@ -23,3 +23,6 @@ document.body.addEventListener("drop", (event) => {
     }
     window.addFiles(files)
 }, false);
+
+
+window.changeQualityLevel(2)
