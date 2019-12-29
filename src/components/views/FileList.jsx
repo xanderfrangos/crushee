@@ -61,7 +61,7 @@ export default class FileList extends PureComponent {
             return (<div className="elem--file" key={file.UUID} data-uuid={file.UUID} data-status={file.Status} onContextMenu={rightClickFilter} onClick={rightClickFilter}>
                 <div className="inner">
 
-                    <div className="preview">
+                    <div className="preview" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); window.showComparison(file); return false; } }>
                         <div className="inner">
                             <div className="overlay">
                                 <div className="progress-bar" style={{ width: "100%" }}></div>

@@ -5,7 +5,7 @@ import { Sidebar } from "./Sidebar";
 import { Empty } from "./views/Empty";
 import { Scanning } from "./views/Scanning";
 import FileList from "./views/FileList";
-import { SingleFile } from "./views/SingleFile";
+import SingleFile from "./views/SingleFile";
 const Utilities = require("../Utilities")
 
 const getTotalFiles = (stats) => {
@@ -30,7 +30,10 @@ export default class App extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            activeScans: 0
+            activeScans: 0,
+            comparisonShow: false,
+            comparisonBefore: "",
+            comparisonAfter: ""
         }
     }
 
@@ -43,7 +46,14 @@ export default class App extends PureComponent {
             this.setState({
                 activeScans: count
             })
-            console.log('count', count)
+        })
+        window.addEventListener('previewUpdated', (e) => {
+            const detail = e.detail
+            this.setState({
+                comparisonShow: detail.show,
+                comparisonBefore: (detail.before ? detail.before : this.state.comparisonBefore),
+                comparisonAfter: (detail.after ? detail.after : this.state.comparisonAfter)
+            })
         })
     }
 
@@ -101,7 +111,7 @@ export default class App extends PureComponent {
                 <div className="base" id="app">
                     <div className="base--inner">
                         <FileList data-counts={window.fileCounts} scans={this.state.activeScans} stats={stats} />
-                        <SingleFile />
+                        <SingleFile show={ this.state.comparisonShow } before={ this.state.comparisonBefore } after={ this.state.comparisonAfter } />
                         <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0)}>
                             <div className="text">
                                 {getStatusBar(stats)}

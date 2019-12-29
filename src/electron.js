@@ -280,6 +280,13 @@ const menus = {
         })
       }
     }, {
+      label: `Compare Changes`,
+      click: () => {
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "right-click-compare"
+        })
+      }
+    }, {
       type: 'separator'
     },{
       label: `Save`,
@@ -336,8 +343,9 @@ ipcMain.on('popupMenu', (event, args) => {
   if(args.disable) {
     switch(args.menu) {
       case "RightClickFile":
-          popupMenu[2].enabled = false
+          popupMenu[1].enabled = false
           popupMenu[3].enabled = false
+          popupMenu[2].enabled = false
         break;
       case "File":
           popupMenu[3].enabled = false
@@ -349,8 +357,9 @@ ipcMain.on('popupMenu', (event, args) => {
   } else {
     switch(args.menu) {
       case "RightClickFile":
-          popupMenu[2].enabled = true
+          popupMenu[1].enabled = true
           popupMenu[3].enabled = true
+          popupMenu[2].enabled = true
         break;
       case "File":
           popupMenu[3].enabled = true

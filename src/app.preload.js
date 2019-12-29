@@ -127,6 +127,9 @@ ipcRenderer.on('shortcut', function (event, data) {
         case "right-click-remove":
             window.deleteUUID(window.rightClickTarget, true)
             break;
+        case "right-click-compare":
+            window.showComparison(window.files[window.rightClickTarget])
+            break;
     }
 
 });
@@ -463,6 +466,26 @@ const sendScanUpdate = () => {
         }
     }))
 }
+
+const sendPreviewUpdate = (show = false, before = false, after = false) => {
+    window.dispatchEvent(new CustomEvent('previewUpdated', {
+        detail: {
+            show,
+            before,
+            after
+        }
+    }))
+}
+window.sendPreviewUpdate = sendPreviewUpdate
+
+
+const showComparison = (file) => {
+    if(file.Status === "done") {
+        window.sendPreviewUpdate(true, "file://" + file.Path + "/source" + file.In.Extension, "file://" + file.Path + "/crushed/" + file.Out.Crushed)
+    }
+}
+window.showComparison = showComparison
+
 
 window.getFile = (uuid) => {
     for (file of files) {
