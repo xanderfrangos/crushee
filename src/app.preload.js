@@ -23,7 +23,7 @@ function openDialog(isFolder = false) {
             { name: 'Images', extensions: ['jpg', 'png', 'gif', 'svg'] },
             { name: 'All Files', extensions: ['*'] }
         ],
-        buttonLabel: '+ Add File(s)',
+        buttonLabel: 'Add File(s)',
         properties: [
             'openFile',
             'multiSelections'
