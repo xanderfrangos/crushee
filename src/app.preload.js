@@ -39,7 +39,6 @@ function openDialog(isFolder = false) {
         if (files == undefined)
             return false;
 
-        console.log(files)
         window.addFiles(files)
     })
 }
@@ -57,7 +56,6 @@ function saveDialog(isFolder = false, extension = null) {
             if (files == undefined)
                 return false;
 
-            console.log(files)
             if (files.length === 1) {
                 window.saveAllFiles(files[0])
             } else {
@@ -102,7 +100,6 @@ function setDockBadge(count) {
 }
 
 ipcRenderer.on('shortcut', function (event, data) {
-    console.log(data)
 
     switch (data.shortcut) {
         case "recrush":
@@ -429,9 +426,7 @@ window.changeQualityLevel = changeQualityLevel
 let scanList = 0
 
 function processMessage(ev) {
-    console.log(ev)
     var data = ev
-    //console.log(data)
     if (typeof data.type != "undefined")
         switch (data.type) {
             case "check":
