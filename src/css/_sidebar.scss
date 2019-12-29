@@ -377,14 +377,27 @@
 }
 
 #app-base {
+
+    .sidebar .bottom {
+        .button > span + span:before {
+            content: "re";
+            display: inline-block;
+            width: 0px;
+            opacity: 0;
+            transition: width 0.2s, opacity 0.2s;
+            overflow: hidden;
+            vertical-align: middle;
+        }
+    }
+
     &[data-any="true"] .sidebar .bottom {
         //transform: translateY(0%);
     }
 
     &[data-crushed="true"] .sidebar .bottom {
         .button > span + span:before {
-            content: "re";
-            display: inline;
+            width: 26px;
+            opacity: 1;
         }
     }
 }
