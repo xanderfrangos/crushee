@@ -88,9 +88,9 @@ export default class FileList extends PureComponent {
         if(this.props.scans > 0) {
             return (<Scanning title="Scanning..." />)
         } else {
-            if (this.props.stats.processing > 0 && this.props.stats.total > 20) {
+            if (this.props.stats.processing > 0) {
                 return (<Scanning title="Analyzing..." description={`${this.props.stats.processing} files`} />)
-            } else if(this.props.stats.crushing > 0 && this.props.stats.total > 20) {
+            } else if(this.props.stats.crushing > 0) {
                 return (<Scanning title="Crushing..." description={ `${this.props.stats.crushing} files` } />)
             }  else if(this.props.stats.saving > 0) {
                 return (<Scanning title="Saving..." description={ `${this.props.stats.saving} files` } />)

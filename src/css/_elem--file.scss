@@ -102,7 +102,7 @@
         }
         img {
             display: none;
-            animation: filePreviewIn 0.3s;
+            //animation: filePreviewIn 0.3s;
             @keyframes filePreviewIn {
                 0% { opacity: 0; }
                 10% { opacity: 0; }

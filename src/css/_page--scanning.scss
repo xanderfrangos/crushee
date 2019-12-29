@@ -8,6 +8,7 @@
     user-select: none;
     cursor: pointer;
     z-index: 1;
+    animation: filePreviewIn 0.3s;
 
     svg {
         width: 100px;

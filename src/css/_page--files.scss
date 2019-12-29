@@ -18,6 +18,7 @@
     &.show {
         transform: translateY(0%);
         //box-shadow: 0 20px 35px rgba(33,33,33,0.5);
+        animation: filePreviewIn 0.3s;
 
         & ~ .floating-buttons {
             display: flex;
