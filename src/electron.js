@@ -244,7 +244,7 @@ const menus = {
         })
       }
     },
-      {
+      /*{
         label: 'Reset App',
         click: () => {
             console.log('Reset Clicked');
@@ -252,7 +252,7 @@ const menus = {
             shortcut: "reset-app"
           })
         }
-    },
+    },*/
       /*{
           label: 'Check For Updates',
           click: () => {
