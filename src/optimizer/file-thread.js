@@ -335,7 +335,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
         // Use MozJPEG to adjust overall quality
         // We'll use this on JPEGs that have been processed by sharp
         let mozJPEG
-        if (path.extname(resized) == ".jpg" && quality < 95) {
+        if (path.extname(resized) == ".jpg" && quality < 95 && options.jpg.useOriginal === false) {
             sendGenericMessage("MozJPEG compressing...")
             mozJPEG = await compressFile(resized, path.join(uuidDir, "moz"), options, "mozjpeg")
             if (mozJPEG) {
