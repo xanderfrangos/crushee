@@ -29,14 +29,24 @@ const makeFileItemImage = function (file) {
     }
 }
 
+const makeFormatTag = (file) => {
+    const ext1 = file.In.Extension.substr(1).toUpperCase()
+    if(file.Out.Extension && file.Out.Extension != file.In.Extension) {
+        const ext2 = file.Out.Extension.substr(1).toUpperCase()
+        return (<span className={"format " + ext1 + "-to-" + ext2}>{ext1} &rarr; {ext2}</span>)
+    } else {
+        return (<span className={"format " + ext1}>{ext1}</span>)
+    }
+}
+
 const makeFileItemInfoRow = function (file) {
     switch (file.Status) {
         case "done":
-            return (<div className="subtitle"><span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span className="dot">&middot;</span><span className="bold">{Utilities.getFormattedPercent(file.In.FileSize, file.Out.FileSize)}</span></div>);
+            return (<div className="subtitle">{makeFormatTag(file)}<span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span className="dot">&middot;</span><span className="bold">{Utilities.getFormattedPercent(file.In.FileSize, file.Out.FileSize)}</span></div>);
         case "crushing":
-            return (<div className="subtitle"><span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span className="dot">&middot;</span><span className="bold">Crushing...</span></div>);
+            return (<div className="subtitle">{makeFormatTag(file)}<span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span className="dot">&middot;</span><span className="bold">Crushing...</span></div>);
         case "analyzed":
-            return (<div className="subtitle"><span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span className="dot">&middot;</span><span className="bold">Ready to crush</span></div>);
+            return (<div className="subtitle">{makeFormatTag(file)}<span>{Utilities.getFormattedSize(file.In.FileSize)}</span><span className="dot">&middot;</span><span className="bold">Ready to crush</span></div>);
         case "error":
             return (<div className="subtitle"><span className="error">File not compatible.</span></div>);
     }

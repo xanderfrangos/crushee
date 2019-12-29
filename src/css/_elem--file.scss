@@ -136,10 +136,93 @@
         .subtitle {
             font-size: 13px;
             margin-top: 8px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
             .bold {
                 color: var(--color-primary);
                 font-weight: 800;
             }
+        }
+
+
+        .format {
+            background: #333;
+            color: white;
+            display: inline-block;
+            padding: 4px 7px;
+            line-height: 1;
+            border-radius: 17px;
+            font-size: 10px;
+            font-weight: bold;
+            font-family: Helvetica, "Seoge UI";
+            margin: -2px 2px -2px 0;
+
+            $cJPG: rgb(64, 160, 107);
+            $cPNG: rgb(201, 67, 183);
+            $cWEBP: rgb(218, 44, 44);
+            $cGIF: rgb(29, 101, 184);
+            $cSVG: rgb(163, 110, 50);
+
+            &.JPG {
+                background: $cJPG;
+            }
+            &.PNG {
+                background: $cPNG;
+            }
+            &.WEBP {
+                background: $cWEBP;
+            }
+            &.GIF {
+                background: $cGIF;
+            }
+            &.SVG {
+                background: $cSVG;
+            }
+
+            &.JPG-to-WEBP {
+                background: linear-gradient(90deg, $cJPG 0%, $cWEBP 100%);
+            }
+            &.JPG-to-PNG {
+                background: linear-gradient(90deg, $cJPG 0%, $cWEBP 100%);
+            }
+
+            &.PNG-to-JPG {
+                background: linear-gradient(90deg, $cPNG 0%, $cJPG 100%);
+            }
+            &.PNG-to-WEBP {
+                background: linear-gradient(90deg, $cPNG 0%, $cWEBP 100%);
+            }
+
+            &.WEBP-to-JPG {
+                background: linear-gradient(90deg, $cWEBP 0%, $cJPG 100%);
+            }
+            &.WEBP-to-PNG {
+                background: linear-gradient(90deg, $cWEBP 0%, $cPNG 100%);
+            }
+
+            
+            &.GIF-to-JPG {
+                background: linear-gradient(90deg, $cGIF 0%, $cJPG 100%);
+            }
+            &.GIF-to-PNG {
+                background: linear-gradient(90deg, $cGIF 0%, $cPNG 100%);
+            }
+            &.GIF-to-WEBP {
+                background: linear-gradient(90deg, $cGIF 0%, $cWEBP 100%);
+            }
+
+            &.SVG-to-JPG {
+                background: linear-gradient(90deg, $cSVG 0%, $cJPG 100%);
+            }
+            &.SVG-to-PNG {
+                background: linear-gradient(90deg, $cSVG 0%, $cPNG 100%);
+            }
+            &.SVG-to-WEBP {
+                background: linear-gradient(90deg, $cSVG 0%, $cWEBP 100%);
+            }
+
+
         }
 
     }
