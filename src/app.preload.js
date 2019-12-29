@@ -481,7 +481,7 @@ window.sendPreviewUpdate = sendPreviewUpdate
 
 const showComparison = (file) => {
     if(file.Status === "done") {
-        window.sendPreviewUpdate(true, "file://" + file.Path + "/source" + file.In.Extension, "file://" + file.Path + "/crushed/" + file.Out.Crushed)
+        window.sendPreviewUpdate(true, "file://" + file.Path + "/source" + file.In.Extension + "?" + Date.now(), "file://" + file.Path + "/crushed/" + file.Out.Crushed + "?" + Date.now())
     }
 }
 window.showComparison = showComparison
