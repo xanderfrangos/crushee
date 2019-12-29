@@ -47,6 +47,9 @@ let imgSettings = {
         alphaQuality: 100,
         make: false,
         only: false
+    },
+    gif: {
+        colors: 128
     }
 }
 
@@ -213,7 +216,7 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
                 jpgPlugin,
                 imageminGIFSicle({
                     optimizationLevel: 3,
-                    colors: 256
+                    colors: settings.gif.colors
                 }),
                 imageminSVGO(),
                 imageminPngquant({

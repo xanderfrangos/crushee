@@ -325,6 +325,9 @@ const qualityPresets = [
         },
         webp: {
             quality: 70
+        },
+        gif: {
+            colors: 64
         }
     },
     // Medium
@@ -340,6 +343,9 @@ const qualityPresets = [
         },
         webp: {
             quality: 88
+        },
+        gif: {
+            colors: 128
         }
     },
     // High
@@ -355,6 +361,9 @@ const qualityPresets = [
         },
         webp: {
             quality: 92
+        },
+        gif: {
+            colors: 200
         }
     },
     // Lossless-ish
@@ -370,6 +379,9 @@ const qualityPresets = [
         },
         webp: {
             quality: 95
+        },
+        gif: {
+            colors: 256
         }
     },
 ]
