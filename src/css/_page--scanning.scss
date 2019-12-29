@@ -15,6 +15,11 @@
         height: 100px;
         margin-bottom: 20px;
         fill: var(--color-primary);
+        animation: statusScreenRotate 1.0s infinite linear;
+        @keyframes statusScreenRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
     }
 
     .text {
