@@ -345,7 +345,7 @@ ipcMain.on('popupMenu', (event, args) => {
       case "RightClickFile":
           popupMenu[1].enabled = false
           popupMenu[3].enabled = false
-          popupMenu[2].enabled = false
+          popupMenu[4].enabled = false
         break;
       case "File":
           popupMenu[3].enabled = false
@@ -359,7 +359,7 @@ ipcMain.on('popupMenu', (event, args) => {
       case "RightClickFile":
           popupMenu[1].enabled = true
           popupMenu[3].enabled = true
-          popupMenu[2].enabled = true
+          popupMenu[4].enabled = true
         break;
       case "File":
           popupMenu[3].enabled = true

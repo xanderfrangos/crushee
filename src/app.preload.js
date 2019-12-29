@@ -30,7 +30,7 @@ function openDialog(isFolder = false) {
         ]
     }
 
-    if(isFolder == true) {
+    if (isFolder == true) {
         params.properties.push('openDirectory')
     }
 
@@ -44,26 +44,44 @@ function openDialog(isFolder = false) {
     })
 }
 
-function saveDialog(isFolder = false) {
-    if(isFolder) {
+function saveDialog(isFolder = false, extension = null) {
+    if (isFolder) {
         dialog.showOpenDialog({
-        title: "Select folder",
-        buttonLabel: 'Select folder',
-        properties: [
-            'openDirectory'
-        ]
+            title: "Select folder",
+            buttonLabel: 'Select folder',
+            properties: [
+                'openDirectory'
+            ]
         }).then((returned) => {
             const files = returned.filePaths
             if (files == undefined)
                 return false;
 
             console.log(files)
-            if(files.length === 1) {
+            if (files.length === 1) {
                 window.saveAllFiles(files[0])
             } else {
                 console.log("Length not 1")
                 return false;
             }
+        })
+    } else {
+        let settings = {
+            title: "Save as",
+            buttonLabel: 'Save file'
+        }
+        if (extension) {
+            settings.filters = [{
+                name: extension,
+                extensions: [extension.substr(1)]
+            }]
+        }
+        dialog.showSaveDialog(settings).then((returned) => {
+            if(returned.filePath) {
+                window.saveFiles([window.rightClickTarget], path.dirname(returned.filePath), path.basename(returned.filePath))
+            }
+            
+            
         })
     }
 }
@@ -120,6 +138,9 @@ ipcRenderer.on('shortcut', function (event, data) {
             break;
         case "right-click-save":
             window.saveFiles(window.rightClickTarget)
+            break;
+        case "right-click-save-as":
+            saveDialog(false, window.files[window.rightClickTarget].In.Extension)
             break;
         case "right-click-crush":
             window.crushFile(window.rightClickTarget, window.GlobalSettings.Quality)
@@ -234,7 +255,7 @@ window.deleteUUID = (UUID, sendUpdate = true) => {
         window.fileCounts.total--
     }
     delete files[UUID]
-    if(sendUpdate) {
+    if (sendUpdate) {
         window.sendUpdate()
     }
 }
@@ -244,7 +265,7 @@ window.saveFiles = (files, directory = false, filename = false) => {
     let first = true
     for (let UUID of files) {
         window.files[UUID].Status = "saving"
-        if(first) {
+        if (first) {
             first = false
             sendUpdate()
         }
@@ -261,7 +282,7 @@ window.saveAllFiles = (folder = false) => {
     const fileList = []
     for (let UUID in window.files) {
         const file = window.files[UUID]
-        if(file.Status == "done") {
+        if (file.Status == "done") {
             fileList.push(UUID)
         }
     }
@@ -391,7 +412,7 @@ const qualityPresets = [
 window.qualityPresets = qualityPresets
 
 const changeQualityLevel = (level) => {
-    if(level != window.GlobalSettings.Quality.app.qualityPreset) {
+    if (level != window.GlobalSettings.Quality.app.qualityPreset) {
         window.GlobalSettings.Quality.app.qualityPreset = level
         window.GlobalSettings.Quality.jpg = Object.assign(window.GlobalSettings.Quality.jpg, qualityPresets[level].jpg)
         window.GlobalSettings.Quality.png = Object.assign(window.GlobalSettings.Quality.png, qualityPresets[level].png)
@@ -417,7 +438,7 @@ function processMessage(ev) {
                 break;
             case "update":
                 if (window.files[data.payload.file.UUID]) {
-                    if(data.payload.file.Status !== "deleted") {
+                    if (data.payload.file.Status !== "deleted") {
                         window.files[data.payload.file.UUID] = data.payload.file
                     }
                     if (window.GlobalSettings.RemoveErroredFiles && data.payload.file.Status === "error") {
@@ -440,7 +461,7 @@ function processMessage(ev) {
                 sendUpdate()
                 break;
             case "saved":
-                if(window.files[data.payload.UUID]) {
+                if (window.files[data.payload.UUID]) {
                     window.files[data.payload.UUID].Status = (data.payload.saved ? "done" : "error")
                 }
                 sendUpdate()
@@ -461,9 +482,9 @@ function processMessage(ev) {
 const sendUpdate = () => {
     window.dispatchEvent(new CustomEvent('filesUpdated', {
         detail: {
-          ts: Date.now()
+            ts: Date.now()
         }
-      }))
+    }))
 }
 window.sendUpdate = sendUpdate
 
@@ -489,7 +510,7 @@ window.sendPreviewUpdate = sendPreviewUpdate
 
 
 const showComparison = (file) => {
-    if(file.Status === "done") {
+    if (file.Status === "done") {
         window.sendPreviewUpdate(true, "file://" + file.Path + "/source" + file.In.Extension + "?" + Date.now(), "file://" + file.Path + "/crushed/" + file.Out.Crushed + "?" + Date.now())
     }
 }
