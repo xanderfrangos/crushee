@@ -150,4 +150,14 @@ input[type=number]::-webkit-outer-spin-button {
         }
     }
 
+
+@at-root {
+    body[data-platform="MacIntel"] {
+        .button span + span {
+            // Vertical alignment of text on MacOS is stupid
+            margin-bottom: 3px;
+        }
+    }
+}
+
 }
