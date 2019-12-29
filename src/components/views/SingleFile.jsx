@@ -18,7 +18,7 @@ export default class SingleFile extends PureComponent {
 
     render() {
         return (
-            <div className="page page--comparison" onMouseMove={ this.comparisonMove } style={ {display: (this.props.show ? "block" : "none") } } onClick={ () => window.sendPreviewUpdate(false) }>
+            <div className="page page--comparison" onMouseMove={ this.comparisonMove } style={ {display: (this.props.show ? "block" : "none") } } onClick={ () => window.sendPreviewUpdate(false) } data-show={this.props.show}>
                 <div className="bg"></div>
                 <div className="inner">
                     <div className="divider-wrap" style={ {width: this.state.width + "px"} }>

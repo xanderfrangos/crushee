@@ -110,8 +110,8 @@ export default class App extends PureComponent {
                 <Sidebar />
                 <div className="base" id="app">
                     <div className="base--inner">
-                        <FileList data-counts={window.fileCounts} scans={this.state.activeScans} stats={stats} />
                         <SingleFile show={ this.state.comparisonShow } before={ this.state.comparisonBefore } after={ this.state.comparisonAfter } />
+                        <FileList data-counts={window.fileCounts} scans={this.state.activeScans} stats={stats} />
                         <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0)}>
                             <div className="text">
                                 {getStatusBar(stats)}

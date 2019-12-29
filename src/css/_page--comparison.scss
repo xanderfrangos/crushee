@@ -106,4 +106,9 @@
         }
     }
 
+
+    &[data-show="true"] + .page--files {
+        display: none;
+    }
+
 }
