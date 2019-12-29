@@ -128,7 +128,9 @@
             white-space: nowrap;
             max-width: 100%;
             overflow: hidden;
-            text-overflow: ellipsis
+            text-overflow: ellipsis;
+            padding-bottom: 10px;
+            margin-bottom: -10px;
         }
 
         .subtitle {
