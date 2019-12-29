@@ -273,7 +273,7 @@ const menus = {
 
   RightClickFile: [
     {
-      label: `Crush`,
+      label: `Crush File`,
       click: () => {
         mainWindow.webContents.send('shortcut', {
           shortcut: "right-click-crush"
