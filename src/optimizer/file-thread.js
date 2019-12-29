@@ -188,7 +188,7 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
 
     } else {
         const quality = parseInt(settings.jpg.quality)
-        const min = quality * Math.pow(0.5, 100 - quality) * 0.1
+        const min = quality * Math.pow(0.95, (100 - quality) * 1.5)
         const method = (parseInt(settings.jpg.subsampling) <= 1 ? "ssim" : "smallfry")
         if (parseInt(settings.jpg.subsampling) <= 1) {
             jpgPlugin = imageminJPEGRecompress({
