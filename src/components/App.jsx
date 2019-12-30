@@ -133,6 +133,7 @@ export default class App extends PureComponent {
                         <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0 || window.stats.crushing > 0 || window.stats.saving > 0)}>
                             <div className="summary-text">
                                 {getStatusBar(stats)}
+                                <div className="clear-all" onClick={window.clearAllFiles}>Clear all files</div>
                             </div>
                             <div className="buttons">
                                 <div className="button big action--download-all" data-eventstate={window.eventState.saving} onClick={(e) => {

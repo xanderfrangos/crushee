@@ -100,10 +100,22 @@
         box-sizing: border-box;
         padding: 0 10px 8px;
         width: 100%;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
 
         b, strong {
             color: var(--color-primary);
             font-weight: bold;
+        }
+
+        .clear-all {
+            color: var(--color-primary);
+            font-weight: bold;
+            cursor: pointer;
+            &:hover {
+                color: var(--color-secondary);
+            }
         }
 
     }
