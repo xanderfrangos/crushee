@@ -37,4 +37,13 @@ document.body.addEventListener("drop", (event) => {
 
 
 window.changeQualityLevel(2)
-
+if(window.appInfo.isAppX === false) {
+    fetch("https://api.github.com/repos/xanderfrangos/crushee/releases").then((response) => {
+        response.json().then((json) => {
+            if(json[0].tag_name != window.appInfo.version) {
+                window.appInfo.newVersion = json[0].tag_name
+                window.sendUpdate()
+            }
+        })
+    });
+}

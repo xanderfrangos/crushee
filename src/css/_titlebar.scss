@@ -141,13 +141,55 @@
 
     }
 
+    .update {
+        background: var(--color-primary);
+        color: white;
+        display: inline-block;
+        padding: 3px 3px;
+        line-height: 1;
+        border-radius: 17px;
+        font-size: 10px;
+        font-weight: bold;
+        font-family: Helvetica, "Seoge UI";
+        margin: 2px 2px 0px 6px;
+        display: flex;
+        align-items: center;
+        user-select: none;
+        cursor: pointer;
+        transition: 0.2s background;
+        animation: updateButton 0.4s;
+        @keyframes updateButton {
+            0% { opacity: 0; transform: translateY(-40px); }
+            100% { opacity: 1; transform: translateY(0px); }
+        }
+
+        &:hover {
+            background: #777777;
+        }
+
+        svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+            padding-right: 4px;
+        }
+
+        .text {
+            padding-right: 4px;
+        }
+
+    }
+
 }
 
 body[data-platform="MacIntel"] {
     .window-titlebar {
         height: 22px;
-        .titlebar-menu, .window-controls-container {
+        .titlebar-menu .logo-icon, .titlebar-menu .menu, .window-controls-container {
             display: none;
+        }
+        .titlebar-menu .update {
+            margin-left:70px;
         }
     }
 

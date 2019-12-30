@@ -7,6 +7,11 @@ const { dialog } = require('electron').remote
 const slash = require('slash')
 let browser = remote.getCurrentWindow()
 
+window.appInfo = {
+    version: 'v' + remote.app.getVersion(),
+    isAppX: (remote.app.getName() == "crushee-appx" ? true : false),
+    newVersion: false
+}
 
 console.log("Starting optimizer...")
 let server = fork(path.join(__dirname, "../src/optimizer/server.js"))
@@ -292,6 +297,9 @@ window.saveAllFiles = (folder = false) => {
 }
 
 
+window.openWebsite = function() {
+    require("electron").shell.openExternal("https://crushee.app/?app")
+}
 
 
 
