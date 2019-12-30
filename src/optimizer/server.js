@@ -286,7 +286,7 @@ const fileUpdateEvent = (uuid) => {
 
 
 
-const scanFiles = (inFiles) => {
+const scanFiles = async (inFiles) => {
 
     const files = (typeof inFiles == "object" ? inFiles : [inFiles])
 
@@ -330,7 +330,7 @@ const scanFiles = (inFiles) => {
 
 }
 
-const saveFiles = (inFiles, inDirectory = false, fileName = false) => {
+const saveFiles = async (inFiles, inDirectory = false, fileName = false) => {
     const files = (typeof inFiles == "object" ? inFiles : [inFiles])
     for (let i = 0, UUID; UUID = files[i]; i++) {
         if(uploads[UUID]) {
@@ -356,7 +356,7 @@ const saveFiles = (inFiles, inDirectory = false, fileName = false) => {
 
 }
 
-const uploadFile = (pathName) => {
+const uploadFile = async (pathName) => {
     
     console.log(`\x1b[34mAnalyzing\x1b[0m ${pathName}`)
 
