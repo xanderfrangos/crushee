@@ -449,6 +449,9 @@ function processMessage(ev) {
                     if (data.payload.file.Status !== "deleted") {
                         window.files[data.payload.file.UUID] = data.payload.file
                     }
+                    if(data.payload.file.Status === "done") { 
+                        window.changeEventState("saving", 0)
+                    }
                     if (window.GlobalSettings.RemoveErroredFiles && data.payload.file.Status === "error") {
                         deleteUUID(data.payload.file.UUID)
                     }
