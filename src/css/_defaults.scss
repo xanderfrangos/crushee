@@ -101,11 +101,19 @@ input[type=number]::-webkit-outer-spin-button {
         }
     }
     &.transparent {
-        background: none;
+        background: rgba(123, 123, 123, 0);
         color: var(--color-secondary);
         box-shadow: none;
         svg {
-            fill: var(--color-secondary);
+            fill: var(--color-secondary) !important;
+        }
+        &:hover {
+            background: rgba(123, 123, 123, 0.25);
+            color: var(--color-secondary);
+        }
+        &:active {
+            background: rgba(123, 123, 123, 0.25);
+            color: var(--color-secondary);
         }
     }
 
