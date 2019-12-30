@@ -105,7 +105,7 @@ export default class FileList extends PureComponent {
             } else if(this.props.stats.saving > 0) {
                 return (<Scanning title="Saving..." description={ `${this.props.stats.saving} file${(this.props.stats.saving > 1 ? "s" : "")}` } />)
             } else {
-                if (window.fileCounts.total > 0) {
+                if (this.props.stats.total > 0) {
                     return (
                         <div className="page page--files show">
                             <div className="page--files--list">
