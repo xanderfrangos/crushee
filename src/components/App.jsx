@@ -104,30 +104,65 @@ export default class App extends PureComponent {
         }
         window.stats = stats
 
+        if (stats.crushing > 0) {
+            window.eventState.crushing = 1
+        } else if (stats.crushing === 0 && window.eventState.crushing === 1) {
+            window.eventState.crushing = 2
+        }
+
+        if (stats.saving > 0) {
+            window.eventState.saving = 1
+        } else if (stats.saving === 0 && window.eventState.saving === 1) {
+            window.eventState.saving = 2
+        }
+
+        if (stats.analyzing > 0) {
+            window.eventState.analyzing = 1
+        } else if (stats.analyzing === 0 && window.eventState.analyzing === 1) {
+            window.eventState.analyzing = 2
+        }
+
+        console.log(window.stats)
+
         return (
-            <div id="app-base" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0 || window.stats.crushing > 0)}>
+            <div id="app-base" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0 || window.stats.crushing > 0 || window.stats.saving > 0)}>
                 <Titlebar />
                 <Sidebar />
                 <div className="base" id="app">
                     <div className="base--inner">
-                        <SingleFile show={ this.state.comparisonShow } before={ this.state.comparisonBefore } after={ this.state.comparisonAfter } />
+                        <SingleFile show={this.state.comparisonShow} before={this.state.comparisonBefore} after={this.state.comparisonAfter} />
                         <FileList data-counts={window.fileCounts} scans={this.state.activeScans} stats={stats} />
-                        <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0)}>
-                            <div className="text">
+                        <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0 || window.stats.crushing > 0 || window.stats.saving > 0)}>
+                            <div className="summary-text">
                                 {getStatusBar(stats)}
                             </div>
                             <div className="buttons">
-                                <div className="button big action--download-all" onClick={(e) => {
+                                <div className="button big action--download-all" data-eventstate={window.eventState.saving} onClick={(e) => {
                                     window.saveAllFiles()
                                 }}>
-                                    <span>
+                                    
+
+
+                                    <div className="row primary">
+                                    <span className="icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                             <path id="Path_37" data-name="Path 37" d="M0,0H24V24H0Z" fill="none" />
                                             <path id="Path_38" data-name="Path 38" d="M17.59,3.59A2.006,2.006,0,0,0,16.17,3H5A2,2,0,0,0,3,5V19a2.006,2.006,0,0,0,2,2H19a2.006,2.006,0,0,0,2-2V7.83a1.966,1.966,0,0,0-.59-1.41L17.59,3.59ZM12,19a3,3,0,1,1,3-3A3,3,0,0,1,12,19ZM13,9H7A2,2,0,0,1,7,5h6a2,2,0,0,1,0,4Z" fill="#fff" />
                                         </svg>
 
                                     </span>
-                                    <span>Save All</span></div>
+                                    <span className="text">Save All</span>
+                                    </div>
+
+                                    <div className="row secondary">
+                                        <span className="icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="secondary"><path d="M0 0h24v24H0z" fill="none" /><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                                        </span>
+                                        <span className="text">Saved!</span>
+                                    </div>
+
+
+                                </div>
 
                                 <div className="button big transparent action--add-file" onClick={(e) => {
                                     window.openDialog(false)

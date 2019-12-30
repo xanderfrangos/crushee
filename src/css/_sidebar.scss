@@ -141,7 +141,7 @@
         //transform: translateY(100%);
         transition: transform 0.3s;
 
-        .text {
+        .description {
             font-size: 14px;
             text-align: center;
             font-weight: 500;
@@ -149,6 +149,7 @@
         }
 
     }
+
 
 }
 
@@ -379,7 +380,7 @@
 #app-base {
 
     .sidebar .bottom {
-        .button > span + span:before {
+        .button > div.primary span+span:before {
             content: "re";
             display: inline-block;
             width: 0px;
@@ -395,7 +396,7 @@
     }
 
     &[data-crushed="true"] .sidebar .bottom {
-        .button > span + span:before {
+        .button > div.primary span+span:before {
             width: 26px;
             opacity: 1;
         }

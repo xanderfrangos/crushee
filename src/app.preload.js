@@ -450,6 +450,8 @@ function processMessage(ev) {
             case "upload":
                 window.files[data.payload.file.UUID] = data.payload.file
                 window.fileCounts.total++
+                window.changeEventState("crushing", 0)
+                window.changeEventState("saving", 0)
                 sendUpdate()
                 break;
             case "replace":

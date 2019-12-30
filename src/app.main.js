@@ -6,6 +6,17 @@ const files = []
 window.files = files
 window.stats = {}
 
+window.eventState = {
+    crushing: 0,
+    saving: 0,
+    analyzing: 0
+}
+
+window.changeEventState = (event, state) => {
+    window.eventState[event] = state
+    window.sendUpdate()
+}
+
 ReactDOM.render(<App />, document.getElementById("crushee"));
 
 document.body.addEventListener("dragover", function (event) {
@@ -26,3 +37,4 @@ document.body.addEventListener("drop", (event) => {
 
 
 window.changeQualityLevel(2)
+

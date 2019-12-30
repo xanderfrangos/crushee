@@ -81,6 +81,7 @@ input[type=number]::-webkit-outer-spin-button {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 
     height: 20px;
     line-height: 1;
@@ -124,6 +125,55 @@ input[type=number]::-webkit-outer-spin-button {
         svg {
             fill: white;
         }
+    }
+
+    .icon {
+        height: 24px;
+        width: 24px;
+        margin: 0px 6px 0px -4px;
+        svg {
+            margin: 0;
+        }
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    div.primary {
+        display: flex;
+        animation: buttonPrimaryIn 0.3s;
+        @keyframes buttonPrimaryIn {
+            0% { transform: translateX(30px); opacity: 0; }
+            100% { transform: translateX(0px); opacity: 1; }
+        }
+    }
+    div.secondary {
+        display: none;
+        animation: buttonSecondaryIn 0.3s;
+        @keyframes buttonSecondaryIn {
+            0% { transform: translateX(-30px); opacity: 0; }
+            100% { transform: translateX(0px); opacity: 1; }
+        }
+    }
+
+    &[data-eventstate="2"] {
+        background: var(--color-button-done) !important;
+
+        .primary {
+            display: none;
+        }
+        .secondary {
+            display: flex;
+        }
+
+    }
+
+    .text {
+        margin: 0px 0 -3px;
     }
 
     span {
