@@ -263,7 +263,7 @@ const menus = {
         type: 'separator'
       },
       {
-      label: `Crushee v${crusheeVersion}`,
+      label: `About Crushee v${crusheeVersion}`,
       click: () => {
         console.log('Version Clicked');
         require("electron").shell.openExternal("https://crushee.app/?app")
