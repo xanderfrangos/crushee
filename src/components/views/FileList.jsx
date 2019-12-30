@@ -98,11 +98,11 @@ export default class FileList extends PureComponent {
         if(this.props.scans > 0) {
             return (<Scanning title="Scanning..." description={`${this.props.scans} folder${(this.props.scans > 1 ? "s" : "")}`} />)
         } else {
-            if (this.props.stats.processing > 0) {
-                return (<Scanning title="Analyzing..." description={`${this.props.stats.processing} file${(this.props.stats.processing > 1 ? "s" : "")}`} />)
-            } else if(this.props.stats.crushing > 0) {
+            if(this.props.stats.crushing > 0) {
                 return (<Scanning title="Crushing..." description={ `${this.props.stats.crushing} file${(this.props.stats.crushing > 1 ? "s" : "")}` } />)
-            }  else if(this.props.stats.saving > 0) {
+            }  else if (this.props.stats.processing > 0) {
+                return (<Scanning title="Analyzing..." description={`${this.props.stats.processing} file${(this.props.stats.processing > 1 ? "s" : "")}`} />)
+            } else if(this.props.stats.saving > 0) {
                 return (<Scanning title="Saving..." description={ `${this.props.stats.saving} file${(this.props.stats.saving > 1 ? "s" : "")}` } />)
             } else {
                 if (window.fileCounts.total > 0) {
