@@ -431,3 +431,11 @@
 .elem--file--mode-small {
     @include elem--file--mode-small();
 }
+
+
+// Stupid Mac text alignment
+body[data-platform="MacIntel"] {
+    .elem--file .details span + span {
+        margin-bottom: 1px;
+    }
+}
