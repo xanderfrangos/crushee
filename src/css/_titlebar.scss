@@ -6,7 +6,6 @@
     overflow: hidden;
     flex-shrink: 0;
     align-items: center;
-    justify-content: center;
     user-select: none;
     zoom: 1;
     line-height: 22px;
@@ -142,10 +141,12 @@
     }
 
     .update {
+        height: 20px;
+        box-sizing: border-box;
         background: var(--color-primary);
         color: white;
         display: inline-block;
-        padding: 3px 3px;
+        padding: 2px 3px;
         line-height: 1;
         border-radius: 17px;
         font-size: 10px;
