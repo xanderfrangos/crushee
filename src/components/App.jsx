@@ -122,8 +122,6 @@ export default class App extends PureComponent {
             window.eventState.analyzing = 2
         }
 
-        console.log(window.stats)
-
         return (
             <div id="app-base" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0 || window.stats.crushing > 0 || window.stats.saving > 0)}>
                 <Titlebar />
