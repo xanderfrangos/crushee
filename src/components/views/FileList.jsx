@@ -6,7 +6,7 @@ const Utilities = require("../../Utilities")
 
 const rightClickFilter = (event) => {
     const file = window.files[event.currentTarget.dataset.uuid]
-    if(file.Status === "done" || file.Status === "analyzed") {
+    if(file.Status === "done" || file.Status === "analyzed" || file.Status === "error") {
         window.rightClickTarget = file.UUID;
         window.popupMenu("RightClickFile", null, null, (file.Status !== "done"))
     }
