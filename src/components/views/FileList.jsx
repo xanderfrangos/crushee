@@ -12,9 +12,9 @@ const rightClickFilter = (event) => {
     }
 }
 
-const moreMenuButton = (event) => {
-    const file = window.files[event.currentTarget.parentElement.parentElement.parentElement.dataset.uuid]
-    console.log(event.currentTarget.parentElement.parentElement.parentElement)
+const previewClickFallback = (event) => {
+    const file = window.files[event.currentTarget.parentElement.parentElement.dataset.uuid]
+    console.log(event.currentTarget.parentElement.parentElement)
     if(file.Status === "done" || file.Status === "analyzed") {
         window.rightClickTarget = file.UUID;
         window.popupMenu("RightClickFile", null, null, (file.Status !== "done"))
@@ -71,7 +71,7 @@ export default class FileList extends PureComponent {
             return (<div className="elem--file" key={file.UUID} data-uuid={file.UUID} data-status={file.Status} onContextMenu={rightClickFilter} onClick={rightClickFilter}>
                 <div className="inner">
 
-                    <div className="preview" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); window.showComparison(file); return false; } }>
+                    <div className="preview" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); if (file.Status === "done") { window.showComparison(file); } else { previewClickFallback(e) }  return false; } }>
                         <div className="inner">
                             <div className="overlay">
                                 <div className="progress-bar" style={{ width: "100%" }}></div>
