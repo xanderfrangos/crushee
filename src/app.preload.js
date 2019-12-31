@@ -81,11 +81,11 @@ function saveDialog(isFolder = false, extension = null) {
             }]
         }
         dialog.showSaveDialog(settings).then((returned) => {
-            if(returned.filePath) {
+            if (returned.filePath) {
                 window.saveFiles([window.rightClickTarget], path.dirname(returned.filePath), path.basename(returned.filePath))
             }
-            
-            
+
+
         })
     }
 }
@@ -146,6 +146,9 @@ ipcRenderer.on('shortcut', function (event, data) {
             break;
         case "right-click-crush":
             window.crushFile(window.rightClickTarget, window.GlobalSettings.Quality)
+            break;
+        case "right-click-show-original":
+            remote.shell.showItemInFolder(window.files[window.rightClickTarget].In.Source)
             break;
         case "right-click-remove":
             window.deleteUUID(window.rightClickTarget, true)
@@ -268,7 +271,7 @@ window.saveAllFiles = (folder = false) => {
 }
 
 
-window.openWebsite = function() {
+window.openWebsite = function () {
     require("electron").shell.openExternal("https://crushee.app/?app")
 }
 
@@ -415,7 +418,7 @@ function processMessage(ev) {
                     if (data.payload.file.Status !== "deleted") {
                         window.files[data.payload.file.UUID] = data.payload.file
                     }
-                    if(data.payload.file.Status === "done") { 
+                    if (data.payload.file.Status === "done") {
                         window.changeEventState("saving", 0)
                     }
                     if (window.GlobalSettings.RemoveErroredFiles && data.payload.file.Status === "error") {
@@ -462,13 +465,13 @@ let updateThrottle = false;
 let updatePressure = 0
 const sendUpdate = (throttle = true) => {
 
-    if(!throttle) {
+    if (!throttle) {
         window.dispatchEvent(new CustomEvent('filesUpdated', {
             detail: {
                 ts: Date.now()
             }
         }))
-    } else if(updateThrottle === false) {
+    } else if (updateThrottle === false) {
         updatePressure++
         updateThrottle = setTimeout(() => {
             window.sendUpdate(false)
@@ -476,7 +479,7 @@ const sendUpdate = (throttle = true) => {
             updatePressure = 0
         }, (updatePressure > 1 ? 150 : 16))
     }
-    
+
 
 }
 window.sendUpdate = sendUpdate

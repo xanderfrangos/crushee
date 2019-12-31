@@ -290,6 +290,13 @@ const menus = {
         })
       }
     }, {
+      label: `Show Original`,
+      click: () => {
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "right-click-show-original"
+        })
+      }
+    }, {
       type: 'separator'
     },{
       label: `Save`,
@@ -347,8 +354,8 @@ ipcMain.on('popupMenu', (event, args) => {
     switch(args.menu) {
       case "RightClickFile":
           popupMenu[1].enabled = false
-          popupMenu[3].enabled = false
           popupMenu[4].enabled = false
+          popupMenu[5].enabled = false
         break;
       case "File":
           popupMenu[3].enabled = false
@@ -361,8 +368,8 @@ ipcMain.on('popupMenu', (event, args) => {
     switch(args.menu) {
       case "RightClickFile":
           popupMenu[1].enabled = true
-          popupMenu[3].enabled = true
           popupMenu[4].enabled = true
+          popupMenu[5].enabled = true
         break;
       case "File":
           popupMenu[3].enabled = true
