@@ -459,6 +459,7 @@ function processMessage(ev) {
 
 
 let updateThrottle = false;
+let updatePressure = 0
 const sendUpdate = (throttle = true) => {
 
     if(!throttle) {
@@ -468,10 +469,12 @@ const sendUpdate = (throttle = true) => {
             }
         }))
     } else if(updateThrottle === false) {
+        updatePressure++
         updateThrottle = setTimeout(() => {
             window.sendUpdate(false)
             updateThrottle = false
-        }, 50)
+            updatePressure = 0
+        }, (updatePressure > 1 ? 150 : 16))
     }
     
 
