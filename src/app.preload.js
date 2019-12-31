@@ -97,6 +97,7 @@ function setDockBadge(count) {
         remote.app.dock.setBadge('' + (count || ''));
     }
 }
+window.setDockBadge = setDockBadge
 
 ipcRenderer.on('shortcut', function (event, data) {
 

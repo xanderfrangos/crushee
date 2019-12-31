@@ -104,6 +104,8 @@ export default class App extends PureComponent {
         }
         window.stats = stats
 
+        window.setDockBadge(stats.processing + stats.crushing + stats.saving)
+
         if (stats.crushing > 0) {
             window.eventState.crushing = 1
         } else if (stats.crushing === 0 && window.eventState.crushing === 1) {
