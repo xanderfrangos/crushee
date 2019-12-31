@@ -3,7 +3,6 @@ const path = require("path")
 const fs = require("fs")
 const { fork } = require("child_process")
 const isDev = require("electron-is-dev");
-const ewc = require("ewc")
 const os = require("os")
 let mainWindow
 let splashWindow
@@ -61,7 +60,7 @@ function createWindow() {
     frame: false,
     backgroundColor: '#00000000',
     titleBarStyle: 'hidden',
-    vibrancy: 'light',
+    vibrancy: 'sidebar',
     webPreferences: {
       navigateOnDragDrop: false,
       webSecurity: false,
@@ -81,6 +80,7 @@ function createWindow() {
     
     try {
       if(os.platform() === "win32" && os.release().split('.')[2] >= 18363) {
+        const ewc = require("ewc")
         ewc.setAcrylic(mainWindow, 0x88DDDDDD)
       }
     } catch(e) {

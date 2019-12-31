@@ -402,3 +402,9 @@
         }
     }
 }
+
+body[data-platform="MacIntel"] {
+    .sidebar {
+        background: var(--sidebar-bg-mac);
+    }
+}
