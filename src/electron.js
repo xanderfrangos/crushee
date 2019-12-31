@@ -3,6 +3,8 @@ const path = require("path")
 const fs = require("fs")
 const { fork } = require("child_process")
 const isDev = require("electron-is-dev");
+const ewc = require("ewc")
+const os = require("os")
 let mainWindow
 let splashWindow
 
@@ -57,7 +59,7 @@ function createWindow() {
     title: 'Crushee',
     show: false,
     frame: false,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#00000000',
     titleBarStyle: 'hidden',
     vibrancy: 'light',
     webPreferences: {
@@ -77,6 +79,14 @@ function createWindow() {
 
   mainWindow.webContents.on('did-finish-load', function () {
     
+    try {
+      if(os.platform() === "win32" && os.release().split('.')[2] >= 18363) {
+        ewc.setAcrylic(mainWindow, 0x88DDDDDD)
+      }
+    } catch(e) {
+      console.log("Could not enable blur.", e)
+    }
+
     setTimeout(() => {
       if (splashWindow) {
         splashWindow.close();

@@ -8,6 +8,7 @@
     "css-loader": "^3.3.2",
     "del": "^5.1.0",
     "electron-is-dev": "^1.1.0",
+    "ewc": "0.0.1",
     "imagemin": "^7.0.1",
     "imagemin-advpng": "^5.1.0",
     "imagemin-gifsicle": "^6.0.1",
