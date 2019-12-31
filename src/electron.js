@@ -81,7 +81,7 @@ function createWindow() {
     try {
       if(os.platform() === "win32" && os.release().split('.')[2] >= 18363) {
         const ewc = require("ewc")
-        ewc.setAcrylic(mainWindow, 0x88DDDDDD)
+        ewc.setBlurBehind(mainWindow, 0x88DDDDDD)
       }
     } catch(e) {
       console.log("Could not enable blur.", e)
