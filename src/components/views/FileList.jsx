@@ -65,6 +65,9 @@ export default class FileList extends PureComponent {
         })
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('fileUpdated')
+    }
 
     makeFileItem = function (file, idx) {
         if (file.Status !== "deleted") {
