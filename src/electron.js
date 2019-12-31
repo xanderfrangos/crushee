@@ -57,7 +57,7 @@ function createWindow() {
     title: 'Crushee',
     show: false,
     frame: false,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     titleBarStyle: 'hidden',
     vibrancy: 'light',
     webPreferences: {
@@ -76,11 +76,14 @@ function createWindow() {
   );
 
   mainWindow.webContents.on('did-finish-load', function () {
-    if(splashWindow) {
-      splashWindow.close();
-      splashWindow = null;
-    }
-    mainWindow.show();
+    
+    setTimeout(() => {
+      if (splashWindow) {
+        splashWindow.close();
+        splashWindow = null;
+      }
+      mainWindow.show();
+    }, 500)
 
     mainWindow.webContents.send('version', `v${crusheeVersion}`)
 
