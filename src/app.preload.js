@@ -91,12 +91,6 @@ function saveDialog(isFolder = false, extension = null) {
 }
 
 
-ipc.on('markAllComplete', () => {
-    // the todo app defines this function
-    window.electron.markAllComplete();
-});
-
-
 function setDockBadge(count) {
     if (process.platform === 'darwin') {
         //Coerce count into a string. Passing an empty string makes the badge disappear.
@@ -162,13 +156,6 @@ ipcRenderer.on('shortcut', function (event, data) {
 
 });
 
-
-// Current version number recieved
-ipcRenderer.on('version', (event, curVersion) => {
-
-})
-
-
 window.popupMenu = (menu, x = null, y = null, disable = false) => {
     ipcRenderer.send("popupMenu", {
         menu,
@@ -177,14 +164,6 @@ window.popupMenu = (menu, x = null, y = null, disable = false) => {
         disable
     })
 }
-
-
-const saveFile = async (filePath, destination, filename, cb) => {
-    console.log(filePath, destination, filename, cb)
-};
-
-
-
 
 
 function addFiles(files) {
@@ -213,15 +192,6 @@ server.on('message', processMessage)
 window.server = server
 window.thisWindow = browser
 window.openDialog = openDialog
-window.saveFile = saveFile
-
-
-
-
-
-
-
-
 
 
 window.fileCounts = {
@@ -300,11 +270,6 @@ window.saveAllFiles = (folder = false) => {
 window.openWebsite = function() {
     require("electron").shell.openExternal("https://crushee.app/?app")
 }
-
-
-
-
-
 
 
 
@@ -548,7 +513,6 @@ window.getFile = (uuid) => {
         }
     }
 }
-
 
 
 
