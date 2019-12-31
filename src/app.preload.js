@@ -274,7 +274,7 @@ window.saveFiles = (files, directory = false, filename = false) => {
         window.files[UUID].Status = "saving"
         if (first) {
             first = false
-            sendUpdate()
+            sendUpdate(false)
         }
     }
     sendUpdate()
@@ -477,7 +477,7 @@ function processMessage(ev) {
                 if (window.files[data.payload.UUID]) {
                     window.files[data.payload.UUID].Status = (data.payload.saved ? "done" : "error")
                 }
-                sendUpdate()
+                sendUpdate(false)
                 break;
             case "scanStart":
                 scanList++
@@ -492,12 +492,23 @@ function processMessage(ev) {
 }
 
 
-const sendUpdate = () => {
-    window.dispatchEvent(new CustomEvent('filesUpdated', {
-        detail: {
-            ts: Date.now()
-        }
-    }))
+let updateThrottle = false;
+const sendUpdate = (throttle = true) => {
+
+    if(!throttle) {
+        window.dispatchEvent(new CustomEvent('filesUpdated', {
+            detail: {
+                ts: Date.now()
+            }
+        }))
+    } else if(updateThrottle === false) {
+        updateThrottle = setTimeout(() => {
+            window.sendUpdate(false)
+            updateThrottle = false
+        }, 50)
+    }
+    
+
 }
 window.sendUpdate = sendUpdate
 
