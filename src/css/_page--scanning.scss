@@ -10,6 +10,11 @@
     z-index: 1;
     animation: filePreviewIn 0.3s;
 
+    .inner {
+        position: relative;
+        top: -50px;
+    }
+
     svg {
         width: 100px;
         height: 100px;
