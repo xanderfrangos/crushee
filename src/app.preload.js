@@ -9,7 +9,7 @@ let browser = remote.getCurrentWindow()
 
 window.appInfo = {
     version: 'v' + remote.app.getVersion(),
-    isAppX: (remote.app.getName() == "crushee-appx" ? true : false),
+    isAppX: (remote.app.name == "crushee-appx" ? true : false),
     newVersion: false
 }
 
