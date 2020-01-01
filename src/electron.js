@@ -171,7 +171,7 @@ const menus = {
 
   File: [
       {
-        label: 'Add File(s)',
+        label: 'Add file(s)',
         accelerator: 'Shift+CmdOrCtrl+A',
         click: () => {
           mainWindow.webContents.send('shortcut', {
@@ -179,7 +179,7 @@ const menus = {
           })
         }
     }, {
-      label: 'Add Folder(s)',
+      label: 'Add folder(s)',
       click: () => {
         mainWindow.webContents.send('shortcut', {
           shortcut: "add-folders"
@@ -188,7 +188,7 @@ const menus = {
     }, {
       type: 'separator'
     }, {
-      label: 'Save All Files',
+      label: 'Save all files',
       accelerator: 'CmdOrCtrl+S',
       click: () => {
         console.log('Save All Clicked');
@@ -197,7 +197,7 @@ const menus = {
         })
       }
     }, {
-      label: 'Save To Folder',
+      label: 'Save to folder',
       accelerator: 'CmdOrCtrl+F',
       click: () => {
         console.log('Save To Folder Clicked');
@@ -218,7 +218,7 @@ const menus = {
 
     Edit: [
       {
-        label: 'Recrush All Files',
+        label: 'Recrush all files',
         accelerator: 'CmdOrCtrl+R',
         click: () => {
           mainWindow.webContents.send('shortcut', {
@@ -227,7 +227,7 @@ const menus = {
         }
     },
     {
-      label: 'Clear All Files',
+      label: 'Clear all files',
       accelerator: 'CmdOrCtrl+D',
       click: () => {
         mainWindow.webContents.send('shortcut', {
@@ -237,7 +237,7 @@ const menus = {
       }, {
         type: 'separator'
       }, {
-        label: 'Remove Unoptimized Files (<0%)',
+        label: 'Remove unoptimized files (<0%)',
         accelerator: 'CmdOrCtrl+L',
         click: () => {
           console.log('Remove Larger Clicked');
@@ -257,7 +257,7 @@ const menus = {
           }
       },*/
     {
-      label: 'Open Inspector Window',
+      label: 'Developer tools',
       accelerator: 'CmdOrCtrl+I',
       click: () => {
         console.log('Inspector Clicked');
@@ -296,21 +296,21 @@ const menus = {
 
   RightClickFile: [
     {
-      label: `Crush File`,
+      label: `Crush file`,
       click: () => {
         mainWindow.webContents.send('shortcut', {
           shortcut: "right-click-crush"
         })
       }
     }, {
-      label: `Compare Changes`,
+      label: `Compare changes`,
       click: () => {
         mainWindow.webContents.send('shortcut', {
           shortcut: "right-click-compare"
         })
       }
     }, {
-      label: `Show Original`,
+      label: `Show original`,
       click: () => {
         mainWindow.webContents.send('shortcut', {
           shortcut: "right-click-show-original"
@@ -327,7 +327,7 @@ const menus = {
       }
     },
     {
-      label: `Save As...`,
+      label: `Save as...`,
       click: () => {
         mainWindow.webContents.send('shortcut', {
           shortcut: "right-click-save-as"
