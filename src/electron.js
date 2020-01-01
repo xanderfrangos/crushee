@@ -80,8 +80,8 @@ function createWindow() {
     
     try {
       if(os.platform() === "win32" && os.release().split('.')[2] >= 18363) {
-        const ewc = require("ewc")
-        ewc.setBlurBehind(mainWindow, 0x88DDDDDD)
+        const SWCA = require('windows-swca')
+        SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDD88)
       }
     } catch(e) {
       console.log("Could not enable blur.", e)

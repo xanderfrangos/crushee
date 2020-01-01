@@ -8,7 +8,6 @@
     "css-loader": "^3.3.2",
     "del": "^5.1.0",
     "electron-is-dev": "^1.1.0",
-    "ewc": "0.0.1",
     "imagemin": "^7.0.1",
     "imagemin-advpng": "^5.1.0",
     "imagemin-gifsicle": "^6.0.1",
@@ -25,7 +24,8 @@
     "request": "^2.88.0",
     "sharp": "^0.23.4",
     "slash": "^3.0.0",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "windows-swca": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.7.5",
