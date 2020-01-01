@@ -498,12 +498,12 @@ const checkUUIDs = (uuids) => {
 
 const crush = (UUID, options = "{}") => {
     const file = uploads[UUID]
-    processFile(UUID, path.basename(file.In.Source), file.Path + "/source" + file.In.Extension, outPath, JSON.parse(options))
+    processFile(UUID, path.basename(file.In.Source), file.Path + "/source" + file.In.Extension, outPath, options)
 }
 
 const recrush = (UUID, options = "{}") => {
     const file = uploads[UUID]
-    processFile(UUID, path.basename(file.In.Source), file.Path + "/source" + file.In.Extension, outPath, JSON.parse(options))
+    processFile(UUID, path.basename(file.In.Source), file.Path + "/source" + file.In.Extension, outPath, options)
 }
 
 sendMessage({

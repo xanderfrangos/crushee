@@ -224,7 +224,7 @@ window.crushFile = (UUID, options = defaultSettings) => {
     const file = files[UUID]
     if (file.Status === "done" || file.Status === "analyzed") {
         file.Status = "crushing"
-        sendMessage("crush", { UUID, options: JSON.stringify(options) })
+        sendMessage("crush", { UUID, options })
         window.fileCounts.crushing++
     }
 }
