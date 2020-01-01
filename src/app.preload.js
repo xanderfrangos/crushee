@@ -99,6 +99,14 @@ function setDockBadge(count) {
 }
 window.setDockBadge = setDockBadge
 
+
+window.updateTaskbarPercentage = function() {
+    let progress = 1 - ((window.stats.processing + window.stats.crushing + window.stats.saving) / window.stats.total)
+    if(progress >= 1) progress = 0;
+    if(typeof progress != "number") progress = 0;
+    window.thisWindow.setProgressBar(progress || 0)
+}
+
 ipcRenderer.on('shortcut', function (event, data) {
 
     switch (data.shortcut) {

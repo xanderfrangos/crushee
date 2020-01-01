@@ -105,6 +105,7 @@ export default class App extends PureComponent {
         window.stats = stats
 
         window.setDockBadge(stats.processing + stats.crushing + stats.saving)
+        window.updateTaskbarPercentage()
 
         if (stats.crushing > 0) {
             window.eventState.crushing = 1
