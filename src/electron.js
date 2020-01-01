@@ -40,6 +40,17 @@ function loadCrusheePage() {
   
 }
 
+let acrylicWindow
+
+function updateAcrylic() {
+  try {
+    acrylicWindow.setBounds(mainWindow.getBounds())
+    mainWindow.setAlwaysOnTop(true)
+    acrylicWindow.moveTop()
+    mainWindow.setAlwaysOnTop(false)
+  } catch(e) { }
+}
+
 function createWindow() {
 
   // Manually set to Light theme for now
@@ -79,12 +90,36 @@ function createWindow() {
       if (os.platform() === "win32") {
         const SWCA = require('windows-swca')
         const release = os.release().split('.')[2]
+
+
+
+        acrylicWindow = new BrowserWindow({
+          width: 0,
+          height: 0,
+          show: false,
+          frame: false,
+          transparent: true,
+          skipTaskbar: true,
+          backgroundColor: '#00FFFFFF',
+          webPreferences: {
+            navigateOnDragDrop: false,
+          },
+          titleBarStyle: "hidden"
+        })
+
+        mainWindow.on('resize', updateAcrylic)
+        mainWindow.on('move', updateAcrylic)
+        mainWindow.on('focus', updateAcrylic)
+
+        SWCA.SetWindowCompositionAttribute(acrylicWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_ACRYLICBLURBEHIND, 0xF5F5F500)
+        SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_TRANSPARENTGRADIENT, 0xDDDDDD00)
+
         if (release < 18363) {
           blurEnabled = false
         } else if (release < 19041) {
-          SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDDBB)
+          //SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDDBB)
         } else {
-          SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDDBB)
+          //SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDDBB)
 
           // Maybe one day this will work without lagging when transparency is on in Windows...
           //SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_ACRYLICBLURBEHIND, 0xDDDDDD22)
@@ -102,6 +137,10 @@ function createWindow() {
       }
       mainWindow.webContents.send('blurEnabled', blurEnabled)
       mainWindow.show();
+      if(acrylicWindow) {
+        acrylicWindow.show()
+        updateAcrylic()
+      }
     }, 500)
 
     mainWindow.webContents.send('version', `v${crusheeVersion}`)
