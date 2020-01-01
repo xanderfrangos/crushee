@@ -120,6 +120,7 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
             image.resize(
                 width,
                 height,
+                { fit: (parseBool(settings.resize.crop) === true ? "cover" : "inside") }
             )
         }
 
