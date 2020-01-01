@@ -27,9 +27,6 @@
     "slash": "^3.0.0",
     "uuid": "^3.3.3"
   },
-  "optionalDependencies": {
-    "windows-swca": "^2.0.2"
-  },
   "devDependencies": {
     "@babel/core": "^7.7.5",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
