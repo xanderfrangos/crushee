@@ -195,4 +195,4 @@ Procfile          text
 *.exe             binary
 *.pyc             binary
 
-* linguist-language=JavaScript
+#* linguist-language=JavaScript
