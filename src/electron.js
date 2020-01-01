@@ -60,7 +60,7 @@ function createWindow() {
     frame: false,
     backgroundColor: '#00FFFFFF',
     titleBarStyle: 'hidden',
-    vibrancy: 'sidebar',
+    vibrancy: 'fullscreen-ui',
     webPreferences: {
       navigateOnDragDrop: false,
       webSecurity: false,
@@ -69,7 +69,6 @@ function createWindow() {
       preload: path.resolve(__dirname, 'app.preload.js')
     }
   })
-
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3001/v2.html"

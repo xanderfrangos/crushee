@@ -6,6 +6,7 @@ const uuidv1 = require('uuid/v1');
 const { dialog } = require('electron').remote
 const slash = require('slash')
 let browser = remote.getCurrentWindow()
+window.electronBrowser = browser
 
 window.appInfo = {
     version: 'v' + remote.app.getVersion(),
