@@ -9,6 +9,7 @@
     //box-shadow: 0 -15px 35px rgba(33,33,33,0.5);
     box-sizing: border-box;
     //padding-bottom: 100px;
+    overflow: hidden;
 
     will-change: transform;
 
@@ -89,6 +90,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
 
     transition: transform 0.3s;
     transform: translateY(100%);

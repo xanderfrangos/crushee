@@ -47,3 +47,7 @@ if(window.appInfo.isAppX === false) {
         })
     });
 }
+
+window.thisWindow.on('resize', () => {
+    window.sendUpdate()
+})
