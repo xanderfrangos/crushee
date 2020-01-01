@@ -76,12 +76,18 @@ function createWindow() {
     
     let blurEnabled = true
     try {
-      if(os.platform() === "win32" && os.release().split('.')[2] >= 18363) {
+      if (os.platform() === "win32") {
         const SWCA = require('windows-swca')
-        SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDD88)
-      } else {
-        if(os.platform() === "win32") {
+        const release = os.release().split('.')[2]
+        if (release < 18363) {
           blurEnabled = false
+        } else if (release < 19041) {
+          SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDDBB)
+        } else {
+          SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDDBB)
+
+          // Maybe one day this will work without lagging when transparency is on in Windows...
+          //SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_ACRYLICBLURBEHIND, 0xDDDDDD22)
         }
       }
     } catch(e) {
