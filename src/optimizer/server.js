@@ -242,7 +242,6 @@ async function processFile(uuid, uploadName, inFile, outDir, options = {}) {
 
     }).then((result) => {
         // We did it!
-        uploads[uuid] = Object.assign(uploads[uuid], result)
         uploads[uuid].Status = "done"
         uploads[uuid].Out = Object.assign(uploads[uuid].Out, result)
         fileUpdateEvent(uuid)
