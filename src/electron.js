@@ -19,6 +19,7 @@ function createSplash() {
     show: false,
     frame: false,
     transparent: true,
+    backgroundColor: "#00000000",
     webPreferences: {
       navigateOnDragDrop: false,
     },
@@ -33,11 +34,6 @@ function createSplash() {
   splashWindow.webContents.on('did-finish-load', function () {
     if(splashWindow) splashWindow.show();
   });
-}
-
-function loadCrusheePage() {
-  //mainWindow.loadURL('http://127.0.0.1:1603/', { "extraHeaders": "pragma: no-cache\n" })
-  
 }
 
 function createWindow() {
