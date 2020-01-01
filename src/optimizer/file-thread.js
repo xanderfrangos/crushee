@@ -105,10 +105,21 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
         let resized = false
         if (settings.resize.width || settings.resize.height) {
             resized = true
+
+            let width = (settings.resize.width && parseInt(settings.resize.width) > 0 ? parseInt(settings.resize.width) : null)
+            let height = (settings.resize.height && parseInt(settings.resize.height) > 0 ? parseInt(settings.resize.height) : null)
+
+            // Check if percentages
+            if(settings.resize.width && parseInt(settings.resize.width) != 0 && settings.resize.width.substr(-1) === "%") {
+                width = Math.ceil(metadata.width * (parseInt(settings.resize.width) / 100))
+            }
+            if(settings.resize.height && parseInt(settings.resize.height) != 0 && settings.resize.height.substr(-1) === "%") {
+                height = Math.ceil(metadata.height * (parseInt(settings.resize.height) / 100))
+            }
+
             image.resize(
-                (settings.resize.width && parseInt(settings.resize.width) > 0 ? parseInt(settings.resize.width) : null),
-                (settings.resize.height && parseInt(settings.resize.height) > 0 ? parseInt(settings.resize.height) : null),
-                { fit: (settings.resize.crop == "true" ? "cover" : "inside") }
+                width,
+                height,
             )
         }
 
