@@ -6,7 +6,6 @@ const uuidv1 = require('uuid/v1');
 const { dialog } = require('electron').remote
 const slash = require('slash')
 let browser = remote.getCurrentWindow()
-window.electronBrowser = browser
 
 window.appInfo = {
     version: 'v' + remote.app.getVersion(),
@@ -18,7 +17,7 @@ console.log("Starting optimizer...")
 let server = fork(path.join(__dirname, "../src/optimizer/server.js"))
 
 remote.app.on("will-quit", () => {
-    server.send(JSON.stringify({ type: "quit" }))
+    server.send({ type: "quit" })
 })
 
 function openDialog(isFolder = false) {
@@ -104,6 +103,13 @@ ipcRenderer.on('blurEnabled', (event, data) => {
     document.body.dataset.blurEnabled = data
 })
 
+window.updateTaskbarPercentage = function() {
+    let progress = 1 - ((window.stats.processing + window.stats.crushing + window.stats.saving) / window.stats.total)
+    if(progress >= 1) progress = 0;
+    if(typeof progress != "number") progress = 0;
+    window.thisWindow.setProgressBar(progress || 0)
+}
+
 ipcRenderer.on('shortcut', function (event, data) {
 
     switch (data.shortcut) {
@@ -185,10 +191,10 @@ window.addFiles = addFiles
 
 
 const sendMessage = (type, payload = {}) => {
-    window.server.send(JSON.stringify({
+    window.server.send({
         type,
         payload
-    }))
+    })
 }
 window.sendMessage = sendMessage
 
@@ -221,7 +227,7 @@ window.crushFile = (UUID, options = defaultSettings) => {
     const file = files[UUID]
     if (file.Status === "done" || file.Status === "analyzed") {
         file.Status = "crushing"
-        sendMessage("crush", { UUID, options: JSON.stringify(options) })
+        sendMessage("crush", { UUID, options })
         window.fileCounts.crushing++
     }
 }

@@ -105,6 +105,7 @@ export default class App extends PureComponent {
         window.stats = stats
 
         window.setDockBadge(stats.processing + stats.crushing + stats.saving)
+        window.updateTaskbarPercentage()
 
         if (stats.crushing > 0) {
             window.eventState.crushing = 1
@@ -129,9 +130,9 @@ export default class App extends PureComponent {
                 <Titlebar />
                 <Sidebar />
                 <div className="base" id="app">
-                    <div className="base--inner">
+                    <div className="base--inner" id="base--inner">
                         <SingleFile show={this.state.comparisonShow} before={this.state.comparisonBefore} after={this.state.comparisonAfter} />
-                        <FileList data-counts={window.fileCounts} scans={this.state.activeScans} stats={stats} />
+                        <FileList data-counts={window.fileCounts} scans={this.state.activeScans} stats={stats} height={ (document.getElementById("base--inner") ? document.getElementById("base--inner").clientHeight - 100 : 0) } />
                         <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0 || window.stats.crushing > 0 || window.stats.saving > 0)}>
                             <div className="summary-text">
                                 {getStatusBar(stats)}

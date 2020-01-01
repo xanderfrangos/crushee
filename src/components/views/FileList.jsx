@@ -2,11 +2,12 @@ import React from "react";
 import { PureComponent } from "react";
 import { Empty } from "./Empty";
 import { Scanning } from "./Scanning";
+import { FixedSizeList as List } from 'react-window';
 const Utilities = require("../../Utilities")
 
 const rightClickFilter = (event) => {
     const file = window.files[event.currentTarget.dataset.uuid]
-    if(file.Status === "done" || file.Status === "analyzed" || file.Status === "error") {
+    if (file.Status === "done" || file.Status === "analyzed" || file.Status === "error") {
         window.rightClickTarget = file.UUID;
         window.popupMenu("RightClickFile", null, null, (file.Status !== "done"))
     }
@@ -15,7 +16,7 @@ const rightClickFilter = (event) => {
 const previewClickFallback = (event) => {
     const file = window.files[event.currentTarget.parentElement.parentElement.dataset.uuid]
     console.log(event.currentTarget.parentElement.parentElement)
-    if(file.Status === "done" || file.Status === "analyzed") {
+    if (file.Status === "done" || file.Status === "analyzed") {
         window.rightClickTarget = file.UUID;
         window.popupMenu("RightClickFile", null, null, (file.Status !== "done"))
     }
@@ -31,7 +32,7 @@ const makeFileItemImage = function (file) {
 
 const makeFormatTag = (file) => {
     const ext1 = file.In.Extension.substr(1).toUpperCase()
-    if(file.Out.Extension && file.Out.Extension != file.In.Extension) {
+    if (file.Out.Extension && file.Out.Extension != file.In.Extension) {
         const ext2 = file.Out.Extension.substr(1).toUpperCase()
         return (<span className={"format " + ext1 + "-to-" + ext2}>{ext1} &rarr; {ext2}</span>)
     } else {
@@ -66,15 +67,19 @@ export default class FileList extends PureComponent {
     }
 
     componentWillUnmount() {
-        window.removeEventListener('fileUpdated')
+
     }
+
+    fileRow = ({ index, style }) => {
+        return(<div style={style}>{this.makeFileItem(this.files[index], index)}</div>)
+    };
 
     makeFileItem = function (file, idx) {
         if (file.Status !== "deleted") {
             return (<div className="elem--file" key={file.UUID} data-uuid={file.UUID} data-status={file.Status} onContextMenu={rightClickFilter} onClick={rightClickFilter}>
                 <div className="inner">
 
-                    <div className="preview" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); if (file.Status === "done") { window.showComparison(file); } else { previewClickFallback(e) }  return false; } }>
+                    <div className="preview" onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (file.Status === "done") { window.showComparison(file); } else { previewClickFallback(e) } return false; }}>
                         <div className="inner">
                             <div className="overlay">
                                 <div className="progress-bar" style={{ width: "100%" }}></div>
@@ -97,22 +102,33 @@ export default class FileList extends PureComponent {
 
     }
 
+    
+
     render() {
-        if(this.props.scans > 0) {
+        console.log("height", this.props.height)
+        if (this.props.scans > 0) {
             return (<Scanning title="Scanning..." description={`${this.props.scans} folder${(this.props.scans > 1 ? "s" : "")}`} />)
         } else {
-            if(this.props.stats.crushing > 0) {
-                return (<Scanning title="Crushing..." description={ `${this.props.stats.crushing} file${(this.props.stats.crushing > 1 ? "s" : "")}` } />)
-            }  else if (this.props.stats.processing > 0) {
+            if (this.props.stats.crushing > 0) {
+                return (<Scanning title="Crushing..." description={`${this.props.stats.crushing} file${(this.props.stats.crushing > 1 ? "s" : "")}`} />)
+            } else if (this.props.stats.processing > 0) {
                 return (<Scanning title="Analyzing..." description={`${this.props.stats.processing} file${(this.props.stats.processing > 1 ? "s" : "")}`} />)
-            } else if(this.props.stats.saving > 0) {
-                return (<Scanning title="Saving..." description={ `${this.props.stats.saving} file${(this.props.stats.saving > 1 ? "s" : "")}` } />)
+            } else if (this.props.stats.saving > 0) {
+                return (<Scanning title="Saving..." description={`${this.props.stats.saving} file${(this.props.stats.saving > 1 ? "s" : "")}`} />)
             } else {
                 if (this.props.stats.total > 0) {
+                    this.files = Object.values(window.files).slice(0).reverse()
                     return (
-                        <div className="page page--files show">
+                        <div className="page page--files show" id="page--files">
                             <div className="page--files--list">
-                                {Object.values(window.files).slice(0).reverse().map(this.makeFileItem)}
+                                <List
+                                    height={this.props.height}
+                                    itemCount={this.files.length}
+                                    itemSize={104}
+                                    width={"100%"}
+                                >
+                                    {this.fileRow}
+                                </List>
                             </div>
                         </div>
                     )
@@ -121,7 +137,7 @@ export default class FileList extends PureComponent {
                     return (<Empty />)
                 }
             }
-            
+
         }
 
     }
