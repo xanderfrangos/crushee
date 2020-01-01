@@ -1,25 +1,19 @@
 <p align="center">
   <img src="https://crushee.app/assets/img/icon.svg">
 </p>
-<h1 align="center">Crushee for Desktop</h1>
+<h1 align="center">Crushee</h1>
 
 *An image squisher*
 
 Crushee is an image compression tool, powered by Electron and Node.js. It accepts JPEG, PNG, GIF, SVG, and WebP files, and will convert to JPEG, PNG, or WebP. It's useful for batch optimization and resizing images. You can carefully tune your images to meet your needs without having to re-upload or restart every time.
 
-Crushee was primarily built with [Electron](https://electronjs.org/), [Node.js](https://nodejs.org/), [Express](https://expressjs.com/), [sharp](https://github.com/lovell/sharp/), and [imagemin](https://github.com/imagemin/imagemin).
+Crushee was primarily built with [Electron](https://electronjs.org/), [Node.js](https://nodejs.org/), [sharp](https://github.com/lovell/sharp/), and [imagemin](https://github.com/imagemin/imagemin).
+
+**Download the lastest release from [crushee.app](https://crushee.app/).**
 
 
 
-## Requirements
-
-- **Node.js** (v10+)
-
-- What what I've experienced, all other image libraries should come pre-built through *npm install*
-
-
-
-## Usage
+## Building & Usage
 
 - Download or clone
 - Run *npm install*.
