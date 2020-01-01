@@ -58,7 +58,7 @@ function createWindow() {
     title: 'Crushee',
     show: false,
     frame: false,
-    backgroundColor: '#00000000',
+    backgroundColor: '#00FFFFFF',
     titleBarStyle: 'hidden',
     vibrancy: 'sidebar',
     webPreferences: {
@@ -78,13 +78,19 @@ function createWindow() {
 
   mainWindow.webContents.on('did-finish-load', function () {
     
+    let blurEnabled = true
     try {
       if(os.platform() === "win32" && os.release().split('.')[2] >= 18363) {
         const SWCA = require('windows-swca')
         SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDD88)
+      } else {
+        if(os.platform() === "win32") {
+          blurEnabled = false
+        }
       }
     } catch(e) {
       console.log("Could not enable blur.", e)
+      blurEnabled = false
     }
 
     setTimeout(() => {
@@ -92,6 +98,7 @@ function createWindow() {
         splashWindow.close();
         splashWindow = null;
       }
+      mainWindow.webContents.send('blurEnabled', blurEnabled)
       mainWindow.show();
     }, 500)
 

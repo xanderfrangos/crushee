@@ -99,6 +99,10 @@ function setDockBadge(count) {
 }
 window.setDockBadge = setDockBadge
 
+ipcRenderer.on('blurEnabled', (event, data) => {
+    document.body.dataset.blurEnabled = data
+})
+
 ipcRenderer.on('shortcut', function (event, data) {
 
     switch (data.shortcut) {

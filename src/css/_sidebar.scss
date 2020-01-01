@@ -403,6 +403,13 @@
     }
 }
 
+
+body[data-platform="Win32"][data-blur-enabled="true"] {
+    .sidebar {
+        background: var(--sidebar-bg-win);
+    }
+}
+
 body[data-platform="MacIntel"] {
     .sidebar {
         background: var(--sidebar-bg-mac);
