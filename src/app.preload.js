@@ -17,7 +17,7 @@ console.log("Starting optimizer...")
 let server = fork(path.join(__dirname, "../src/optimizer/server.js"))
 
 remote.app.on("will-quit", () => {
-    server.send(JSON.stringify({ type: "quit" }))
+    server.send({ type: "quit" })
 })
 
 function openDialog(isFolder = false) {
@@ -188,10 +188,10 @@ window.addFiles = addFiles
 
 
 const sendMessage = (type, payload = {}) => {
-    window.server.send(JSON.stringify({
+    window.server.send({
         type,
         payload
-    }))
+    })
 }
 window.sendMessage = sendMessage
 

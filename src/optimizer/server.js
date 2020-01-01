@@ -361,7 +361,7 @@ const uploadFile = async (pathName) => {
     console.log(`\x1b[34mAnalyzing\x1b[0m ${pathName}`)
 
     const file = new File(pathName)
-    file.setStatus("processing")
+    file.Status = "processing"
     const uuidDir = file.Path
 
     sendMessage("upload", {
@@ -395,7 +395,7 @@ fileStatus.on("replaceUUID", (oldUUID, file) => {
 
 
 process.on('message', function (msg) {
-    data = JSON.parse(msg)
+    data = msg
     let uuids
     if (typeof data.type != undefined)
         switch (data.type) {
@@ -414,7 +414,6 @@ process.on('message', function (msg) {
                 removeFiles(data.payload)
                 break;
             case "upload":
-                //uploadFile(data.payload.path, JSON.parse(data.payload.settings), data.payload.id)
                 scanFiles(data.payload.path)
                 break;
             case "crush":
