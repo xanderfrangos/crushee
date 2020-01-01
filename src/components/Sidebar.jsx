@@ -17,16 +17,18 @@ export const Sidebar = () => {
                             <label>Max Width</label>
                             <input type="numeric" name="resize.width" onChange={(e) => {
                                 window.GlobalSettings.Quality.resize.width = e.target.value
-                                window.changeEventState("crushing", 0)
-                                window.changeEventState("saving", 0)
+                                window.changeEventState("crushing", 0, false)
+                                window.changeEventState("saving", 0, false)
+                                window.sendUpdate()
                             }} />
                         </div>
                         <div className="col">
                             <label>Max Height</label>
                             <input type="numeric" name="resize.height" onChange={(e) => {
                                 window.GlobalSettings.Quality.resize.height = e.target.value
-                                window.changeEventState("crushing", 0)
-                                window.changeEventState("saving", 0)
+                                window.changeEventState("crushing", 0, false)
+                                window.changeEventState("saving", 0, false)
+                                window.sendUpdate()
                             }} />
                         </div>
                     </div>
@@ -51,8 +53,9 @@ export const Sidebar = () => {
                             <div className="input--dropdown" data-for="resizeCrop" tabIndex="0" data-linked="webp.make">
                                 <select onChange={(e) => {
                                     window.GlobalSettings.Quality.app.convert = e.target.value
-                                    window.changeEventState("crushing", 0)
-                                    window.changeEventState("saving", 0)
+                                    window.changeEventState("crushing", 0, false)
+                                    window.changeEventState("saving", 0, false)
+                                    window.sendUpdate()
                                 }}>
                                     <option value="none">Do not convert</option>
                                     <option value="jpg">JPEG</option>

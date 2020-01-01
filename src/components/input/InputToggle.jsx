@@ -42,8 +42,9 @@ export default class InputToggle extends PureComponent {
                     <div className="input--toggle" data-value={window.GlobalSettings.Quality[keys[0]][keys[1]] || false} onClick={(e) => {
                         window.GlobalSettings.Quality[keys[0]][keys[1]] = (window.GlobalSettings.Quality[keys[0]][keys[1]] === true ? false : true)
                         this.setState({ value: window.GlobalSettings.Quality[keys[0]][keys[1]] })
-                        window.changeEventState("crushing", 0)
-                        window.changeEventState("saving", 0)
+                        window.changeEventState("crushing", 0, false)
+                        window.changeEventState("saving", 0, false)
+                        window.sendUpdate()
                     }}>
                         <div></div>
                         <input type="hidden" value={window.GlobalSettings.Quality[keys[0]][keys[1]] || false} />

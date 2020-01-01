@@ -397,7 +397,7 @@ const changeQualityLevel = (level) => {
         window.GlobalSettings.Quality.png = Object.assign(window.GlobalSettings.Quality.png, qualityPresets[level].png)
         window.GlobalSettings.Quality.webp = Object.assign(window.GlobalSettings.Quality.webp, qualityPresets[level].webp)
         window.GlobalSettings.Quality.gif = Object.assign(window.GlobalSettings.Quality.gif, qualityPresets[level].gif)
-        window.sendUpdate()
+        window.sendUpdate(false)
     }
 }
 
@@ -419,7 +419,7 @@ function processMessage(ev) {
                         window.files[data.payload.file.UUID] = data.payload.file
                     }
                     if (data.payload.file.Status === "done") {
-                        window.changeEventState("saving", 0)
+                        window.changeEventState("saving", 0, false)
                     }
                     if (window.GlobalSettings.RemoveErroredFiles && data.payload.file.Status === "error") {
                         deleteUUID(data.payload.file.UUID)
@@ -430,8 +430,8 @@ function processMessage(ev) {
             case "upload":
                 window.files[data.payload.file.UUID] = data.payload.file
                 window.fileCounts.total++
-                window.changeEventState("crushing", 0)
-                window.changeEventState("saving", 0)
+                window.changeEventState("crushing", 0, false)
+                window.changeEventState("saving", 0, false)
                 sendUpdate()
                 break;
             case "replace":
@@ -477,7 +477,7 @@ const sendUpdate = (throttle = true) => {
             window.sendUpdate(false)
             updateThrottle = false
             updatePressure = 0
-        }, (updatePressure > 1 ? 150 : 16))
+        }, (updatePressure > 1 ? 250 : 17))
     }
 
 
