@@ -12,9 +12,9 @@ window.eventState = {
     analyzing: 0
 }
 
-window.changeEventState = (event, state) => {
+window.changeEventState = (event, state, sendUpdate = true) => {
     window.eventState[event] = state
-    window.sendUpdate()
+    if(sendUpdate) window.sendUpdate()
 }
 
 ReactDOM.render(<App />, document.getElementById("crushee"));

@@ -21,9 +21,6 @@ function createSplash() {
     transparent: true,
     webPreferences: {
       navigateOnDragDrop: false,
-      webSecurity: false,
-      scrollBounce: true,
-      experimentalFeatures: true,
     },
     titleBarStyle: "default"
   })
@@ -71,8 +68,8 @@ function createWindow() {
   })
   mainWindow.loadURL(
     isDev
-      ? "http://localhost:3001/v2.html"
-      : `file://${path.join(__dirname, "../build/v2.html")}`
+      ? "http://localhost:3001/index.html"
+      : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
   mainWindow.webContents.on('did-finish-load', function () {
