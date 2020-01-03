@@ -90,7 +90,10 @@
         color: var(--sidebar-input-color);
         font-size: 14px;
         transition: background 0.1s, border 0.1s;
-        box-shadow: inset 0 1px 3px -1px rgba(0, 0, 0, 0.4);
+
+        &:not([type="range"]), &::-webkit-slider-runnable-track {
+            box-shadow: inset 0 1px 3px -1px rgba(0, 0, 0, 0.4);
+        }
 
         &[type=number] {
             text-align: center;
@@ -100,7 +103,7 @@
             border-color: var(--sidebar-input-focus-border);
         }
 
-        &:focus {
+        &:focus:not([type="range"]), &::-webkit-slider-runnable-track {
             outline: none;
             background: var(--sidebar-input-focus-bg);
             border-color: var(--sidebar-input-focus-border);
@@ -295,6 +298,7 @@
         border: none;
         padding: 0;
         position: relative;
+        cursor: pointer;
 
         &:focus {
             outline: none;
@@ -315,6 +319,9 @@
             position: relative;
         }
 
+        &::-webkit-slider-container {
+            padding: 7px 0;
+        }
 
         &::-webkit-slider-runnable-track {
             width: 100%;
@@ -335,7 +342,9 @@
         background: #EB358A;
         height: 4px;
         position: relative;
-        top: -4px;
+        top: -18px;
+        border-radius: 4px;
+        pointer-events: none;
     }
 
     input.val {
