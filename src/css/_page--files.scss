@@ -90,7 +90,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden;
 
     transition: transform 0.3s;
     transform: translateY(100%);
@@ -124,6 +123,13 @@
 
     .action--download-all {
         display: none;
+    }
+
+    .action--clear-all {
+        
+        @media (max-width:1160px) {
+            display: none;;
+        }
     }
 
 

@@ -6,6 +6,7 @@ import { Empty } from "./views/Empty";
 import { Scanning } from "./views/Scanning";
 import FileList from "./views/FileList";
 import SingleFile from "./views/SingleFile";
+import MoreButton from "./input/MoreButton";
 const Utilities = require("../Utilities")
 
 const getTotalFiles = (stats) => {
@@ -132,7 +133,7 @@ export default class App extends PureComponent {
                 <div className="base" id="app">
                     <div className="base--inner" id="base--inner">
                         <SingleFile show={this.state.comparisonShow} before={this.state.comparisonBefore} after={this.state.comparisonAfter} />
-                        <FileList data-counts={window.fileCounts} scans={this.state.activeScans} stats={stats} height={ (document.getElementById("base--inner") ? document.getElementById("base--inner").clientHeight - 100 : 0) } />
+                        <FileList data-counts={window.fileCounts} scans={this.state.activeScans} stats={stats} height={(document.getElementById("base--inner") ? document.getElementById("base--inner").clientHeight - 100 : 0)} />
                         <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0 || window.stats.crushing > 0 || window.stats.saving > 0)}>
                             <div className="summary-text">
                                 {getStatusBar(stats)}
@@ -142,42 +143,62 @@ export default class App extends PureComponent {
                                 <div className="button big action--download-all" data-eventstate={window.eventState.saving} onClick={(e) => {
                                     window.saveAllFiles()
                                 }}>
-                                    
 
 
-                                    <div className="row primary">
-                                    <span className="icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                            <path id="Path_37" data-name="Path 37" d="M0,0H24V24H0Z" fill="none" />
-                                            <path id="Path_38" data-name="Path 38" d="M17.59,3.59A2.006,2.006,0,0,0,16.17,3H5A2,2,0,0,0,3,5V19a2.006,2.006,0,0,0,2,2H19a2.006,2.006,0,0,0,2-2V7.83a1.966,1.966,0,0,0-.59-1.41L17.59,3.59ZM12,19a3,3,0,1,1,3-3A3,3,0,0,1,12,19ZM13,9H7A2,2,0,0,1,7,5h6a2,2,0,0,1,0,4Z" fill="#fff" />
-                                        </svg>
 
-                                    </span>
-                                    <span className="text">Save All</span>
-                                    </div>
+                                    <div className="inner">
+                                        <div className="row primary">
+                                            <span className="icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                    <path id="Path_37" data-name="Path 37" d="M0,0H24V24H0Z" fill="none" />
+                                                    <path id="Path_38" data-name="Path 38" d="M17.59,3.59A2.006,2.006,0,0,0,16.17,3H5A2,2,0,0,0,3,5V19a2.006,2.006,0,0,0,2,2H19a2.006,2.006,0,0,0,2-2V7.83a1.966,1.966,0,0,0-.59-1.41L17.59,3.59ZM12,19a3,3,0,1,1,3-3A3,3,0,0,1,12,19ZM13,9H7A2,2,0,0,1,7,5h6a2,2,0,0,1,0,4Z" fill="#fff" />
+                                                </svg>
 
-                                    <div className="row secondary">
-                                        <span className="icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="secondary"><path d="M0 0h24v24H0z" fill="none" /><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
-                                        </span>
-                                        <span className="text">Saved!</span>
+                                            </span>
+                                            <span className="text">Save All</span>
+                                        </div>
+
+                                        <div className="row secondary">
+                                            <span className="icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="secondary"><path d="M0 0h24v24H0z" fill="none" /><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                                            </span>
+                                            <span className="text">Saved!</span>
+                                        </div>
                                     </div>
 
 
                                 </div>
+
+
+                                <div className="button big med-gray action--clear-all hasMore">
+                                    <div className="inner" onClick={(e) => { window.clearAllFiles() }}>
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none" /><path d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" /></svg>
+                                        </span>
+                                        <span>Clear all files</span>
+                                    </div>
+                                    <MoreButton>
+                                        <li>Clear crushed files</li>
+                                        <li>Clear uncrushed files</li>
+                                    </MoreButton>
+                                </div>
+
 
                                 <div className="button big transparent action--add-file" onClick={(e) => {
                                     window.openDialog(false)
                                 }}>
-                                    <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                            <path fill="none" d="M0 0h24v24H0V0z" />
-                                            <path
-                                                d="M12 7c-.55 0-1 .45-1 1v3H8c-.55 0-1 .45-1 1s.45 1 1 1h3v3c0 .55.45 1 1 1s1-.45 1-1v-3h3c.55 0 1-.45 1-1s-.45-1-1-1h-3V8c0-.55-.45-1-1-1zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                                        </svg>
-                                    </span>
-                                    <span>Add file(s)</span>
+                                    <div className="inner">
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path fill="none" d="M0 0h24v24H0V0z" />
+                                                <path
+                                                    d="M12 7c-.55 0-1 .45-1 1v3H8c-.55 0-1 .45-1 1s.45 1 1 1h3v3c0 .55.45 1 1 1s1-.45 1-1v-3h3c.55 0 1-.45 1-1s-.45-1-1-1h-3V8c0-.55-.45-1-1-1zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                            </svg>
+                                        </span>
+                                        <span>Add file(s)</span>
+                                    </div>
                                 </div>
+                                
                             </div>
                         </div>
 

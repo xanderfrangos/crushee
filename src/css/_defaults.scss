@@ -66,7 +66,7 @@ input[type=number]::-webkit-outer-spin-button {
 .button {
     @extend shadow;
     background: var(--color-secondary);
-    padding: 12px 30px;
+    
     font-size: 20px;
     font-weight: 800;
     color: white;
@@ -78,12 +78,10 @@ input[type=number]::-webkit-outer-spin-button {
     cursor: pointer;
     transition: background 0.1s;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    display: block;
+    position: relative;
 
-    height: 20px;
+    
     line-height: 1;
 
     &.big {
@@ -116,24 +114,11 @@ input[type=number]::-webkit-outer-spin-button {
             color: var(--color-secondary);
         }
     }
+    &.med-gray {
+        background: rgba(72, 72, 72, 0.85);
+    }
 
-    &:hover {
-        background: var(--color-button-hover);
-        color: white;
-        svg {
-            fill: white;
-        }
-        @include appnav {
-            background: var(--color-secondary);
-        }
-    }
-    &:active {
-        background: var(--color-button-hover);
-        color: white;
-        svg {
-            fill: white;
-        }
-    }
+    
 
     .icon {
         height: 24px;
@@ -205,6 +190,118 @@ input[type=number]::-webkit-outer-spin-button {
         padding: 12px 16px;
         span.text {
             display: none;
+        }
+    }
+
+
+    .inner {
+        overflow: hidden;
+        position: relative;
+        padding: 12px 30px;
+        display: flex;
+        width: 100%;
+        height: 48px;
+        box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+
+        &:hover {
+        background: var(--color-button-hover);
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: brightness(100%) contrast(130%) saturate(120%);
+        color: white;
+        svg {
+            fill: white;
+        }
+        & + .more {
+            &:before {
+                opacity: 0;
+            }
+        }
+        @include appnav {
+            background: var(--color-secondary);
+        }
+    }
+    &:active {
+        background: var(--color-button-hover);
+        color: white;
+        svg {
+            fill: white;
+        }
+    }
+
+    }
+
+    $morePadding: 40px;
+
+    &.hasMore {
+        padding-right: $morePadding;
+    }
+
+    .more {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: $morePadding;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius:  0 5px 5px 0;
+        transition: background 0.3s;
+
+        &:hover {
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.35);
+            &:before {
+                opacity: 0;
+                transform: scale(1, 0.9);
+            }
+        }
+
+        &[data-active="true"] {
+            & + .moreMenu {
+                display: block;
+            }
+        }
+
+        &:before {
+            content: ' ';
+            display: block;
+            position: absolute;
+            top: 8px;
+            left: 0px;
+            height: calc(100% - 16px);
+            width: 1px;
+            background: white;
+            opacity: 0.5;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: scale(1, 1);
+        }
+    }
+    .moreMenu {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        width: 100%;
+        height: auto;
+        padding-bottom: 10px;
+        display: none;
+        
+        ul {
+            background: rgb(70, 70, 70);
+            //backdrop-filter: blur(8px);
+            border-radius: 5px;
+            list-style: none;
+            padding: 5px 0;
+            margin: 0;
+            li {
+                padding: 12px 0;
+                &:hover {
+                    background: black;
+                }
+            }
         }
     }
 
