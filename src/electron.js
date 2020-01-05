@@ -135,7 +135,7 @@ function createSettingsWindow() {
 
   settingsWindow.webContents.on('did-finish-load', () => {
     settingsWindow.show()
-    settingsWindow.webContents.openDevTools()
+    //settingsWindow.webContents.openDevTools()
   })
 
   settingsWindow.on('closed', function () {
