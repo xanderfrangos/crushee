@@ -6,6 +6,7 @@ const isDev = require("electron-is-dev");
 const os = require("os")
 let mainWindow
 let splashWindow
+let settingsWindow
 
 // App version
 const crusheeVersion = require('../package.json').version
@@ -36,15 +37,53 @@ function createSplash() {
   });
 }
 
-function createWindow() {
+function createSettingsWindow() {
+  if(settingsWindow != null) {
+    settingsWindow.focus()
+    return false;
+  } 
+  settingsWindow = new BrowserWindow({
+    width: 400,
+    height: 640,
+    icon: __dirname + '/assets/icon-shadow.ico',
+    title: 'Crushee Settings',
+    show: false,
+    frame: false,
+    resizable: false,
+    backgroundColor: '#00FFFFFF',
+    titleBarStyle: 'hidden',
+    vibrancy: 'fullscreen-ui',
+    webPreferences: {
+      navigateOnDragDrop: false,
+      webSecurity: false,
+      scrollBounce: true,
+      preload: path.resolve(__dirname, 'settings.preload.js')
+    }
+  })
+  settingsWindow.loadURL(
+    isDev
+      ? "http://localhost:3001/settings.html"
+      : `file://${path.join(__dirname, "../build/settings.html")}`
+  );
 
-  // Manually set to Light theme for now
-  nativeTheme.themeSource = 'light'
+  settingsWindow.webContents.on('did-finish-load', () => {
+    settingsWindow.show()
+    settingsWindow.webContents.openDevTools()
+  })
+
+  settingsWindow.on('closed', function () {
+    settingsWindow = null
+  })
+
+
+}
+
+function createWindow() {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 700,
+    width: 1070,
+    height: 720,
     minWidth: 700,
     minHeight: 600,
     icon: __dirname + '/assets/icon-shadow.ico',
@@ -122,9 +161,6 @@ function createWindow() {
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
     mainWindow = null
     app.quit()
   })
@@ -158,6 +194,17 @@ app.on('activate', function () {
     }
   }
 })
+
+
+
+ipcMain.on('send-settings', (event, settings) => {
+  console.log(event, settings)
+  if(settings.theme) {
+    nativeTheme.themeSource = settings.theme
+  }
+})
+
+
 
 // Start up app
 function tryStart() {
@@ -206,6 +253,13 @@ const menus = {
         })
       }
     }, {
+      type: 'separator'
+    }, {
+      label: 'Preferences',
+      click: () => {
+        createSettingsWindow()
+      }
+    }, {
             type: 'separator'
         }, {
             label: 'Quit',
@@ -250,12 +304,6 @@ const menus = {
 
 
     Help: [
-      /*{
-          label: 'About Crushee',
-          click: () => {
-              console.log('About Clicked');
-          }
-      },*/
     {
       label: 'Developer tools',
       accelerator: 'CmdOrCtrl+I',
@@ -267,21 +315,6 @@ const menus = {
         })
       }
     },
-      /*{
-        label: 'Reset App',
-        click: () => {
-            console.log('Reset Clicked');
-          mainWindow.webContents.send('shortcut', {
-            shortcut: "reset-app"
-          })
-        }
-    },*/
-      /*{
-          label: 'Check For Updates',
-          click: () => {
-              app.quit();
-          }
-      },*/
       {
         type: 'separator'
       },

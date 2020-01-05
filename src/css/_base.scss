@@ -26,6 +26,9 @@
   ::-webkit-scrollbar-track {
     background: #f1f1f1; 
     background: #dcdcdc;
+    @media screen and (prefers-color-scheme: dark) {
+      background: #141414;
+  }
   }
    
   /* Handle */

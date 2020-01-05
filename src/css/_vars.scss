@@ -14,6 +14,7 @@
     --sidebar-bg: #F1F1F1;
     --sidebar-bg-win: rgba(247, 247, 247, 0.85);
     --sidebar-bg-mac: rgba(245, 245, 245, 0.78);
+    --sidebar-shadow: black;
 
     --preview-bg: #848484;
 
@@ -23,20 +24,21 @@
 
   }
 
-
-  body[data-theme='dark'] {
-    --base-bg: #101010; 
-    --base-bg-alt: #212121;
-
-    --text-base: #FFFFFF;
-
-    --sidebar-bg: rgb(8, 8, 8);
-
-    --color-button-hover: #333333;
-
-    --titlebar-icon: #fff;
-    --titlebar-icon-hover: #eee;
-
-  }
-
+  @media screen and (prefers-color-scheme: dark) {
+    :root {
+      --base-bg: #101010; 
+      --base-bg: rgb(8, 8, 8);
+      --base-bg-alt: #212121;
   
+      --text-base: #FFFFFF;
+      --text-sidebar: #FFFFFF;
+  
+      --sidebar-bg: rgb(8, 8, 8);
+      --sidebar-bg: #101010;
+  
+      --color-button-hover: #333333;
+  
+      --titlebar-icon: #fff;
+      --titlebar-icon-hover: #eee;
+    }
+}

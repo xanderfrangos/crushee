@@ -89,6 +89,7 @@ function saveDialog(isFolder = false, extension = null) {
         })
     }
 }
+window.saveDialog = saveDialog
 
 
 function setDockBadge(count) {
@@ -232,9 +233,10 @@ window.crushFile = (UUID, options = defaultSettings) => {
     }
 }
 
-window.clearAllFiles = function () {
-    for (let file in window.files) {
-        window.deleteUUID(file, false)
+window.clearAllFiles = function (mode = "all") {
+    for (let UUID in window.files) {
+        if(mode === "all" || (mode === "crushed" && window.files[UUID].Status === "done") || (mode === "uncrushed" && window.files[UUID].Status !== "done"))
+        window.deleteUUID(UUID, false)
     }
     sendUpdate()
 }
