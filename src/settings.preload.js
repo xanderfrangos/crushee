@@ -32,5 +32,5 @@ window.lastUpdate = Date.now()
 window.settings = {}
 window.thisWindow = browser
 
-window.version = 'v' + remote.app.getVersion()
-window.isAppX = (remote.app.getName() == "crushee-appx" ? true : false)
+window.version = 'v' + remote.app.version
+window.isAppX = (remote.app.name == "crushee-appx" ? true : false)
