@@ -127,7 +127,7 @@ window.GlobalSettings = {
 }
 
 window.appInfo = {
-    version: 'v' + remote.app.version,
+    version: 'v' + remote.app.getVersion(),
     isAppX: (remote.app.name == "crushee-appx" ? true : false),
     newVersion: false
 }
