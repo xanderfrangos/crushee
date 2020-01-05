@@ -17,6 +17,21 @@ const sendMessage = (type, payload = {}) => {
     })
 }
 
+const getUUID = () => {
+    // Make UUID
+    let uuid = uuidv1();
+    let uuidDir = outPath + uuid + "/"
+
+    // Check if folder UUID exists, reroll
+    while (fs.existsSync(uuidDir)) {
+        consoleLog("UUID exists, rerolling")
+        uuid = uuidv1();
+        uuidDir = outPath + uuid + "/"
+    }
+    fs.mkdirSync(uuidDir)
+    return uuid
+}
+
 class File {
     constructor(filePath) {
         const base = path.basename(filePath)
@@ -91,11 +106,16 @@ function cleanUp() {
 }
 cleanUp()
 
-// Set up processing threads
-for (let i = 0; i < maxProcessingThreads; i++) {
-    const forked = makeThread(i)
-    fileProcessorThreads.push(forked)
+function createThreads(count = 1) {
+    // Set up processing threads
+    for (let i = 0; i < count; i++) {
+        const forked = makeThread(i)
+        fileProcessorThreads.push(forked)
+    }
 }
+
+// Set up processing threads
+createThreads(maxProcessingThreads)
 
 function makeThread(threadNum) {
     let thread = fork(path.join(__dirname, 'file-thread.js'), [], { silent: false })
@@ -105,7 +125,8 @@ function makeThread(threadNum) {
         threadNum,
         thread,
         jobs: [],
-        lastAlive: Date.now()
+        lastAlive: Date.now(),
+        uuid: getUUID()
     }
     forked.thread.send({
         type: 'setThreadNum',
@@ -115,7 +136,7 @@ function makeThread(threadNum) {
     // Handle messages and queue updates
     forked.thread.on('message', (data) => {
         if (data.type === "queueLength") {
-            fileProcessorThreads[data.threadNum].queue = data.result
+            if(fileProcessorThreads[data.threadNum]) fileProcessorThreads[data.threadNum].queue = data.result
         } else if (data.type === "generic") {
             console.log(`\x1b[35mThread ${data.threadNum} says\x1b[0m "${(typeof data.message === 'object' ? JSON.stringify(data.message) : data.message)}"`)
         } else if (data.type === "alive") {
@@ -151,6 +172,47 @@ function makeThread(threadNum) {
     })
 
     return forked
+}
+
+function restartThreads(count = "auto") {
+    let threadCount = count;
+    if(count === "auto"){
+        threadCount = (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1)
+    }
+    console.log(`\x1b[35mRestarting to ${threadCount} threads\x1b[0m`)
+    fileProcessorThreads.forEach((fork, idx) => {
+        fork.thread.kill()
+    })
+
+    fileProcessorThreads = []
+    createThreads(threadCount)
+}
+
+function adjustThreads(count = "auto") {
+    let threadCount = count * 1;
+    if(count === "auto"){
+        threadCount = (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1)
+    }
+    const currCount = fileProcessorThreads.length
+
+    if(currCount < threadCount) {
+        // Add threads
+        for (let t = currCount; t < threadCount; t++) {
+            console.log(`\x1b[35mAdding thread ${t}\x1b[0m`)
+            const forked = makeThread(t)
+            fileProcessorThreads.push(forked)
+        }
+    } else if(currCount > threadCount) {
+        // Remove threads
+        for (let t = threadCount; t < currCount; t++) {
+            console.log(`\x1b[35mRemoving thread ${t}\x1b[0m`)
+            fileProcessorThreads[t].thread.send({
+                type: 'softKill'
+            })
+        }
+        fileProcessorThreads.splice(threadCount, currCount - threadCount)
+    }
+
 }
 
 
@@ -256,20 +318,7 @@ async function processFile(uuid, uploadName, inFile, outDir, options = {}) {
 
 }
 
-getUUID = () => {
-    // Make UUID
-    let uuid = uuidv1();
-    let uuidDir = outPath + uuid + "/"
 
-    // Check if folder UUID exists, reroll
-    while (fs.existsSync(uuidDir)) {
-        consoleLog("UUID exists, rerolling")
-        uuid = uuidv1();
-        uuidDir = outPath + uuid + "/"
-    }
-    fs.mkdirSync(uuidDir)
-    return uuid
-}
 
 
 
@@ -435,6 +484,12 @@ process.on('message', function (msg) {
                 } else {
                     recrush(uuids, data.payload.options)
                 }
+                break;
+            case "restart-threads":
+                restartThreads(data.payload)
+                break;
+            case "adjust-threads":
+                adjustThreads(data.payload)
                 break;
         }
 });

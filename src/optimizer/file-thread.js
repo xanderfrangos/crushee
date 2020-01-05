@@ -472,6 +472,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
 let processQueue = []
 let processBusy = false
 let threadNum = -1
+let shouldDie = false
 process.on('message', (data) => {
     if (data.type == "job") {
         processQueue.push(data)
@@ -484,6 +485,8 @@ process.on('message', (data) => {
     } else if (data.type == 'quit') {
         sendGenericMessage("Shutting down...")
         process.exit(0)
+    } else if(data.type == 'softKill') {
+        shouldDie = true
     }
 })
 
@@ -509,6 +512,11 @@ function sendGenericMessage(message) {
 setInterval(checkCanDoJob, 100)
 async function checkCanDoJob() {
     if (processBusy == false) {
+
+        if(shouldDie) {
+            process.exit(0)
+            return false;
+        }
 
         if (processQueue.length === 0) {
             // No jobs, request another
