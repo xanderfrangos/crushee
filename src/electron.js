@@ -7,9 +7,76 @@ const os = require("os")
 let mainWindow
 let splashWindow
 let settingsWindow
+const debug = console
 
 // App version
 const crusheeVersion = require('../package.json').version
+
+
+const settingsPath = path.join(app.getPath("userData"), `\\settings${(isDev ? "-dev" : "")}.json`)
+let settings = {
+  theme: 'system',
+  threads: 'auto',
+  updates: true,
+  analytics: true,
+  autoThreads: (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1)
+}
+
+function readSettings() {
+  try {
+    if (fs.existsSync(settingsPath)) {
+      settings = Object.assign(settings, JSON.parse(fs.readFileSync(settingsPath)))
+    } else {
+      fs.writeFileSync(settingsPath, JSON.stringify({}))
+    }
+    debug.log('Settings loaded:', settings)
+  } catch (e) {
+    debug.error("Couldn't load settings", e)
+  }
+  processSettings()
+}
+
+function writeSettings(newSettings = {}, processAfter = true) {
+  settings = Object.assign(settings, newSettings)
+
+  // Save new settings
+  try {
+    fs.writeFile(settingsPath, JSON.stringify(settings), (e) => { if (e) debug.error(e) })
+  } catch (e) {
+    debug.error("Couldn't save settings.", settingsPath, e)
+  }
+  if (processAfter) processSettings();
+}
+
+ipcMain.on('send-settings', (event, settings) => {
+  writeSettings(settings)
+})
+
+ipcMain.on('request-settings', () => {
+  debug.log("Settings requested")
+  processSettings()
+})
+
+function processSettings() {
+  if (settings.theme) {
+    nativeTheme.themeSource = settings.theme
+  }
+  sendToAllWindows('settings-updated', settings)
+}
+
+function sendToAllWindows(eventName, data) {
+  if (mainWindow) {
+    mainWindow.webContents.send(eventName, data)
+  }
+  if (settingsWindow) {
+    settingsWindow.webContents.send(eventName, data)
+  }
+}
+
+
+
+
+
 
 function createSplash() {
   splashWindow = new BrowserWindow({
@@ -33,15 +100,15 @@ function createSplash() {
       : `file://${path.join(__dirname, "../build/splash.html")}`
   );
   splashWindow.webContents.on('did-finish-load', function () {
-    if(splashWindow) splashWindow.show();
+    if (splashWindow) splashWindow.show();
   });
 }
 
 function createSettingsWindow() {
-  if(settingsWindow != null) {
+  if (settingsWindow != null) {
     settingsWindow.focus()
     return false;
-  } 
+  }
   settingsWindow = new BrowserWindow({
     width: 400,
     height: 640,
@@ -108,7 +175,7 @@ function createWindow() {
   );
 
   mainWindow.webContents.on('did-finish-load', function () {
-    
+
     let blurEnabled = true
     try {
       if (os.platform() === "win32") {
@@ -129,11 +196,11 @@ function createWindow() {
         }
         */
       }
-    } catch(e) {
+    } catch (e) {
       console.log("Could not enable blur.", e)
       blurEnabled = false
     }
-    
+
 
     setTimeout(() => {
       if (splashWindow) {
@@ -154,7 +221,7 @@ function createWindow() {
   mainWindow.setMenuBarVisibility(false)
   mainWindow.setMenuBarVisibility(true)
   const menu = Menu.buildFromTemplate(menuTemplate);
-    Menu.setApplicationMenu(menu);
+  Menu.setApplicationMenu(menu);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -197,18 +264,14 @@ app.on('activate', function () {
 
 
 
-ipcMain.on('send-settings', (event, settings) => {
-  console.log(event, settings)
-  if(settings.theme) {
-    nativeTheme.themeSource = settings.theme
-  }
-})
+
 
 
 
 // Start up app
 function tryStart() {
   createSplash()
+  readSettings()
   createWindow()
   tryingConnection = false
 }
@@ -217,14 +280,14 @@ const menus = {
 
 
   File: [
-      {
-        label: 'Add file(s)',
-        accelerator: 'Shift+CmdOrCtrl+A',
-        click: () => {
-          mainWindow.webContents.send('shortcut', {
-            shortcut: "add-files"
-          })
-        }
+    {
+      label: 'Add file(s)',
+      accelerator: 'Shift+CmdOrCtrl+A',
+      click: () => {
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "add-files"
+        })
+      }
     }, {
       label: 'Add folder(s)',
       click: () => {
@@ -260,25 +323,25 @@ const menus = {
         createSettingsWindow()
       }
     }, {
-            type: 'separator'
-        }, {
-            label: 'Quit',
-            click: () => {
-                app.quit();
-            }
-        }
-    ],
+      type: 'separator'
+    }, {
+      label: 'Quit',
+      click: () => {
+        app.quit();
+      }
+    }
+  ],
 
 
-    Edit: [
-      {
-        label: 'Recrush all files',
-        accelerator: 'CmdOrCtrl+R',
-        click: () => {
-          mainWindow.webContents.send('shortcut', {
-            shortcut: "recrush"
-          })
-        }
+  Edit: [
+    {
+      label: 'Recrush all files',
+      accelerator: 'CmdOrCtrl+R',
+      click: () => {
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "recrush"
+        })
+      }
     },
     {
       label: 'Clear all files',
@@ -288,22 +351,22 @@ const menus = {
           shortcut: "clear-all"
         })
       }
-      }, {
-        type: 'separator'
-      }, {
-        label: 'Remove unoptimized files (<0%)',
-        accelerator: 'CmdOrCtrl+L',
-        click: () => {
-          console.log('Remove Larger Clicked');
-          mainWindow.webContents.send('shortcut', {
-            shortcut: "remove-large-files"
-          })
-        }
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Remove unoptimized files (<0%)',
+      accelerator: 'CmdOrCtrl+L',
+      click: () => {
+        console.log('Remove Larger Clicked');
+        mainWindow.webContents.send('shortcut', {
+          shortcut: "remove-large-files"
+        })
       }
-    ],
+    }
+  ],
 
 
-    Help: [
+  Help: [
     {
       label: 'Developer tools',
       accelerator: 'CmdOrCtrl+I',
@@ -315,10 +378,10 @@ const menus = {
         })
       }
     },
-      {
-        type: 'separator'
-      },
-      {
+    {
+      type: 'separator'
+    },
+    {
       label: `About Crushee v${crusheeVersion}`,
       click: () => {
         console.log('Version Clicked');
@@ -351,7 +414,7 @@ const menus = {
       }
     }, {
       type: 'separator'
-    },{
+    }, {
       label: `Save`,
       click: () => {
         mainWindow.webContents.send('shortcut', {
@@ -367,7 +430,7 @@ const menus = {
         })
       }
     },
-     {
+    {
       type: 'separator'
     },
     {
@@ -385,17 +448,17 @@ const menus = {
 
 const menuTemplate = [
   {
-      label: 'File',
-      submenu: menus.File
+    label: 'File',
+    submenu: menus.File
   },
   {
     label: 'Edit',
     submenu: menus.Edit
-},
-{
-  label: 'Help',
-  submenu: menus.Help
-}
+  },
+  {
+    label: 'Help',
+    submenu: menus.Help
+  }
 ];
 
 
@@ -403,30 +466,30 @@ ipcMain.on('popupMenu', (event, args) => {
 
   const popupMenu = menus[args.menu]
 
-  if(args.disable) {
-    switch(args.menu) {
+  if (args.disable) {
+    switch (args.menu) {
       case "RightClickFile":
-          popupMenu[1].enabled = false
-          popupMenu[4].enabled = false
-          popupMenu[5].enabled = false
+        popupMenu[1].enabled = false
+        popupMenu[4].enabled = false
+        popupMenu[5].enabled = false
         break;
       case "File":
-          popupMenu[3].enabled = false
-          popupMenu[4].enabled = false
+        popupMenu[3].enabled = false
+        popupMenu[4].enabled = false
         break;
       case "Edit":
         break;
     }
   } else {
-    switch(args.menu) {
+    switch (args.menu) {
       case "RightClickFile":
-          popupMenu[1].enabled = true
-          popupMenu[4].enabled = true
-          popupMenu[5].enabled = true
+        popupMenu[1].enabled = true
+        popupMenu[4].enabled = true
+        popupMenu[5].enabled = true
         break;
       case "File":
-          popupMenu[3].enabled = true
-          popupMenu[4].enabled = true
+        popupMenu[3].enabled = true
+        popupMenu[4].enabled = true
         break;
       case "Edit":
         break;

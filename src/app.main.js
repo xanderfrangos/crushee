@@ -37,7 +37,7 @@ document.body.addEventListener("drop", (event) => {
 
 
 window.changeQualityLevel(2)
-if(window.appInfo.isAppX === false) {
+if(window.appInfo.isAppX === false && window.GlobalSettings.App.updates) {
     fetch("https://api.github.com/repos/xanderfrangos/crushee/releases").then((response) => {
         response.json().then((json) => {
             if(json[0].tag_name != window.appInfo.version) {

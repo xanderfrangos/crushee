@@ -7,17 +7,142 @@ const { dialog } = require('electron').remote
 const slash = require('slash')
 let browser = remote.getCurrentWindow()
 
+const defaultSettings = {
+    resize: {
+        width: "",
+        height: "",
+        crop: false
+    },
+    jpg: {
+        quality: 95,
+        make: false,
+        subsampling: 1,
+        useOriginal: false
+    },
+    png: {
+        qualityMin: 50,
+        qualityMax: 95
+    },
+    gif: {
+        colors: 128
+    },
+    webp: {
+        quality: 90,
+        make: false,
+        only: false
+    },
+    app: {
+        qualityPreset: 4,
+        advancedQuality: "false",
+        overwite: false,
+        darkMode: false,
+        convert: "none"
+    }
+}
+window.defaultSettings = defaultSettings
+
+
+
+const qualityPresets = [
+    // Low
+    {
+        jpg: {
+            quality: 77,
+            subsampling: 3,
+            useOriginal: false
+        },
+        png: {
+            qualityMin: 1,
+            qualityMax: 75
+        },
+        webp: {
+            quality: 70
+        },
+        gif: {
+            colors: 64
+        }
+    },
+    // Medium
+    {
+        jpg: {
+            quality: 85,
+            subsampling: 2,
+            useOriginal: false
+        },
+        png: {
+            qualityMin: 10,
+            qualityMax: 85
+        },
+        webp: {
+            quality: 88
+        },
+        gif: {
+            colors: 128
+        }
+    },
+    // High
+    {
+        jpg: {
+            quality: 94,
+            subsampling: 2,
+            useOriginal: true
+        },
+        png: {
+            qualityMin: 15,
+            qualityMax: 95
+        },
+        webp: {
+            quality: 92
+        },
+        gif: {
+            colors: 200
+        }
+    },
+    // Lossless-ish
+    {
+        jpg: {
+            quality: 95,
+            subsampling: 1,
+            useOriginal: true
+        },
+        png: {
+            qualityMin: 25,
+            qualityMax: 98
+        },
+        webp: {
+            quality: 95
+        },
+        gif: {
+            colors: 256
+        }
+    },
+]
+window.qualityPresets = qualityPresets
+
+window.GlobalSettings = {
+    FilterUsingExtension: true,
+    RemoveErroredFiles: true,
+    Quality: Object.assign({}, defaultSettings),
+    App: {}
+}
+
 window.appInfo = {
-    version: 'v' + remote.app.getVersion(),
+    version: 'v' + remote.app.version,
     isAppX: (remote.app.name == "crushee-appx" ? true : false),
     newVersion: false
 }
+
+ipcRenderer.on('settings-updated', (event, data) => {
+    window.GlobalSettings.App = data
+    sendMessage('adjust-threads', data.threads)
+})
+ipc.send('request-settings')
 
 console.log("Starting optimizer...")
 let server = fork(path.join(__dirname, "../src/optimizer/server.js"))
 
 remote.app.on("will-quit", () => {
-    server.send({ type: "quit" })
+    //server.send({ type: "quit" })
 })
 
 function openDialog(isFolder = false) {
@@ -291,117 +416,7 @@ window.openWebsite = function () {
 
 
 
-const defaultSettings = {
-    resize: {
-        width: "",
-        height: "",
-        crop: false
-    },
-    jpg: {
-        quality: 95,
-        make: false,
-        subsampling: 1,
-        useOriginal: false
-    },
-    png: {
-        qualityMin: 50,
-        qualityMax: 95
-    },
-    gif: {
-        colors: 128
-    },
-    webp: {
-        quality: 90,
-        make: false,
-        only: false
-    },
-    app: {
-        qualityPreset: 4,
-        advancedQuality: "false",
-        overwite: false,
-        darkMode: false,
-        convert: "none"
-    }
-}
-window.defaultSettings = defaultSettings
 
-
-
-const qualityPresets = [
-    // Low
-    {
-        jpg: {
-            quality: 77,
-            subsampling: 3,
-            useOriginal: false
-        },
-        png: {
-            qualityMin: 1,
-            qualityMax: 75
-        },
-        webp: {
-            quality: 70
-        },
-        gif: {
-            colors: 64
-        }
-    },
-    // Medium
-    {
-        jpg: {
-            quality: 85,
-            subsampling: 2,
-            useOriginal: false
-        },
-        png: {
-            qualityMin: 10,
-            qualityMax: 85
-        },
-        webp: {
-            quality: 88
-        },
-        gif: {
-            colors: 128
-        }
-    },
-    // High
-    {
-        jpg: {
-            quality: 94,
-            subsampling: 2,
-            useOriginal: true
-        },
-        png: {
-            qualityMin: 15,
-            qualityMax: 95
-        },
-        webp: {
-            quality: 92
-        },
-        gif: {
-            colors: 200
-        }
-    },
-    // Lossless-ish
-    {
-        jpg: {
-            quality: 95,
-            subsampling: 1,
-            useOriginal: true
-        },
-        png: {
-            qualityMin: 25,
-            qualityMax: 98
-        },
-        webp: {
-            quality: 95
-        },
-        gif: {
-            colors: 256
-        }
-    },
-]
-window.qualityPresets = qualityPresets
 
 const changeQualityLevel = (level) => {
     if (level != window.GlobalSettings.Quality.app.qualityPreset) {
@@ -536,12 +551,7 @@ window.getFile = (uuid) => {
 
 
 
-window.GlobalSettings = {
-    FilterUsingExtension: true,
-    RemoveErroredFiles: true,
-    NumberOfThreads: 2,
-    Quality: Object.assign({}, defaultSettings)
-}
+
 
 window.sendMessage("settings", {
     settings: window.GlobalSettings

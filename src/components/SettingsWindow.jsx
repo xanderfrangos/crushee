@@ -10,7 +10,8 @@ export default class SettingsWindow extends PureComponent {
       theme: 'system',
       analytics: false,
       threads: "auto",
-      updates: true
+      updates: true,
+      autoThreads: "?"
     }
     this.lastLevels = []
   }
@@ -19,27 +20,16 @@ export default class SettingsWindow extends PureComponent {
     window.addEventListener("settingsUpdated", this.recievedSettings)
   }
 
-
-  themeChanged = (event) => {
-    this.setState({ theme: event.target.value })
-    window.sendSettings({ theme: event.target.value })
+  settingChanged = (setting, value) => {
+    window.sendSettings({[setting]: value})
   }
-
-  startupChanged = (event) => {
-    const openAtLogin = (this.state.openAtLogin ? false : true)
-    this.setState({ openAtLogin })
-    window.sendSettings({ openAtLogin })
-  }
-
 
   // Update settings
   recievedSettings = (e) => {
     const settings = e.detail
 
     this.setState({
-
-    }, () => {
-      this.forceUpdate()
+      ...settings
     })
   }
 
@@ -47,7 +37,7 @@ export default class SettingsWindow extends PureComponent {
 
   render() {
     return (
-      <div className="window-base" data-theme={window.settings.theme || "default"}>
+      <div className="window-base">
         <Titlebar title="Crushee Preferences" />
         <div id="page">
           <div className="pageSection">
@@ -56,7 +46,7 @@ export default class SettingsWindow extends PureComponent {
             <div className="row">
               <label>App theme</label>
               <div className="sublabel">You're probably just here to turn on Dark Mode.</div>
-              <select value={window.settings.theme} onChange={this.themeChanged}>
+              <select value={window.settings.theme} onChange={(e) => {this.settingChanged("theme", event.target.value)}}>
                 <option value="system">System Preference (Default)</option>
                 <option value="dark">Dark Mode</option>
                 <option value="light">Light Mode</option>
@@ -66,15 +56,15 @@ export default class SettingsWindow extends PureComponent {
             <InputToggle
               label="Check for updates"
               description="Look for updates at startup"
-              path="app.CheckForUpdates"
-              value={window.GlobalSettings.Quality.app.CheckForUpdates}
+              value={this.state.updates}
+              onChange={(e, val, elem) => {this.settingChanged("updates", val)}}
             />
 
             <InputToggle
               label="Collect usage analytics"
               description="Send usage data to help me understand how people are using Crushee"
-              path="app.Analytics"
-              value={window.GlobalSettings.Quality.app.Analytics}
+              value={this.state.analytics}
+              onChange={(e, val, elem) => {this.settingChanged("analytics", val)}}
             />
 
           </div>
@@ -86,8 +76,8 @@ export default class SettingsWindow extends PureComponent {
 
             <label>Concurrent files</label>
             <div className="sublabel">How many files can be analyzed/crushed/saved at once. Changing this probably won't do you much good, except under very specific circumstances.</div>
-            <select value={this.state.updateInterval} onChange={this.updateIntervalChanged}>
-              <option value="auto">Automatic</option>
+            <select value={this.state.threads} onChange={(e) => {this.settingChanged("threads", event.target.value)}}>
+              <option value="auto">Automatic ({ this.state.autoThreads })</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>

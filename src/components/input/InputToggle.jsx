@@ -24,14 +24,14 @@ export default class InputToggle extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            value: false
+            value: this.props.value || false
         }
     }
 
 
 
     render() {
-        const keys = this.props.path.split(".")
+        const keys = (this.props.path ? this.props.path.split(".") : false)
         return (
             <div className="row">
                 <div className="col">
@@ -39,15 +39,21 @@ export default class InputToggle extends PureComponent {
                     {makeDescription(this.props.description)}
                 </div>
                 <div className="col">
-                    <div className="input--toggle" data-value={window.GlobalSettings.Quality[keys[0]][keys[1]] || false} onClick={(e) => {
-                        window.GlobalSettings.Quality[keys[0]][keys[1]] = (window.GlobalSettings.Quality[keys[0]][keys[1]] === true ? false : true)
-                        this.setState({ value: window.GlobalSettings.Quality[keys[0]][keys[1]] })
-                        window.changeEventState("crushing", 0, false)
-                        window.changeEventState("saving", 0, false)
-                        window.sendUpdate()
+                    <div className="input--toggle" data-value={(keys ? window.GlobalSettings.Quality[keys[0]][keys[1]] || false : this.props.value)} onClick={(e) => {
+                        if(this.props.keys) {
+                            window.GlobalSettings.Quality[keys[0]][keys[1]] = (window.GlobalSettings.Quality[keys[0]][keys[1]] === true ? false : true)
+                            this.setState({ value: window.GlobalSettings.Quality[keys[0]][keys[1]] })
+                            window.changeEventState("crushing", 0, false)
+                            window.changeEventState("saving", 0, false)
+                            window.sendUpdate()
+                        } else {
+                            if(typeof this.props.onChange == "function") {
+                                this.props.onChange(e, !this.props.value, this)
+                            }
+                        }
+                        
                     }}>
                         <div></div>
-                        <input type="hidden" value={window.GlobalSettings.Quality[keys[0]][keys[1]] || false} />
                     </div>
                 </div>
             </div>
