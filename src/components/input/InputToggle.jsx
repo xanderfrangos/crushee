@@ -40,7 +40,7 @@ export default class InputToggle extends PureComponent {
                 </div>
                 <div className="col">
                     <div className="input--toggle" data-value={(keys ? window.GlobalSettings.Quality[keys[0]][keys[1]] || false : this.props.value)} onClick={(e) => {
-                        if(this.props.keys) {
+                        if(keys) {
                             window.GlobalSettings.Quality[keys[0]][keys[1]] = (window.GlobalSettings.Quality[keys[0]][keys[1]] === true ? false : true)
                             this.setState({ value: window.GlobalSettings.Quality[keys[0]][keys[1]] })
                             window.changeEventState("crushing", 0, false)
