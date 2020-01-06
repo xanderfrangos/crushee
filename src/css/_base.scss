@@ -32,6 +32,8 @@ body[data-platform="MacIntel"] {
   ::-webkit-scrollbar-track {
     background: #f1f1f1; 
     background: #dcdcdc;
+    border-radius: 0px;
+    margin: 0px 0 0px;
     @media screen and (prefers-color-scheme: dark) {
       background: rgba(255,255,255,0.2);
   }
@@ -40,9 +42,13 @@ body[data-platform="MacIntel"] {
   /* Handle */
   ::-webkit-scrollbar-thumb {
     background: #888; 
+    border-radius: 0px;
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #555; 
+    @media screen and (prefers-color-scheme: dark) {
+      background: rgba(255,255,255,0.6);
+  }
   }
