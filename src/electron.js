@@ -11,6 +11,8 @@ let splashWindow
 let settingsWindow
 const debug = console
 let analytics = false
+let analyticsQueue = false
+let analyticsInterval = false
 
 // App version
 const crusheeVersion = require('../package.json').version
@@ -95,9 +97,20 @@ function processSettings() {
         ea: "CPU Model",
         el: os.cpus()[0].model
       }).send()
+
+      analyticsInterval = setInterval(() => {
+        if(analytics && analyticsQueue) {
+          console.log("\x1b[34mAnalytics:\x1b[0m Sending analytics")
+          analyticsQueue.send()
+          analyticsQueue = false
+        }
+      }, 30 * 1000)
     }
   } else {
     analytics = false
+    if(analyticsInterval) {
+      clearInterval(analyticsInterval)
+    }
   }
   sendToAllWindows('settings-updated', settings)
 }
@@ -542,10 +555,12 @@ ipcMain.on('popupMenu', (event, args) => {
 
 ipcMain.on('crushEvent', (event, settings) => {
   if(analytics) {
-    let chain = analytics
+    if(!analyticsQueue) {
+      analyticsQueue = analytics
+    }
     for(let category in settings) {
       for(let key in settings[category]) {
-        chain = chain.event({
+        analyticsQueue.event({
           ec: "Crush Settings",
           ea: category,
           el: key,
@@ -553,15 +568,16 @@ ipcMain.on('crushEvent', (event, settings) => {
         })
       }
     }
-    chain.send()
   }
 })
 ipcMain.on('saveEvent', (event, data) => {
   if(analytics) {
-    let chain = analytics
+    if(!analyticsQueue) {
+      analyticsQueue = analytics
+    }
     for(let category in data) {
       for(let key in data[category]) {
-        chain = chain.event({
+        analyticsQueue.event({
           ec: "Save Results",
           ea: category,
           el: key,
@@ -569,12 +585,14 @@ ipcMain.on('saveEvent', (event, data) => {
         })
       }
     }
-    chain.send()
   }
 })
 ipcMain.on('event', (event, data) => {
   if(analytics) {
-    analytics.event(data).send()
+    if(!analyticsQueue) {
+      analyticsQueue = analytics
+    }
+    analyticsQueue.event(data)
   }
 })
 
