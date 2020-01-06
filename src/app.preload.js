@@ -132,11 +132,11 @@ window.appInfo = {
     newVersion: false
 }
 
-ipcRenderer.on('settings-updated', (event, data) => {
+ipc.on('settings-updated', (event, data) => {
     window.GlobalSettings.App = data
     sendMessage('adjust-threads', data.threads)
+    sendUpdate()
 })
-ipc.send('request-settings')
 
 console.log("Starting optimizer...")
 let server = fork(path.join(__dirname, "../src/optimizer/server.js"))
@@ -548,10 +548,6 @@ window.getFile = (uuid) => {
         }
     }
 }
-
-
-
-
 
 window.sendMessage("settings", {
     settings: window.GlobalSettings

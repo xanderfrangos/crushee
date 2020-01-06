@@ -176,6 +176,8 @@ function createWindow() {
 
   mainWindow.webContents.on('did-finish-load', function () {
 
+    processSettings()
+
     let blurEnabled = true
     try {
       if (os.platform() === "win32") {
