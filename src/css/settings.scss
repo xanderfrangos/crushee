@@ -117,6 +117,12 @@ body {
     --tray-background: var(--page-background);
 }
 
+body[data-platform="MacIntel"] {
+    #settings > .window-base {
+        background: var(--base-bg-mac);
+    }
+  }
+
 #page {
     overflow: auto;
     

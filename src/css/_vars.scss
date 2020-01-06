@@ -1,6 +1,7 @@
 :root {
     --base-bg: #FFFFFF; 
     --base-bg-alt: #EEEEEE;
+    --base-bg-mac: rgb(255, 255, 255, 0.85);
 
     --text-base: black;
     --text-sidebar: black;
@@ -13,7 +14,7 @@
 
     --sidebar-bg: #F1F1F1;
     --sidebar-bg-win: rgba(247, 247, 247, 0.85);
-    --sidebar-bg-mac: rgba(245, 245, 245, 0.78);
+    --sidebar-bg-mac: rgba(245, 245, 245, 0.70);
     --sidebar-shadow: black;
 
     --preview-bg: #848484;
@@ -28,6 +29,7 @@
     :root {
       --base-bg: #101010; 
       --base-bg: rgb(8, 8, 8);
+      --base-bg-mac: rgb(8, 8, 8, 0.85);
       --base-bg-alt: #212121;
   
       --text-base: #FFFFFF;
