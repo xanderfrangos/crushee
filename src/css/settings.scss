@@ -1,5 +1,5 @@
 @import "style";
-
+@import "./nunito/stylesheet.css";
 
 //
 // Variables
@@ -101,7 +101,7 @@ body {
 #settings > .window-base {
     background: var(--base-bg);
     color: var(--text-base);
-    font-family: 'Segoe UI';
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
     position: absolute;
     top: 0;
     left: 0;
@@ -232,7 +232,7 @@ body {
 
 
 label {
-    font-size: 14px;
+    font-size: 18px;
     display: block;
 
     font-size: 16px;
@@ -284,7 +284,9 @@ label {
 .sublabel {
     margin-bottom: 10px;
     margin-top: 5px;
+    font-size: 14px;
     line-height: 1.2;
+    opacity: 0.8;
 }
 
 p {
