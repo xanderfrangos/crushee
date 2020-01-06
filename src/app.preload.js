@@ -219,6 +219,11 @@ function saveDialog(isFolder = false, extension = null) {
 
         })
     }
+    ipc.send('event', {
+        ec: "Interaction",
+        ea: "Save",
+        el: (isFolder ? "Save to folder" : "Save as"),
+    })
 }
 window.saveDialog = saveDialog
 
@@ -292,6 +297,11 @@ ipcRenderer.on('shortcut', function (event, data) {
             break;
         case "right-click-show-original":
             remote.shell.showItemInFolder(window.files[window.rightClickTarget].In.Source)
+            ipc.send('event', {
+                ec: "Interaction",
+                ea: "Show",
+                el: "Show original",
+            })
             break;
         case "right-click-remove":
             window.deleteUUID(window.rightClickTarget, true)
@@ -310,11 +320,15 @@ window.popupMenu = (menu, x = null, y = null, disable = false) => {
         y,
         disable
     })
+    ipc.send('event', {
+        ec: "Interaction",
+        ea: "Context Menu",
+        el: menu,
+    })
 }
 
 
 function addFiles(files) {
-
     window.sendMessage("upload", {
         path: files
     })
@@ -385,6 +399,11 @@ window.clearAllFiles = function (mode = "all") {
         if(mode === "all" || (mode === "crushed" && window.files[UUID].Status === "done") || (mode === "uncrushed" && window.files[UUID].Status !== "done"))
         window.deleteUUID(UUID, false)
     }
+    ipc.send('event', {
+        ec: "Interaction",
+        ea: "Clear",
+        el: mode,
+    })
     sendUpdate()
 }
 
@@ -447,6 +466,11 @@ window.saveAllFiles = (folder = false) => {
 
 window.openWebsite = function () {
     require("electron").shell.openExternal("https://crushee.app/?app")
+    ipc.send('event', {
+        ec: "Interaction",
+        ea: "Website Link",
+        el: "Crushee website"
+    })
 }
 
 
@@ -573,6 +597,11 @@ const showComparison = (file) => {
     if (file.Status === "done") {
         window.sendPreviewUpdate(true, "file://" + file.Path + "/source" + file.In.Extension + "?" + Date.now(), "file://" + file.Path + "/crushed/" + file.Out.Crushed + "?" + Date.now())
     }
+    ipc.send('event', {
+        ec: "Interaction",
+        ea: "Single File View",
+        el: file.Out.Extension,
+    })
 }
 window.showComparison = showComparison
 

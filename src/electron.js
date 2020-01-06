@@ -66,7 +66,7 @@ function processSettings() {
   }
   if(settings.analytics) {
     if(!analytics) {
-      console.log("Analytics: starting with UUID " + settings.uuid)
+      console.log("\x1b[34mAnalytics:\x1b[0m starting with UUID " + settings.uuid)
       analytics = ua('UA-137776048-2', settings.uuid)
       analytics.set("ds", "app")
       analytics.pageview(app.name + "/" + "v" + app.getVersion() + "/" + os.platform()).send()
@@ -210,15 +210,6 @@ function createWindow() {
   );
 
   mainWindow.webContents.on('did-finish-load', function () {
-
-    if(analytics) {
-      analytics.event({
-        ec: "Screen View",
-        ea: "Main Screen",
-        el: 'v' + app.getVersion(),
-      }).send()
-    }
-
     processSettings()
 
     let blurEnabled = true
@@ -551,7 +542,6 @@ ipcMain.on('popupMenu', (event, args) => {
 
 ipcMain.on('crushEvent', (event, settings) => {
   if(analytics) {
-    console.log("Analytics: crushEvent")
     let chain = analytics
     for(let category in settings) {
       for(let key in settings[category]) {
@@ -568,7 +558,6 @@ ipcMain.on('crushEvent', (event, settings) => {
 })
 ipcMain.on('saveEvent', (event, data) => {
   if(analytics) {
-    console.log("Analytics: crushEvent")
     let chain = analytics
     for(let category in data) {
       for(let key in data[category]) {
@@ -585,7 +574,6 @@ ipcMain.on('saveEvent', (event, data) => {
 })
 ipcMain.on('event', (event, data) => {
   if(analytics) {
-    console.log("Analytics: event")
     analytics.event(data).send()
   }
 })
