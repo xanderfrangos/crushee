@@ -62,7 +62,7 @@ export default class SettingsWindow extends PureComponent {
 
             <InputToggle
               label="Collect usage analytics"
-              description="Send usage data to help me understand how people are using Crushee"
+              description="Send usage data to help understand how people are using Crushee"
               value={this.state.analytics}
               onChange={(e, val, elem) => {this.settingChanged("analytics", val)}}
             />

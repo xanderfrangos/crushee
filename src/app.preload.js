@@ -5,6 +5,7 @@ const { fork } = require("child_process")
 const uuidv1 = require('uuid/v1');
 const { dialog } = require('electron').remote
 const slash = require('slash')
+const os = require('os')
 let browser = remote.getCurrentWindow()
 
 const defaultSettings = {
@@ -170,6 +171,11 @@ function openDialog(isFolder = false) {
             return false;
 
         window.addFiles(files)
+    })
+    ipc.send('event', {
+        ec: "Interaction",
+        ea: "Add",
+        el: (isFolder ? "Add folder(s)" : "Add file(s)"),
     })
 }
 
@@ -345,16 +351,32 @@ window.fileCounts = {
 
 window.recrushAll = () => {
     for (let file in window.files) {
-        window.crushFile(file)
+        window.crushFile(file, window.GlobalSettings.Quality, false)
     }
+    const analyticsData = Object.assign({}, window.GlobalSettings.Quality)
+    analyticsData.metadata = {
+        count: window.files.length,
+        os: os.platform(),
+        version: 'v' + remote.app.getVersion()
+    }
+    ipc.send('crushEvent', analyticsData)
 }
 
-window.crushFile = (UUID, options = defaultSettings) => {
+window.crushFile = (UUID, options = defaultSettings, sendAnalytics = true) => {
     const file = files[UUID]
     if (file.Status === "done" || file.Status === "analyzed") {
         file.Status = "crushing"
         sendMessage("crush", { UUID, options })
         window.fileCounts.crushing++
+    }
+    if(sendAnalytics) {
+        const analyticsData = Object.assign({}, window.GlobalSettings.Quality)
+        analyticsData.metadata = {
+            count: window.files.length,
+            os: os.platform(),
+            version: 'v' + remote.app.getVersion()
+        }
+        ipc.send('crushEvent', analyticsData)
     }
 }
 
@@ -399,13 +421,27 @@ window.saveFiles = (files, directory = false, filename = false) => {
 
 window.saveAllFiles = (folder = false) => {
     const fileList = []
+    const extList = {}
     for (let UUID in window.files) {
         const file = window.files[UUID]
         if (file.Status == "done") {
             fileList.push(UUID)
+            if(extList[file.Out.Extension]) {
+                extList[file.Out.Extension]++
+            } else {
+                extList[file.Out.Extension] = 1
+            }
         }
     }
     window.saveFiles(fileList, folder)
+    ipc.send('saveEvent', {
+        Extensions: extList,
+        Summary: {
+            TotalSize: window.stats.outSize,
+            PercentSaved: Math.floor(100 - ((window.stats.outSize / window.stats.inSize) * 100)),
+            TotalFiles: window.stats.total
+        }
+    })
 }
 
 

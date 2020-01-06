@@ -4,10 +4,13 @@ const fs = require("fs")
 const { fork } = require("child_process")
 const isDev = require("electron-is-dev");
 const os = require("os")
+const ua = require('universal-analytics');
+const uuid = require('uuid/v4')
 let mainWindow
 let splashWindow
 let settingsWindow
 const debug = console
+let analytics = false
 
 // App version
 const crusheeVersion = require('../package.json').version
@@ -19,7 +22,8 @@ let settings = {
   threads: 'auto',
   updates: true,
   analytics: true,
-  autoThreads: (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1)
+  autoThreads: (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1),
+  uuid: uuid()
 }
 
 function readSettings() {
@@ -29,7 +33,6 @@ function readSettings() {
     } else {
       fs.writeFileSync(settingsPath, JSON.stringify({}))
     }
-    debug.log('Settings loaded:', settings)
   } catch (e) {
     debug.error("Couldn't load settings", e)
   }
@@ -61,6 +64,41 @@ function processSettings() {
   if (settings.theme) {
     nativeTheme.themeSource = settings.theme
   }
+  if(settings.analytics) {
+    if(!analytics) {
+      console.log("Analytics: starting with UUID " + settings.uuid)
+      analytics = ua('UA-137776048-2', settings.uuid)
+      analytics.set("ds", "app")
+      analytics.pageview(app.name + "/" + "v" + app.getVersion() + "/" + os.platform()).send()
+      analytics.event({
+        ec: "Session Information",
+        ea: "Version",
+        el: "v" + app.getVersion()
+      }).event({
+        ec: "Session Information",
+        ea: "App Name",
+        el: app.name
+      }).event({
+        ec: "Session Information",
+        ea: "Platform",
+        el: os.platform()
+      }).event({
+        ec: "Session Information",
+        ea: "OS Version",
+        el: os.release()
+      }).event({
+        ec: "Session Information",
+        ea: "CPU Cores",
+        el: os.cpus().length
+      }).event({
+        ec: "Session Information",
+        ea: "CPU Model",
+        el: os.cpus()[0].model
+      }).send()
+    }
+  } else {
+    analytics = false
+  }
   sendToAllWindows('settings-updated', settings)
 }
 
@@ -72,9 +110,6 @@ function sendToAllWindows(eventName, data) {
     settingsWindow.webContents.send(eventName, data)
   }
 }
-
-
-
 
 
 
@@ -175,6 +210,14 @@ function createWindow() {
   );
 
   mainWindow.webContents.on('did-finish-load', function () {
+
+    if(analytics) {
+      analytics.event({
+        ec: "Screen View",
+        ea: "Main Screen",
+        el: 'v' + app.getVersion(),
+      }).send()
+    }
 
     processSettings()
 
@@ -503,6 +546,48 @@ ipcMain.on('popupMenu', (event, args) => {
     x: (args.x ? Math.round(args.x) : null),
     y: (args.y ? Math.round(args.y) : null)
   })
+})
+
+
+ipcMain.on('crushEvent', (event, settings) => {
+  if(analytics) {
+    console.log("Analytics: crushEvent")
+    let chain = analytics
+    for(let category in settings) {
+      for(let key in settings[category]) {
+        chain = chain.event({
+          ec: "Crush Settings",
+          ea: category,
+          el: key,
+          ev: settings[category][key]
+        })
+      }
+    }
+    chain.send()
+  }
+})
+ipcMain.on('saveEvent', (event, data) => {
+  if(analytics) {
+    console.log("Analytics: crushEvent")
+    let chain = analytics
+    for(let category in data) {
+      for(let key in data[category]) {
+        chain = chain.event({
+          ec: "Save Results",
+          ea: category,
+          el: key,
+          ev: data[category][key]
+        })
+      }
+    }
+    chain.send()
+  }
+})
+ipcMain.on('event', (event, data) => {
+  if(analytics) {
+    console.log("Analytics: event")
+    analytics.event(data).send()
+  }
 })
 
 // Kill everything if this process fails
