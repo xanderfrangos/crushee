@@ -76,7 +76,7 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0px 5px;
     user-select: none;
     cursor: pointer;
-    transition: background 0.1s;
+    //transition: background 0.1s;
 
     display: block;
     position: relative;
@@ -211,7 +211,7 @@ input[type=number]::-webkit-outer-spin-button {
         border-radius: 5px;
         backdrop-filter: brightness(100%) contrast(100%) saturate(100%);
         background: rgba(0, 0, 0, 0);
-        transition: background 0.2s, backdrop-filter 0.2s;
+        //transition: background 0.2s, backdrop-filter 0.2s;
         
 
         &:hover {
@@ -260,7 +260,7 @@ input[type=number]::-webkit-outer-spin-button {
         justify-content: center;
         align-items: center;
         border-radius:  0 5px 5px 0;
-        transition: background 0.3s;
+        //transition: background 0.3s;
         background: rgba(123, 123, 123, 0);
 
         &:hover {
@@ -288,7 +288,7 @@ input[type=number]::-webkit-outer-spin-button {
             width: 1px;
             background: white;
             opacity: 0.5;
-            transition: opacity 0.3s, transform 0.3s;
+            //transition: opacity 0.3s, transform 0.3s;
             transform: scale(1, 1);
         }
     }
