@@ -61,10 +61,12 @@
     "mac": {
       "icon": "src/assets/icon-shadow.icns",
       "category": "",
-      "darkModeSupport": true
+      "darkModeSupport": true,
+      "artifactName": "${productName}-v${version}-${os}.${ext}"
     },
     "win": {
-      "icon": "src/assets/icon-shadow.ico"
+      "icon": "src/assets/icon-shadow.ico",
+      "artifactName": "${productName}-v${version}-${os}-setup.${ext}"
     },
     "appx": {
       "publisherDisplayName": "Xander Frangos",
