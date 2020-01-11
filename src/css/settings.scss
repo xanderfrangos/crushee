@@ -235,7 +235,10 @@ body[data-platform="MacIntel"] {
 
 }
 
-
+a {
+    text-decoration: underline;
+    cursor: pointer;
+}
 
 label {
     font-size: 18px;

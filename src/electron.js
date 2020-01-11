@@ -642,5 +642,9 @@ ipcMain.on('event', (event, data) => {
   }
 })
 
+ipcMain.on('open-url', (event, url) => {
+  require("electron").shell.openExternal(url)
+})
+
 // Kill everything if this process fails
 app.on("error", () => { app.quit() })
