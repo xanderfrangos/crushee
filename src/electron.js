@@ -18,6 +18,30 @@ let analyticsInterval = false
 const crusheeVersion = require('../package.json').version
 
 
+// Handle multiple instances
+const appLocked = app.requestSingleInstanceLock()
+
+if (!appLocked) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    console.log(commandLine, workingDirectory)
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+  })
+}
+
+// Handle opening files
+app.on('will-finish-launching', () => {
+  app.on('open-file', (event, path) => {
+      console.log(event, path)
+  });
+});
+
+
+
 const settingsPath = path.join(app.getPath("userData"), `\\settings${(isDev ? "-dev" : "")}.json`)
 let settings = {
   theme: 'system',
