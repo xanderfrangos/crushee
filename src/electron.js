@@ -37,6 +37,7 @@ if (!appLocked) {
 // Handle opening files
 app.on('will-finish-launching', () => {
   app.on('open-file', (event, path) => {
+    event.preventDefault()
     tryOpenFiles(path)
   });
 });
