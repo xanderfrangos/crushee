@@ -313,6 +313,10 @@ ipcRenderer.on('shortcut', function (event, data) {
 
 });
 
+ipcRenderer.on('open-file', function (event, data) {
+    window.addFiles(data)
+})
+
 window.popupMenu = (menu, x = null, y = null, disable = false) => {
     ipcRenderer.send("popupMenu", {
         menu,

@@ -29,6 +29,7 @@ if (!appLocked) {
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       mainWindow.focus()
+      tryOpenFiles(files)
     }
   })
 }
@@ -36,9 +37,21 @@ if (!appLocked) {
 // Handle opening files
 app.on('will-finish-launching', () => {
   app.on('open-file', (event, path) => {
-      console.log(event, path)
+    tryOpenFiles(path)
   });
 });
+
+function tryOpenFiles(files) {
+  if(files && typeof files == "object") {
+    for(let file in files) {
+      fs.lstat(file, (err, stats) => {
+        if(!err) {
+          mainWindow.webContents.send("open-file", file)
+        }
+      })
+    }
+  }
+}
 
 
 
