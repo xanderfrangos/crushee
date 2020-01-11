@@ -62,7 +62,7 @@ export default class SettingsWindow extends PureComponent {
 
             <InputToggle
               label="Collect usage analytics"
-              description="Send usage data to help understand how people are using Crushee."
+              description={(<span>Send usage data to help understand how people are using Crushee. <a onClick={() => { window.openURL("https://crushee.app/privacy-policy.html") }}>More info.</a></span>)}
               value={this.state.analytics}
               onChange={(e, val, elem) => {this.settingChanged("analytics", val)}}
             />
@@ -72,7 +72,7 @@ export default class SettingsWindow extends PureComponent {
           <div className="pageSection">
             <div className="sectionTitle">Advanced</div>
             <label>Concurrent files</label>
-            <div className="sublabel">How many files can be analyzed/crushed/saved at once. Changing this probably won't do you much good, except under very specific circumstances.</div>
+            <div className="sublabel">How many files can be analyzed/crushed/saved at once. More does not necessarily mean faster. Faster CPUs and SSDs can handle more files at once.</div>
             <select value={this.state.threads} onChange={(e) => {this.settingChanged("threads", event.target.value)}}>
               <option value="auto">Automatic ({ this.state.autoThreads })</option>
               <option value="1">1</option>
