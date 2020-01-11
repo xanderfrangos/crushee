@@ -2,8 +2,6 @@ const sharp = require("sharp")
 
 const slash = require('slash');
 
-const appDataPath = require('appdata-path')
-
 const imagemin = require('imagemin');
 const imageminGIFSicle = require('imagemin-gifsicle');
 const imageminJPEGRecompress = require('imagemin-jpeg-recompress');
@@ -12,13 +10,8 @@ const imageminSVGO = require('imagemin-svgo');
 const imageminAdvpng = require('imagemin-advpng');
 const imageminPngquant = require('imagemin-pngquant');
 
-
 const fs = require("fs")
 const path = require("path")
-const uuidv1 = require('uuid/v1')
-const del = require('del')
-
-const basePath = appDataPath("crushee-desktop")
 
 const consoleLog = console.log
 //console.log = () => {}
