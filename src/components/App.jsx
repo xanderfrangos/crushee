@@ -137,7 +137,7 @@ export default class App extends PureComponent {
                         <div className="floating-buttons" id="file-list-actions" data-any={window.stats.total > 0} data-crushed={(window.stats.done > 0 || window.stats.crushing > 0 || window.stats.saving > 0)}>
                             <div className="summary-text">
                                 {getStatusBar(stats)}
-                                <div className="clear-all" onClick={window.clearAllFiles}>Clear all files</div>
+                                <div className="clear-all" onClick={() => window.clearAllFiles()}>Clear all files</div>
                             </div>
                             <div className="buttons">
                                 <div className="button big action--download-all hasMore" data-eventstate={window.eventState.saving}>
@@ -174,7 +174,7 @@ export default class App extends PureComponent {
                                 </div>
 
 
-                                <div className="button big transparent action--clear-all hasMore">
+                                <div className="button big action--clear-all hasMore">
                                     <div className="inner" onClick={(e) => { window.clearAllFiles() }}>
                                         <span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none" /><path d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" /></svg>
@@ -188,7 +188,7 @@ export default class App extends PureComponent {
                                 </div>
 
 
-                                <div className="button big transparent action--add-file hasMore">
+                                <div className="button big action--add-file hasMore">
                                     <div className="inner" onClick={(e) => {
                                     window.openDialog(false)
                                 }}>

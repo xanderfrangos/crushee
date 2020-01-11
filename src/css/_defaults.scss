@@ -212,6 +212,10 @@ input[type=number]::-webkit-outer-spin-button {
         backdrop-filter: brightness(100%) contrast(100%) saturate(100%);
         background: rgba(0, 0, 0, 0);
         //transition: background 0.2s, backdrop-filter 0.2s;
+
+        .icon {
+            padding-left: 1px;
+        }
         
 
         &:hover {
@@ -311,14 +315,17 @@ input[type=number]::-webkit-outer-spin-button {
             //backdrop-filter: blur(8px);
             border-radius: 5px;
             list-style: none;
-            padding: 5px 0;
+            padding: 0px 0;
             margin: 0;
             position: relative;
             z-index: 200000;
+            overflow: hidden;
             li {
-                padding: 12px 0;
+                padding: 10px 0;
+                font-size: 18px;
+                font-weight: 900;
                 &:hover {
-                    background: black;
+                    background: rgba(123, 123, 123, 1);
                 }
             }
         }
