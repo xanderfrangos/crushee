@@ -42,11 +42,19 @@ app.on('will-finish-launching', () => {
 });
 
 function tryOpenFiles(files) {
-  if(files && typeof files == "object") {
-    for(let file in files) {
-      fs.lstat(file, (err, stats) => {
+  if(files) {
+    if(typeof files == "object") {
+      for(let file in files) {
+        fs.lstat(file, (err, stats) => {
+          if(!err) {
+            mainWindow.webContents.send("open-file", file)
+          }
+        })
+      }
+    } else if(typeof files == "string") {
+      fs.lstat(files, (err, stats) => {
         if(!err) {
-          mainWindow.webContents.send("open-file", file)
+          mainWindow.webContents.send("open-file", files)
         }
       })
     }
