@@ -105,7 +105,6 @@ export default class FileList extends PureComponent {
     
 
     render() {
-        console.log("height", this.props.height)
         if (this.props.scans > 0) {
             return (<Scanning title="Scanning..." description={`${this.props.scans} folder${(this.props.scans > 1 ? "s" : "")}`} />)
         } else {
