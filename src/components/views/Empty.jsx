@@ -10,7 +10,7 @@ export const Empty = () => {
                 </svg>
                 <div className="text">
                     <div className="line-bold">Drop your files here</div>
-                    <div className="line-thin">to get started</div>
+                    <div className="line-thin">or <span onClick={(e) => {e.stopPropagation(); e.preventDefault(); window.openDialog(true); return false;}}>add a folder</span></div>
                 </div>
             </div>
         </div>

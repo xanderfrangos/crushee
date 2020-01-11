@@ -25,6 +25,17 @@
         font-weight: 900;
     }
 
+    .line-thin {
+        span {
+            color: var(--color-primary);
+            font-weight: bold;
+            &:hover {
+                cursor: pointer;
+                color: inherit;
+            }
+        }
+    }
+
 }
 
 #app.drop-hover {
