@@ -55,25 +55,22 @@ export default class SettingsWindow extends PureComponent {
 
             <InputToggle
               label="Check for updates"
-              description="Look for updates at startup"
+              description="Look for updates at startup."
               value={this.state.updates}
               onChange={(e, val, elem) => {this.settingChanged("updates", val)}}
             />
 
             <InputToggle
               label="Collect usage analytics"
-              description="Send usage data to help understand how people are using Crushee"
+              description="Send usage data to help understand how people are using Crushee."
               value={this.state.analytics}
               onChange={(e, val, elem) => {this.settingChanged("analytics", val)}}
             />
 
           </div>
 
-
-
           <div className="pageSection">
             <div className="sectionTitle">Advanced</div>
-
             <label>Concurrent files</label>
             <div className="sublabel">How many files can be analyzed/crushed/saved at once. Changing this probably won't do you much good, except under very specific circumstances.</div>
             <select value={this.state.threads} onChange={(e) => {this.settingChanged("threads", event.target.value)}}>
