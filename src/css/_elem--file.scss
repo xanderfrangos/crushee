@@ -438,4 +438,7 @@ body[data-platform="MacIntel"] {
     .elem--file .details span + span {
         margin-bottom: 1px;
     }
+    .elem--file .details .title {
+        margin-bottom: -6px;
+    }
 }
