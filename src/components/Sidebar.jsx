@@ -137,7 +137,7 @@ export const Sidebar = () => {
 
                     <div className="inner">
                         <div className="row primary">
-                            <span className="icon" style={ { marginLeft: "-5px" }}>
+                            <span className="icon" style={ { marginLeft: "-8px" } }>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                     <path id="Path_54" data-name="Path 54" d="M0,0H24V24H0Z" fill="none" />
                                     <path id="Path_55" data-name="Path 55" d="M11,6v4.59H8.71a.5.5,0,0,0-.35.85l3.29,3.29a.5.5,0,0,0,.71,0l3.29-3.29a.5.5,0,0,0-.35-.85H13V6a1,1,0,0,0-2,0ZM7.1,14a.99.99,0,0,0-.99,1.15,6,6,0,0,0,11.78,0A.99.99,0,0,0,16.9,14a1,1,0,0,0-.98.83,4,4,0,0,1-7.83,0A1.016,1.016,0,0,0,7.1,14Z" fill="#fff" />
