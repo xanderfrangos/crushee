@@ -170,7 +170,15 @@ function sendToAllWindows(eventName, data) {
   }
 }
 
-
+function getVibrancy() {
+  if(os.platform === "darwin") {
+    const release = os.release().split('.')[1]
+    if(release >= 14) {
+      return 'fullscreen-ui'
+    }
+  }
+  return 'dark'
+}
 
 function createSplash() {
   splashWindow = new BrowserWindow({
@@ -213,7 +221,7 @@ function createSettingsWindow() {
     resizable: false,
     backgroundColor: '#00FFFFFF',
     titleBarStyle: 'hidden',
-    vibrancy: 'fullscreen-ui',
+    vibrancy: getVibrancy(),
     webPreferences: {
       navigateOnDragDrop: false,
       webSecurity: false,
@@ -253,7 +261,7 @@ function createWindow() {
     frame: false,
     backgroundColor: '#00FFFFFF',
     titleBarStyle: 'hidden',
-    vibrancy: 'fullscreen-ui',
+    vibrancy: getVibrancy(),
     webPreferences: {
       navigateOnDragDrop: false,
       webSecurity: false,
