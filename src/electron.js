@@ -111,6 +111,7 @@ ipcMain.on('request-settings', () => {
 function processSettings() {
   if (settings.theme) {
     nativeTheme.themeSource = settings.theme
+    if(mainWindow) mainWindow.setVibrancy(getVibrancy())
   }
   if(settings.analytics) {
     if(!analytics) {
@@ -177,7 +178,7 @@ function getVibrancy() {
       return 'fullscreen-ui'
     }
   }
-  return 'dark'
+  return (nativeTheme.shouldUseDarkColors ? "dark" : "light")
 }
 
 function createSplash() {
@@ -217,7 +218,7 @@ function createSettingsWindow() {
     icon: __dirname + '/assets/icon-shadow.ico',
     title: 'Crushee Settings',
     show: false,
-    frame: false,
+    frame: (os.platform === "darwin" ? true : false),
     resizable: false,
     backgroundColor: '#00FFFFFF',
     titleBarStyle: 'hidden',
@@ -258,7 +259,7 @@ function createWindow() {
     icon: __dirname + '/assets/icon-shadow.ico',
     title: 'Crushee',
     show: false,
-    frame: false,
+    frame: (os.platform === "darwin" ? true : false),
     backgroundColor: '#00FFFFFF',
     titleBarStyle: 'hidden',
     vibrancy: getVibrancy(),
