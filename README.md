@@ -9,6 +9,11 @@ Crushee is an image compression tool, powered by Electron and Node.js. It accept
 
 Crushee was primarily built with [Electron](https://electronjs.org/), [Node.js](https://nodejs.org/), [sharp](https://github.com/lovell/sharp/), and [imagemin](https://github.com/imagemin/imagemin).
 
+<p align="center">
+  <img src="https://crushee.app/assets/img/crushee-1.jpg">
+</p>
+
+
 **Download the lastest version from [crushee.app](https://crushee.app/) or the [Releases page](https://github.com/xanderfrangos/crushee/releases).**
 
 <a href="https://www.microsoft.com/store/apps/9PD9XNZT1XL8" target="_blank"><img width="156" src="https://crushee.app/assets/img/ms-store.svg" alt="Get Crushee from the Microsoft Store"></a>
