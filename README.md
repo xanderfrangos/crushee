@@ -11,7 +11,7 @@ Crushee was primarily built with [Electron](https://electronjs.org/), [Node.js](
 
 **Download the lastest version from [crushee.app](https://crushee.app/) or the [Releases page](https://github.com/xanderfrangos/crushee/releases).**
 
-
+<a href="https://www.microsoft.com/store/apps/9PD9XNZT1XL8" target="_blank"><img width="156" src="https://crushee.app/assets/img/ms-store.svg" alt="Get Crushee from the Microsoft Store"></a>
 
 ## Building & Usage
 
