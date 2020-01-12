@@ -172,9 +172,9 @@ function sendToAllWindows(eventName, data) {
 }
 
 function getVibrancy() {
-  if(os.platform === "darwin") {
-    const release = os.release().split('.')[1]
-    if(release >= 14) {
+  if(os.platform() === "darwin") {
+    const release = os.release().split('.')[0]
+    if(release >= 18) {
       return 'fullscreen-ui'
     }
   }
@@ -218,7 +218,7 @@ function createSettingsWindow() {
     icon: __dirname + '/assets/icon-shadow.ico',
     title: 'Crushee Settings',
     show: false,
-    frame: (os.platform === "darwin" ? true : false),
+    frame: (os.platform() === "darwin" ? true : false),
     resizable: false,
     backgroundColor: '#00FFFFFF',
     titleBarStyle: 'hidden',
@@ -259,7 +259,7 @@ function createWindow() {
     icon: __dirname + '/assets/icon-shadow.ico',
     title: 'Crushee',
     show: false,
-    frame: (os.platform === "darwin" ? true : false),
+    frame: (os.platform() === "darwin" ? true : false),
     backgroundColor: '#00FFFFFF',
     titleBarStyle: 'hidden',
     vibrancy: getVibrancy(),
