@@ -32,9 +32,6 @@ let imgSettings = {
         qualityMin: 50,
         qualityMax: 99
     },
-    gif: {
-        colors: 128
-    },
     webp: {
         quality: 80,
         alphaQuality: 100,
@@ -42,7 +39,8 @@ let imgSettings = {
         only: false
     },
     gif: {
-        colors: 128
+        colors: 128,
+        quality: 95
     }
 }
 
@@ -221,7 +219,8 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
                 jpgPlugin,
                 imageminGIFSicle({
                     optimizationLevel: 3,
-                    colors: settings.gif.colors
+                    colors: settings.gif.colors,
+                    lossy: (settings.gif.quality - 100) * -2,
                 }),
                 imageminSVGO(),
                 imageminPngquant({

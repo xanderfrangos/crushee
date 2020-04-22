@@ -25,7 +25,8 @@ const defaultSettings = {
         qualityMax: 95
     },
     gif: {
-        colors: 128
+        colors: 128,
+        quality: 100
     },
     webp: {
         quality: 90,

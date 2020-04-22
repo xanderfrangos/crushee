@@ -123,6 +123,7 @@ export const Sidebar = () => {
                     </div>
                     <FormattedSlider name="WebP Quality" path="webp.quality" min="0" max="99" />
                     <FormattedSlider name="GIF Colors" path="gif.colors" min="2" max="256" />
+                    <FormattedSlider name="GIF Quality" path="gif.quality" min="1" max="100" />
 
 
 
