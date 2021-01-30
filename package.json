@@ -35,7 +35,7 @@
     "electron": "^7.2.4",
     "electron-builder": "21.2.0",
     "parcel-bundler": "^1.12.4",
-    "sass": "^1.23.7",
+    "sass": "^1.32.5",
     "wait-on": "3.2.0"
   },
   "scripts": {
