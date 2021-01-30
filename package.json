@@ -47,7 +47,7 @@
     "start": "wait-on http://localhost:3001/index.html && electron . "
   },
   "author": "Xander Frangos",
-  "license": "ISC",
+  "license": "MIT",
   "build": {
     "productName": "Crushee",
     "appId": "com.xanderfrangos.crushee",
