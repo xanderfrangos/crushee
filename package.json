@@ -14,7 +14,7 @@
     "imagemin-advpng": "^5.1.0",
     "imagemin-jpeg-recompress": "^6.0.0",
     "imagemin-jpegoptim": "^6.0.0",
-    "imagemin-jpegtran": "^6.0.0",
+    "imagemin-jpegtran": "^7.0.0",
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
     "imagemin-svgo": "^7.0.0",
