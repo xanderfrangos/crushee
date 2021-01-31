@@ -1,8 +1,6 @@
 const { ipcRenderer: ipc, remote, Menu, MenuItem, BrowserWindow, ipcRenderer } = require('electron');
-const fs = require('fs');
 const path = require('path');
 const { fork } = require("child_process")
-const uuidv1 = require('uuid/v1');
 const { dialog } = require('electron').remote
 const slash = require('slash')
 const os = require('os')

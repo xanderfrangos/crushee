@@ -5,7 +5,7 @@ const { fork } = require("child_process")
 const isDev = require("electron-is-dev");
 const os = require("os")
 const ua = require('universal-analytics');
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid');
 let mainWindow
 let splashWindow
 let settingsWindow
@@ -16,7 +16,6 @@ let analyticsInterval = false
 
 // App version
 const crusheeVersion = require('../package.json').version
-
 
 // Handle multiple instances
 const appLocked = app.requestSingleInstanceLock()
@@ -61,8 +60,6 @@ function tryOpenFiles(files) {
     }
   }
 }
-
-
 
 const settingsPath = path.join(app.getPath("userData"), `\\settings${(isDev ? "-dev" : "")}.json`)
 let settings = {
@@ -227,6 +224,7 @@ function createSettingsWindow() {
       navigateOnDragDrop: false,
       webSecurity: false,
       scrollBounce: true,
+      enableRemoteModule: true,
       preload: path.resolve(__dirname, 'settings.preload.js')
     }
   })
@@ -244,7 +242,6 @@ function createSettingsWindow() {
   settingsWindow.on('closed', function () {
     settingsWindow = null
   })
-
 
 }
 
@@ -268,6 +265,7 @@ function createWindow() {
       webSecurity: false,
       scrollBounce: true,
       //experimentalFeatures: true,
+      enableRemoteModule: true,
       preload: path.resolve(__dirname, 'app.preload.js')
     }
   })
@@ -654,6 +652,17 @@ ipcMain.on('event', (event, data) => {
 ipcMain.on('open-url', (event, url) => {
   require("electron").shell.openExternal(url)
 })
+
+// Fix http:// + file:// mixing
+const { protocol } = require("electron");
+
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const pathname = decodeURI(request.url.replace('file:///', ''));
+    const parts = pathname.split('?')
+    callback(parts[0]);
+  });
+});
 
 // Kill everything if this process fails
 app.on("error", () => { app.quit() })

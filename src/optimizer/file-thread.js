@@ -3,7 +3,7 @@ const sharp = require("sharp")
 const slash = require('slash');
 
 const imagemin = require('imagemin');
-const imageminGIFSicle = require('imagemin-gifsicle');
+const imageminGIFSicle = require('@xanderfrangos/imagemin-gifsicle');
 const imageminJPEGRecompress = require('imagemin-jpeg-recompress');
 const imageminMozJPEG = require('imagemin-mozjpeg');
 const imageminSVGO = require('imagemin-svgo');
