@@ -13,7 +13,6 @@
     "imagemin": "^7.0.1",
     "imagemin-advpng": "^6.0.0",
     "imagemin-jpeg-recompress": "^7.0.0",
-    "imagemin-jpegoptim": "^7.0.0",
     "imagemin-jpegtran": "^7.0.0",
     "imagemin-mozjpeg": "^9.0.0",
     "imagemin-pngquant": "^9.0.1",
@@ -41,11 +40,13 @@
   "scripts": {
     "parcel": "parcel src/html/*.html --port 3001 --out-dir build",
     "parcel-build": "parcel build src/html/*.html --out-dir build --public-url ./ --no-minify",
+    "dev": "wait-on http://localhost:3001/index.html && electron . ",
     "electron-build": "electron-builder",
+    "postinstall": "electron-builder install-app-deps",
     "appx": "npm run parcel-build && electron-builder -w appx -c.extraMetadata.name=crushee-appx ",
     "appx-signed": "npm run parcel-build && electron-builder -w appx -c.win.certificateFile=cert.pfx -c.extraMetadata.name=crushee-appx",
     "build": "npm run parcel-build && npm run electron-build",
-    "start": "wait-on http://localhost:3001/index.html && electron . "
+    "start": "concurrently \"npm run parcel\" \"npm run dev\""
   },
   "author": "Xander Frangos",
   "license": "MIT",
