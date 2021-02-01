@@ -22,11 +22,10 @@ Crushee was primarily built with [Electron](https://electronjs.org/), [Node.js](
 ## Build
 
 - Download or clone.
-- Run *npm install*.
-- Run *npm run build* to build the native modules.
-- Run *npm run parcel* and *npm start*.
+- Run `npm install`.
+- Run `npm run build` to build an executable or `npm start` to run a development build.
 
-
+Note: For actual development, it's reccomended to run `npm run parcel` and `npm run dev` seperately.
 
 ## License
 
