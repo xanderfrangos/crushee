@@ -190,6 +190,7 @@ function createSplash() {
     backgroundColor: "#00000000",
     webPreferences: {
       navigateOnDragDrop: false,
+      contextIsolation: false
     },
     titleBarStyle: "default"
   })
@@ -225,7 +226,8 @@ function createSettingsWindow() {
       webSecurity: false,
       scrollBounce: true,
       enableRemoteModule: true,
-      preload: path.resolve(__dirname, 'settings.preload.js')
+      preload: path.resolve(__dirname, 'settings.preload.js'),
+      contextIsolation: false
     }
   })
   settingsWindow.loadURL(
@@ -266,7 +268,8 @@ function createWindow() {
       scrollBounce: true,
       //experimentalFeatures: true,
       enableRemoteModule: true,
-      preload: path.resolve(__dirname, 'app.preload.js')
+      preload: path.resolve(__dirname, 'app.preload.js'),
+      contextIsolation: false
     }
   })
   mainWindow.loadURL(
