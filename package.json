@@ -61,7 +61,9 @@
       "icon": "src/assets/icon-shadow.icns",
       "category": "",
       "darkModeSupport": true,
-      "artifactName": "${productName}-v${version}-${os}.${ext}"
+      "artifactName": "${productName}-v${version}-${os}.${ext}",
+      "hardenedRuntime": false,
+      "identity": false
     },
     "win": {
       "icon": "src/assets/icon-shadow.ico",
