@@ -188,7 +188,7 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
         } else if (ext === ".avif") {
             let avif = {
                 quality: parseInt(settings.avif.quality),
-                speed: 0
+                speed: 5
             }
             if(settings.avif.subsampling) {
                 switch(parseInt(settings.avif.subsampling)) {
@@ -246,7 +246,7 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
         sendGenericMessage("Subsampling at " + sample)
 
         jpgPlugin = imageminMozJPEG({
-            quality: 31 + (settings.jpg.quality / 1.5),
+            quality: 31 + parseInt(settings.jpg.quality / 1.5),
             sample,
             progressive: true,
             tune: "hvs-psnr"
@@ -254,7 +254,7 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
 
     } else {
         const quality = parseInt(settings.jpg.quality)
-        const min = quality * Math.pow(0.95, (100 - quality) * 1.5)
+        const min = parseInt(quality * Math.pow(0.95, (100 - quality) * 1.5))
         const method = (parseInt(settings.jpg.subsampling) <= 1 ? "ssim" : "smallfry")
         if (parseInt(settings.jpg.subsampling) <= 1) {
             jpgPlugin = imageminJPEGRecompress({
@@ -283,7 +283,7 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
                 imageminGIFSicle({
                     optimizationLevel: 3,
                     colors: settings.gif.colors,
-                    lossy: (settings.gif.quality - 100) * -2,
+                    lossy: parseInt(settings.gif.quality - 100) * -2,
                 }),
                 imageminSVGO(),
                 imageminPngquant({
