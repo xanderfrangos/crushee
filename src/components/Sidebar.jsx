@@ -1,4 +1,3 @@
-
 import React from 'react';
 import InputToggle from "./input/InputToggle";
 import { FormattedSlider } from "./input/FormattedSlider";
@@ -61,6 +60,7 @@ export const Sidebar = () => {
                                     <option value="jpg">JPEG</option>
                                     <option value="png">PNG</option>
                                     <option value="webp">WebP</option>
+                                    <option value="avif">AVIF</option>
                                 </select>
                             </div>
                         </div>
@@ -115,12 +115,12 @@ export const Sidebar = () => {
                     <FormattedSlider name="PNG Min Quality" path="png.qualityMin" min="0" max="99" />
                     <FormattedSlider name="PNG Max Quality" path="png.qualityMax" min="0" max="99" />
 
-
                     <div className="row center">
                         <div className="col">
                             <div className="sidebar--header">Other Options</div>
                         </div>
                     </div>
+                    <FormattedSlider name="AVIF Quality" path="avif.quality" min="1" max="100" />
                     <FormattedSlider name="WebP Quality" path="webp.quality" min="0" max="99" />
                     <FormattedSlider name="GIF Colors" path="gif.colors" min="2" max="256" />
                     <FormattedSlider name="GIF Quality" path="gif.quality" min="1" max="100" />

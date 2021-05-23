@@ -41,6 +41,19 @@ let imgSettings = {
     gif: {
         colors: 128,
         quality: 95
+    },
+    heif: {
+        quality: 95,
+        compression: "hevc",
+        lossless: false,
+        speed: 5,
+        chromaSubsampling: "4:2:0"
+    },
+    avif: {
+        quality: 95,
+        lossless: false,
+        speed: 5,
+        chromaSubsampling: "4:2:0"
     }
 }
 
@@ -71,7 +84,6 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
     settings.resize.width = (parseInt(settings.resize.width) > 5400 ? 5400 : settings.resize.width)
     settings.resize.height = (parseInt(settings.resize.height) > 5400 ? 5400 : settings.resize.height)
 
-
     let ext = path.extname(file).toLowerCase()
 
     try {
@@ -80,7 +92,14 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
         })
 
         let metadata = await image.metadata()
+
+        // Fix AVIF being detected as HEIF
+        if(metadata.format === "heif" && ext === ".avif") {
+            metadata.format = "avif"
+        }
+
         sendGenericMessage("Detected format:" + metadata.format)
+        sendGenericMessage("Requested output:" + (settings.app.convert === "none" || !settings.app.convert ? metadata.format : settings.app.convert))
 
         if (parseBool(settings.jpg.make) === false && parseBool(settings.webp.make) === false) {
             switch (metadata.format) {
@@ -118,7 +137,7 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
             )
         }
 
-        if (settings.app.convert === "jpg" || settings.app.convert === "png" || settings.app.convert === "webp") {
+        if (settings.app.convert === "jpg" || settings.app.convert === "png" || settings.app.convert === "webp" || settings.app.convert === "heif" || settings.app.convert === "avif") {
             ext = "." + settings.app.convert
         }
 
@@ -141,6 +160,22 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
             image.webp({
                 quality: parseInt(settings.webp.quality)
             })
+        } else if (ext === ".avif") {
+            let avif = {
+                quality: parseInt(settings.avif.quality),
+                speed: 0
+            }
+            if(settings.avif.subsampling) {
+                switch(parseInt(settings.avif.subsampling)) {
+                    case 1: avif.chromaSubsampling = '4:4:4'; break;
+                    case 2: avif.chromaSubsampling = '4:2:2'; break;
+                    case 3: avif.chromaSubsampling = '4:2:0'; break;
+                }
+            }
+            if(avif.quality === 100) {
+                avif.lossless = true
+            }
+            image.avif(avif)
         } else {
             return false
         }

@@ -351,7 +351,7 @@ const scanFiles = async (inFiles) => {
                 let skipFile = false
                 if (Settings.FilterUsingExtension) {
                     const ext = path.extname(file).toLowerCase()
-                    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".svg" && ext !== ".webp" && ext !== ".gif") {
+                    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".svg" && ext !== ".webp" && ext !== ".gif" && ext !== ".heif" && ext !== ".heic" && ext !== ".avif") {
                         console.log("Invalid extension. Skipping " + file)
                         skipFile = true
                     }

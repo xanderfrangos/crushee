@@ -31,6 +31,10 @@ const defaultSettings = {
         make: false,
         only: false
     },
+    avif: {
+        quality: 95,
+        subsampling: 1
+    },
     app: {
         qualityPreset: 4,
         advancedQuality: "false",
@@ -60,6 +64,9 @@ const qualityPresets = [
         },
         gif: {
             colors: 64
+        },
+        avif: {
+            quality: 70
         }
     },
     // Medium
@@ -78,6 +85,9 @@ const qualityPresets = [
         },
         gif: {
             colors: 128
+        },
+        avif: {
+            quality: 85
         }
     },
     // High
@@ -96,6 +106,9 @@ const qualityPresets = [
         },
         gif: {
             colors: 200
+        },
+        avif: {
+            quality: 90
         }
     },
     // Lossless-ish
@@ -114,6 +127,9 @@ const qualityPresets = [
         },
         gif: {
             colors: 256
+        },
+        avif: {
+            quality: 95
         }
     },
 ]
@@ -150,7 +166,7 @@ function openDialog(isFolder = false) {
     const params = {
         title: "Select image(s)",
         filters: [
-            { name: 'Images', extensions: ['jpg', 'png', 'gif', 'svg'] },
+            { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'avif'] },
             { name: 'All Files', extensions: ['*'] }
         ],
         buttonLabel: (isFolder == true ? 'Add Folder(s)' : 'Add File(s)'),
@@ -488,6 +504,7 @@ const changeQualityLevel = (level) => {
         window.GlobalSettings.Quality.png = Object.assign(window.GlobalSettings.Quality.png, qualityPresets[level].png)
         window.GlobalSettings.Quality.webp = Object.assign(window.GlobalSettings.Quality.webp, qualityPresets[level].webp)
         window.GlobalSettings.Quality.gif = Object.assign(window.GlobalSettings.Quality.gif, qualityPresets[level].gif)
+        window.GlobalSettings.Quality.avif = Object.assign(window.GlobalSettings.Quality.avif, qualityPresets[level].avif)
         window.sendUpdate(false)
     }
 }
