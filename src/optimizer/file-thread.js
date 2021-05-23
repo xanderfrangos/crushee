@@ -36,7 +36,11 @@ let imgSettings = {
         quality: 80,
         alphaQuality: 100,
         make: false,
-        only: false
+        only: false,
+        lossless: false,
+        nearLossless: false,
+        smartSubsample: false,
+        reductionEffort: 4
     },
     gif: {
         colors: 128,
@@ -157,9 +161,30 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
         } else if (ext === ".gif" || ext === ".svg") {
             return file
         } else if (ext === ".webp") {
-            image.webp({
-                quality: parseInt(settings.webp.quality)
-            })
+            let webp = {
+                quality: parseInt(settings.webp.quality),
+                alphaQuality: parseInt(settings.webp.quality),
+                reductionEffort: 3
+            }
+
+            // Lossless or near-lossless
+            if(parseInt(settings.webp.quality) === 100) {
+                webp.lossless = true
+            } else if(parseInt(settings.webp.quality) > 90) {
+                webp.nearLossless = true
+            }
+
+            // High quality subsampling
+            if(parseInt(settings.webp.quality) > 80) {
+                webp.smartSubsample = true
+            }
+
+            // Lower quality alpha
+            if(parseInt(settings.webp.quality) < 95) {
+                webp.alphaQuality = parseInt(webp.quality * 0.8)
+            }
+
+            image.webp(webp)
         } else if (ext === ".avif") {
             let avif = {
                 quality: parseInt(settings.avif.quality),
@@ -408,6 +433,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
         })
 
         // Compress original, if possible
+        let compressedOriginal
         if (canUseOriginalImage) {
             compressedOriginal = compressFile(f, path.join(uuidDir, "compressedOriginal"), options).then(result => {
                 if (result) {
