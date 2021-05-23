@@ -380,51 +380,62 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
         let mozJPEG
         if (path.extname(resized) == ".jpg" && quality < 95) {
             sendGenericMessage("MozJPEG compressing...")
-            mozJPEG = await compressFile(resized, path.join(uuidDir, "moz"), options, "mozjpeg")
-            if (mozJPEG) {
-                results["mozJPEG"] = mozJPEG
-            }
+            mozJPEG = compressFile(resized, path.join(uuidDir, "moz"), options, "mozjpeg").then(result => {
+                if (result) {
+                    results["mozJPEG"] = result
+                }
+            })
         }
 
         let mozOriginal
         if (path.extname(resized) == ".jpg" && canUseOriginalImage && quality < 95) {
             sendGenericMessage("MozJPEG compressing original...")
-            mozOriginal = await compressFile(f, path.join(uuidDir, "mozO"), options, "mozjpeg")
-            if (mozOriginal) {
-                results["mozOriginal"] = mozOriginal
-            }
+            mozOriginal = compressFile(f, path.join(uuidDir, "mozO"), options, "mozjpeg").then(result => {
+                if (result) {
+                    results["mozOriginal"] = result
+                }
+            })
         }
 
         // Compress processed file
         sendGenericMessage("Compressing...")
 
         // Use original if possible, else resized
-        let compressed = await compressFile(resized, path.join(uuidDir, "compressed"), options)
-        if (compressed) {
-            results["compressed"] = compressed
-        }
+        let compressed = compressFile(resized, path.join(uuidDir, "compressed"), options).then(result => {
+            if (result) {
+                results["compressed"] = result
+            }
+        })
 
         // Compress original, if possible
         if (canUseOriginalImage) {
-            let compressedOriginal = await compressFile(f, path.join(uuidDir, "compressedOriginal"), options)
-            if (compressedOriginal) {
-                results["compressedOriginal"] = compressedOriginal
-            }
+            compressedOriginal = compressFile(f, path.join(uuidDir, "compressedOriginal"), options).then(result => {
+                if (result) {
+                    results["compressedOriginal"] = result
+                }
+            })
         }
 
 
-        if (mozJPEG && quality < 95 && !(canUseOriginalImage && options.jpg.useOriginal === true)) {
+        let mozCompressed
+        if (await mozJPEG && quality < 95 && !(canUseOriginalImage && options.jpg.useOriginal === true)) {
             // Compress processed file
             sendGenericMessage("Compressing mozJPEG...")
 
             // Use original if possible, else resized
             let optionsCopy = Object.assign(options, {})
             optionsCopy.jpg.subsampling = 3
-            let mozCompressed = await compressFile(mozJPEG, path.join(uuidDir, "mozCompressed"), options)
-            if (mozCompressed) {
-                results["mozCompressed"] = mozCompressed
-            }
+            mozCompressed = compressFile(await mozJPEG, path.join(uuidDir, "mozCompressed"), options).then(result => {
+                if (result) {
+                    results["mozCompressed"] = result
+                }
+            })
         }
+
+        mozJPEG = await mozJPEG
+        compressed = await compressed
+        compressedOriginal = await compressedOriginal
+        mozCompressed = await mozCompressed
 
         const smallest = {
             name: "original",
