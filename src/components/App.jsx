@@ -184,6 +184,7 @@ export default class App extends PureComponent {
                                     <MoreButton>
                                         <li onClick={ () => window.clearAllFiles("crushed") }>Crushed files</li>
                                         <li onClick={ () => window.clearAllFiles("uncrushed") }>Uncrushed files</li>
+                                        <li onClick={ () => window.clearAllFiles("large-files") }>Larger files</li>
                                     </MoreButton>
                                 </div>
 

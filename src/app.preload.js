@@ -291,14 +291,7 @@ ipcRenderer.on('shortcut', function (event, data) {
             window.location.reload()
             break;
         case "remove-large-files":
-            for (let UUID in window.files) {
-                const file = window.files[UUID]
-                console.log(file)
-                if ((file.Status == "done" && file.In.FileSize <= file.Out.FileSize) || file.Status == "analyzed" || file.Status == "error") {
-                    console.log(UUID)
-                    window.deleteUUID(UUID, false)
-                }
-            }
+            window.clearAllFiles("large-files")
             window.sendUpdate()
             break;
         case "right-click-save":
@@ -414,10 +407,20 @@ window.crushFile = (UUID, options = defaultSettings, sendAnalytics = true) => {
 }
 
 window.clearAllFiles = function (mode = "all") {
-    for (let UUID in window.files) {
-        if(mode === "all" || (mode === "crushed" && window.files[UUID].Status === "done") || (mode === "uncrushed" && window.files[UUID].Status !== "done"))
-        window.deleteUUID(UUID, false)
+    if(mode === "large-files") {
+        for (let UUID in window.files) {
+            const file = window.files[UUID]
+            if ((file.Status == "done" && file.In.FileSize <= file.Out.FileSize) || file.Status == "analyzed" || file.Status == "error") {
+                window.deleteUUID(UUID, false)
+            }
+        }
+    } else {
+        for (let UUID in window.files) {
+            if(mode === "all" || (mode === "crushed" && window.files[UUID].Status === "done") || (mode === "uncrushed" && window.files[UUID].Status !== "done"))
+            window.deleteUUID(UUID, false)
+        }
     }
+    
     ipc.send('event', {
         ec: "Interaction",
         ea: "Clear",
