@@ -489,7 +489,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
             fs.mkdirSync(uuidDir + "crushed/")
         }
         
-        let finalFile = uuidDir + "crushed/" + path.basename(fn + "_" + Date.now(), path.extname(fn)) + path.extname(resized)
+        let finalFile = uuidDir + "crushed/" + path.basename(fn, path.extname(fn)) + "_" + Date.now() + path.extname(resized)
 
         try {
             if(fs.existsSync(finalFile)) {
@@ -514,6 +514,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
         const metadata = await sharp(finalFile).metadata()
         const result = {
             Crushed: path.basename(finalFile),
+            BaseName: path.basename(fn, path.extname(fn)) + path.extname(resized),
             Extension: path.extname(path.basename(finalFile)),
             FileSize: finalSize,
             X: metadata.width,

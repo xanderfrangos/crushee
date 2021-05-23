@@ -386,7 +386,7 @@ const saveFiles = async (inFiles, inDirectory = false, fileName = false) => {
             file.Status = "saving"
             const directory = (inDirectory || path.dirname(file.In.Source))
             const inPath = slash(path.join(file.Path, "\\crushed\\", file.Out.Crushed))
-            const outPath = (fileName ? slash(path.join(directory, "\\", fileName)) : slash(path.join(directory, "\\", file.Out.Crushed)))
+            const outPath = (fileName ? slash(path.join(directory, "\\", fileName)) : slash(path.join(directory, "\\", file.Out.BaseName)))
             fs.copyFile(inPath, outPath, (err) => {
                 if(!err) {
                     console.log(`\x1b[34mSaved\x1b[0m ${UUID}`)

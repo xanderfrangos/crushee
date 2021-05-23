@@ -218,7 +218,7 @@ function saveDialog(isFolder = false, extension = null) {
         let settings = {
             title: "Save as",
             buttonLabel: 'Save file',
-            defaultPath: window.files[window.rightClickTarget].Out.Crushed
+            defaultPath: window.files[window.rightClickTarget].Out.BaseName
         }
         if (extension) {
             settings.filters = [{
