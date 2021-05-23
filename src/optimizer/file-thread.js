@@ -92,6 +92,9 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
                     break;
             }
         }
+        
+        // Fix orientation from EXIF data, if available
+        image.rotate()
 
         let resized = false
         if (settings.resize.width || settings.resize.height) {
@@ -257,6 +260,7 @@ async function makePreview(file, outFolder) {
         let image = sharp(file)
         const metadata = await image.metadata()
         let stats = fs.statSync(file)
+        image.rotate() // Fix orientation from EXIF data, if available
         image.resize(200, 200, { fit: "cover" })
         image.flatten({
             background: { r: 255, g: 255, b: 255 }
