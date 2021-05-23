@@ -489,11 +489,16 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
             fs.mkdirSync(uuidDir + "crushed/")
         }
         
-        let finalFile = uuidDir + "crushed/" + path.basename(fn, path.extname(fn)) + path.extname(resized)
+        let finalFile = uuidDir + "crushed/" + path.basename(fn + "_" + Date.now(), path.extname(fn)) + path.extname(resized)
 
-        if(fs.existsSync(finalFile)) {
-            fs.unlinkSync(finalFile)
+        try {
+            if(fs.existsSync(finalFile)) {
+                fs.unlinkSync(finalFile)
+            }
+        } catch(e) {
+            consoleLog(`Couldn't unlink ${finalFile}`)
         }
+        
 
         fs.copyFileSync(results[smallest.name], finalFile)
 
