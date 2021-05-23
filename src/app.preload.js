@@ -202,7 +202,7 @@ function saveDialog(isFolder = false, extension = null) {
         let settings = {
             title: "Save as",
             buttonLabel: 'Save file',
-            defaultPath: window.files[window.rightClickTarget].In.FileName
+            defaultPath: window.files[window.rightClickTarget].Out.Crushed
         }
         if (extension) {
             settings.filters = [{
@@ -289,7 +289,7 @@ ipcRenderer.on('shortcut', function (event, data) {
             window.saveFiles(window.rightClickTarget)
             break;
         case "right-click-save-as":
-            saveDialog(false, window.files[window.rightClickTarget].In.Extension)
+            saveDialog(false, window.files[window.rightClickTarget].Out.Extension)
             break;
         case "right-click-crush":
             window.crushFile(window.rightClickTarget, window.GlobalSettings.Quality)
