@@ -84,11 +84,11 @@ let fileProcessorThreads = []
 */
 
 // Clear output folder at startup
-function cleanUp() {
+async function cleanUp() {
     console.log("Cleaning old output files")
 
     try {
-        del.sync([slash(outPath)], { force: true })
+        await del([slash(outPath)], { force: true })
     } catch (e) {
         console.log(e)
     }
