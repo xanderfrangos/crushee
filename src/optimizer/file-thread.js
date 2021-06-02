@@ -21,7 +21,8 @@ let imgSettings = {
     resize: {
         width: "",
         height: "",
-        crop: false
+        crop: false,
+        mode: "exact"
     },
     jpg: {
         quality: 95,
@@ -134,11 +135,54 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
                 height = Math.ceil(metadata.height * (parseInt(settings.resize.height) / 100))
             }
 
-            image.resize(
-                width,
-                height,
-                { fit: (parseBool(settings.resize.crop) === true ? "cover" : "inside") }
-            )
+            if(settings.resize.mode === "min") {
+                let shouldResize = false
+                if(width && metadata.width < width) {
+                    shouldResize = true
+                }
+
+                if(height && metadata.height < height) {
+                    shouldResize = true
+                }
+
+                if(shouldResize)
+                image.resize(
+                    width,
+                    height,
+                    { fit: "outside" }
+                )
+            } else if(settings.resize.mode === "max") {
+                let shouldResize = false
+                if(width && metadata.width > width) {
+                    shouldResize = true
+                }
+
+                if(height && metadata.height > height) {
+                    shouldResize = true
+                }
+
+                if(shouldResize)
+                image.resize(
+                    width,
+                    height,
+                    { fit: "inside" }
+                )
+            } else {
+                image.resize(
+                    width,
+                    height,
+                    { fit: (width && height ? "cover" : "inside") }
+                )
+            }
+
+            
+
+        if(resized) {
+            const { info } = await image.toBuffer({ resolveWithObject: true });
+            consoleLog(`Original size: ${metadata.width}x${metadata.height}`)
+            consoleLog(`Output size: ${info.width}x${info.height}`)
+        }
+
         }
 
         if (settings.app.convert === "jpg" || settings.app.convert === "png" || settings.app.convert === "webp" || settings.app.convert === "heif" || settings.app.convert === "avif") {
@@ -204,7 +248,7 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
         } else {
             return false
         }
-
+        
         const outPath = outFolder + "manipulated" + ext
         let promise = image.toFile(outPath)
             .then(() => {

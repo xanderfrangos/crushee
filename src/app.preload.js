@@ -10,7 +10,8 @@ const defaultSettings = {
     resize: {
         width: "",
         height: "",
-        crop: false
+        crop: false,
+        mode: "exact"
     },
     jpg: {
         quality: 95,

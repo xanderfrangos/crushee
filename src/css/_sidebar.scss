@@ -73,6 +73,7 @@
 
     .col {
         padding: 10px 10px;
+        box-sizing: border-box;
 
         &.flex-1 {
             flex: 1;
@@ -366,6 +367,63 @@
     }
 }
 
+
+.input--dropdown {
+    position: relative;
+    user-select: none;
+
+    .option {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        background: var(--sidebar-input-bg);
+    }
+    .selected-preview {
+        display: flex;
+        flex-direction: row;
+        cursor: pointer;
+
+        .arrow {
+            width: 20px;
+            background: var(--sidebar-input-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            svg {
+                display: block;
+                fill: var(--text-sidebar);
+            }
+        }
+
+        .option {
+            .sublabel {
+                display: none;
+            }
+        }
+    }
+    .options {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0px;
+        width: 100%;
+        height: auto;
+        box-sizing: border-box;
+        background: var(--base-bg);
+        z-index: 5;
+
+        .option {
+            cursor: pointer;
+            &:focus, &:hover {
+                background: var(--sidebar-input-focus-bg);
+            }
+            &[data-selected="true"] {
+                background: var(--sidebar-input-focus-bg);
+            }
+        }
+    }
+}
 
 
 

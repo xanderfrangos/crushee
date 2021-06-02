@@ -1,6 +1,23 @@
 import React from 'react';
 import InputToggle from "./input/InputToggle";
+import InputDropdown from "./input/InputDropdown";
 import { FormattedSlider } from "./input/FormattedSlider";
+
+const resizeOptions = [
+    {
+        html: (<><label>Exact Size</label><div className="sublabel">Resizes to the provided dimensions. Crops image if both dimensions have been provided.</div></>),
+        value: "exact"
+    },
+    {
+        html: (<><label>Max Size</label><div className="sublabel">Reduces size of images to a maximum size. Preserves aspect ratio.</div></>),
+        value: "max"
+    },
+    {
+        html: (<><label>Min Size</label><div className="sublabel">Increase size of images to a minimum size. Preserves aspect ratio.</div></>),
+        value: "min"
+    }
+]
+
 export const Sidebar = () => {
     return (
         <div className="sidebar">
@@ -13,7 +30,7 @@ export const Sidebar = () => {
                     </div>
                     <div className="row">
                         <div className="col">
-                            <label>Max Width</label>
+                            <label>Width</label>
                             <input type="numeric" name="resize.width" onChange={(e) => {
                                 window.GlobalSettings.Quality.resize.width = e.target.value
                                 window.changeEventState("crushing", 0, false)
@@ -22,7 +39,7 @@ export const Sidebar = () => {
                             }} />
                         </div>
                         <div className="col">
-                            <label>Max Height</label>
+                            <label>Height</label>
                             <input type="numeric" name="resize.height" onChange={(e) => {
                                 window.GlobalSettings.Quality.resize.height = e.target.value
                                 window.changeEventState("crushing", 0, false)
@@ -31,12 +48,20 @@ export const Sidebar = () => {
                             }} />
                         </div>
                     </div>
-                    <InputToggle
-                        label="Crop"
-                        description="Width and height required"
-                        path="resize.crop"
-                        value={window.GlobalSettings.Quality.resize.crop}
-                    />
+                    <div className="row">
+                        <div className="col" style={{width:"100%"}}>
+                        <label>Resize Mode</label>
+                            <InputDropdown
+                                options={resizeOptions}
+                                onChange={(value) => {
+                                    window.GlobalSettings.Quality.resize.mode = value
+                                window.changeEventState("crushing", 0, false)
+                                window.changeEventState("saving", 0, false)
+                                window.sendUpdate()
+                                }}
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div className="sidebar--section">
                     <div className="row center">
