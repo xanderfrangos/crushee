@@ -41,10 +41,12 @@
     "parcel": "parcel src/html/*.html --port 3001 --out-dir build",
     "parcel-build": "parcel build src/html/*.html --out-dir build --public-url ./ --no-minify",
     "dev": "wait-on http://localhost:3001/index.html && electron . ",
-    "electron-build": "electron-builder",
+    "electron-build": "electron-builder --x64",
     "postinstall": "electron-builder install-app-deps",
     "appx": "npm run parcel-build && electron-builder -w appx -c.extraMetadata.name=crushee-appx ",
     "appx-signed": "npm run parcel-build && electron-builder -w appx -c.win.certificateFile=cert.pfx -c.extraMetadata.name=crushee-appx",
+    "mac": "npm run parcel-build && electron-builder --x64 ",
+    "mac-unsigned": "npm run parcel-build && electron-builder --x64 -c.mac.identity=null",
     "build": "npm run parcel-build && npm run electron-build",
     "start": "concurrently \"npm run parcel\" \"npm run dev\""
   },
@@ -62,8 +64,7 @@
       "category": "",
       "darkModeSupport": true,
       "artifactName": "${productName}-v${version}-${os}.${ext}",
-      "hardenedRuntime": false,
-      "identity": false
+      "hardenedRuntime": false
     },
     "win": {
       "icon": "src/assets/icon-shadow.ico",
