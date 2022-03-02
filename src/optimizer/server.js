@@ -28,7 +28,7 @@ const getUUID = () => {
         uuid = uuidv1();
         uuidDir = outPath + uuid + "/"
     }
-    fs.mkdirSync(uuidDir)
+    fs.mkdirSync(uuidDir, { recursive: true })
     return uuid
 }
 
