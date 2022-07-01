@@ -1,9 +1,7 @@
-const { ipcRenderer: ipc, remote, Menu, MenuItem, BrowserWindow, ipcRenderer } = require('electron');
+const { ipcRenderer: ipc, ipcRenderer } = require('electron');
 const path = require('path');
 const { fork } = require("child_process")
-const { dialog } = require('electron').remote
 const os = require('os')
-let browser = remote.getCurrentWindow()
 
 const defaultSettings = {
     resize: {
@@ -143,23 +141,21 @@ window.GlobalSettings = {
 }
 
 window.appInfo = {
-    version: 'v' + remote.app.getVersion(),
-    isAppX: (remote.app.name == "crushee-appx" ? true : false),
+    version: 'v1.0.0',
+    isAppX: true,
     newVersion: false
 }
 
 ipc.on('settings-updated', (event, data) => {
     window.GlobalSettings.App = data
+    window.appInfo.version = data.version
+    window.appInfo.isAppX = data.isAppX
     sendMessage('adjust-threads', data.threads)
     sendUpdate()
 })
 
 console.log("Starting optimizer...")
 let server = fork(path.join(__dirname, "../src/optimizer/server.js"))
-
-remote.app.on("will-quit", () => {
-    //server.send({ type: "quit" })
-})
 
 function openDialog(isFolder = false) {
 
@@ -180,13 +176,14 @@ function openDialog(isFolder = false) {
         params.properties.push('openDirectory')
     }
 
-    dialog.showOpenDialog(params).then((returned) => {
+    ipc.invoke('showOpenDialog', params).then((returned) => {
         const files = returned.filePaths
         if (files == undefined)
             return false;
 
         window.addFiles(files)
     })
+
     ipc.send('event', {
         ec: "Interaction",
         ea: "Add",
@@ -196,7 +193,8 @@ function openDialog(isFolder = false) {
 
 function saveDialog(isFolder = false, extension = null) {
     if (isFolder) {
-        dialog.showOpenDialog({
+
+        ipc.invoke('showOpenDialog', {
             title: "Select folder",
             buttonLabel: 'Select folder',
             properties: [
@@ -214,6 +212,7 @@ function saveDialog(isFolder = false, extension = null) {
                 return false;
             }
         })
+
     } else {
         let settings = {
             title: "Save as",
@@ -226,13 +225,13 @@ function saveDialog(isFolder = false, extension = null) {
                 extensions: [extension.substr(1)]
             }]
         }
-        dialog.showSaveDialog(settings).then((returned) => {
+
+        ipc.invoke('showSaveDialog', settings).then((returned) => {
             if (returned.filePath) {
                 window.saveFiles([window.rightClickTarget], path.dirname(returned.filePath), path.basename(returned.filePath))
             }
-
-
         })
+
     }
     ipc.send('event', {
         ec: "Interaction",
@@ -242,15 +241,6 @@ function saveDialog(isFolder = false, extension = null) {
 }
 window.saveDialog = saveDialog
 
-
-function setDockBadge(count) {
-    if (process.platform === 'darwin') {
-        //Coerce count into a string. Passing an empty string makes the badge disappear.
-        remote.app.dock.setBadge('' + (count || ''));
-    }
-}
-window.setDockBadge = setDockBadge
-
 ipcRenderer.on('blurEnabled', (event, data) => {
     document.body.dataset.blurEnabled = data
 })
@@ -259,7 +249,7 @@ window.updateTaskbarPercentage = function() {
     let progress = 1 - ((window.stats.processing + window.stats.crushing + window.stats.saving) / window.stats.total)
     if(progress >= 1) progress = -1;
     if(typeof progress != "number") progress = -1;
-    window.thisWindow.setProgressBar(progress || -1)
+    ipc.send('setProgressBar', (progress || -1))
 }
 
 ipcRenderer.on('shortcut', function (event, data) {
@@ -278,7 +268,6 @@ ipcRenderer.on('shortcut', function (event, data) {
             window.clearAllFiles()
             break;
         case "save-all":
-            //window.$(".action--download-all").click()
             window.saveAllFiles()
             break;
         case "save-to-folder":
@@ -304,7 +293,7 @@ ipcRenderer.on('shortcut', function (event, data) {
             window.crushFile(window.rightClickTarget, window.GlobalSettings.Quality)
             break;
         case "right-click-show-original":
-            remote.shell.showItemInFolder(window.files[window.rightClickTarget].In.Source)
+            ipc.send('showItemInFolder', window.files[window.rightClickTarget].In.Source)
             ipc.send('event', {
                 ec: "Interaction",
                 ea: "Show",
@@ -363,7 +352,6 @@ server.on('message', processMessage)
 
 
 window.server = server
-window.thisWindow = browser
 window.openDialog = openDialog
 
 
@@ -383,7 +371,7 @@ window.recrushAll = () => {
     analyticsData.metadata = {
         count: window.files.length,
         os: os.platform(),
-        version: 'v' + remote.app.getVersion()
+        //version: 'v' + remote.app.getVersion()
     }
     ipc.send('crushEvent', analyticsData)
 }
@@ -400,7 +388,7 @@ window.crushFile = (UUID, options = defaultSettings, sendAnalytics = true) => {
         analyticsData.metadata = {
             count: window.files.length,
             os: os.platform(),
-            version: 'v' + remote.app.getVersion()
+            //version: 'v' + remote.app.getVersion()
         }
         ipc.send('crushEvent', analyticsData)
     }
@@ -635,6 +623,17 @@ window.getFile = (uuid) => {
             return files[file]
         }
     }
+}
+
+window.setWindowState = function(state) {
+    if(state === "close") {
+        server.send({ type: "quit" })
+    }
+    ipc.send('setWindowState', state)
+}
+
+window.isMaximized = async function() {
+    return ipc.invoke('isMaximized')
 }
 
 window.sendMessage("settings", {

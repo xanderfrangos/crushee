@@ -50,6 +50,6 @@ setTimeout(() => {
     }
 }, 1000)
 
-window.thisWindow.on('resize', () => {
+window.addEventListener('resize', () => {
     window.sendUpdate()
 })

@@ -102,13 +102,13 @@ const Titlebar = (props) => {
       <div className="titlebar-drag-region"></div>
       <div className="window-title">{props.title || ""}</div>
       <div className="window-controls-container">
-        <div className="window-icon-bg" onClick={() => { window.thisWindow.minimize() }} style={{ display: "none" }}>
+        <div className="window-icon-bg" onClick={() => { window.setWindowState('minimize') }} style={{ display: "none" }}>
           <div className="window-icon window-minimize"></div>
         </div>
-        <div className="window-icon-bg" onClick={() => { window.thisWindow.maximize() }} style={{ display: "none" }}>
+        <div className="window-icon-bg" onClick={() => { window.setWindowState('maximize') }} style={{ display: "none" }}>
           <div className="window-icon window-max-restore window-maximize"></div>
         </div>
-        <div className="window-icon-bg window-close-bg" onClick={() => { window.thisWindow.close() }}>
+        <div className="window-icon-bg window-close-bg" onClick={() => { window.setWindowState('close') }}>
           <div className="window-icon window-close"></div>
         </div>
       </div>

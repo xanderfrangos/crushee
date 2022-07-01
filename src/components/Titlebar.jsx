@@ -30,13 +30,13 @@ export const Titlebar = (props) => {
         </div>
         <div className="window-title">{props.title || ""}</div>
         <div className="window-controls-container">
-          <div className="window-icon-bg" onClick={() => { window.thisWindow.minimize() }}>
+          <div className="window-icon-bg" onClick={() => { window.setWindowState('minimize') }}>
             <div className="window-icon window-minimize"></div>
           </div>
-          <div className="window-icon-bg" onClick={() => { if(window.thisWindow.isMaximized()) { window.thisWindow.unmaximize() } else { window.thisWindow.maximize() } }}>
+          <div className="window-icon-bg" onClick={async () => { if(await window.isMaximized()) { window.setWindowState('unmaximize') } else { window.setWindowState('maximize') } }}>
             <div className="window-icon window-max-restore window-maximize"></div>
           </div>
-          <div className="window-icon-bg window-close-bg" onClick={() => { window.thisWindow.close() }}>
+          <div className="window-icon-bg window-close-bg" onClick={() => { window.setWindowState('close') }}>
             <div className="window-icon window-close"></div>
           </div>
         </div>

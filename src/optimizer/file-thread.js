@@ -552,7 +552,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
 
         sendGenericMessage("Writing timestamp...")
         // Write timestamp for cleanup
-        fs.writeFileSync(uuidDir + "ts", Date.now())
+        fs.writeFileSync(uuidDir + "ts", `${Date.now()}`)
 
         sendGenericMessage("Clearing temp files...")
 

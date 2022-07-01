@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, nativeTheme } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, nativeTheme, dialog, shell } = require('electron')
 const path = require("path")
 const fs = require("fs")
 const isDev = require("electron-is-dev");
@@ -67,7 +67,9 @@ let settings = {
   updates: true,
   analytics: true,
   autoThreads: (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1),
-  uuid: uuid()
+  uuid: uuid(),
+  version: app.getVersion(),
+  isAppX: (app.name == "crushee-appx" ? true : false)
 }
 
 function readSettings() {
@@ -224,7 +226,6 @@ function createSettingsWindow() {
       navigateOnDragDrop: false,
       webSecurity: false,
       scrollBounce: true,
-      enableRemoteModule: true,
       preload: path.resolve(__dirname, 'settings.preload.js'),
       contextIsolation: false
     }
@@ -265,8 +266,6 @@ function createWindow() {
       navigateOnDragDrop: false,
       webSecurity: false,
       scrollBounce: true,
-      //experimentalFeatures: true,
-      enableRemoteModule: true,
       preload: path.resolve(__dirname, 'app.preload.js'),
       contextIsolation: false
     }
@@ -658,6 +657,37 @@ ipcMain.on('open-url', (event, url) => {
 
 // Fix http:// + file:// mixing
 const { protocol } = require("electron");
+
+ipcMain.handle('showOpenDialog', async (event, params) => {
+  return dialog.showOpenDialog(params)
+})
+
+ipcMain.handle('showSaveDialog', async (event, params) => {
+  return dialog.showSaveDialog(params)
+})
+
+ipcMain.on('setProgressBar', (event, progress) => {
+  mainWindow.setProgressBar(progress)
+})
+
+ipcMain.on('setWindowState', (event, state) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  switch(state) {
+    case "maximize": win.maximize(); break;
+    case "unmaximize": win.unmaximize(); break;
+    case "minimize": win.minimize(); break;
+    case "close": win.close(); break;
+  }
+})
+
+ipcMain.handle('isMaximized', async (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  return win.isMaximized()
+})
+
+ipcMain.on('showItemInFolder', (filePath) => {
+  shell.showItemInFolder(filePath)
+})
 
 app.whenReady().then(() => {
   protocol.registerFileProtocol('file', (request, callback) => {

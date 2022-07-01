@@ -1,5 +1,4 @@
-const { ipcRenderer: ipc, remote } = require('electron');
-let browser = remote.getCurrentWindow()
+const { ipcRenderer: ipc } = require('electron');
 
 function sendSettings(newSettings) {
     ipc.send('send-settings', newSettings)
@@ -13,6 +12,14 @@ function openURL(url) {
     ipc.send('open-url', url)
 }
 
+window.setWindowState = function(state) {
+    ipc.send('setWindowState', state)
+}
+
+window.isMaximized = async function() {
+    return ipc.invoke('isMaximized')
+}
+
 ipc.on('settings-updated', (event, settings) => {
     window.settings = settings
     window.dispatchEvent(new CustomEvent('settingsUpdated', {
@@ -21,16 +28,15 @@ ipc.on('settings-updated', (event, settings) => {
 })
 
 // Request startup data
-browser.webContents.once('dom-ready', () => {
+window.addEventListener('load', () => {
     requestSettings()
-})
+});
 
 window.sendSettings = sendSettings
 window.requestSettings = requestSettings
 window.openURL = openURL
 window.lastUpdate = Date.now()
 window.settings = {}
-window.thisWindow = browser
 
-window.version = 'v' + remote.app.getVersion()
-window.isAppX = (remote.app.name == "crushee-appx" ? true : false)
+//window.version = 'v' + remote.app.getVersion()
+//window.isAppX = (remote.app.name == "crushee-appx" ? true : false)
