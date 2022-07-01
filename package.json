@@ -78,6 +78,10 @@
       "publisher": "CN=B8E9A58B-32A7-4C6C-A474-D4BE2A3CEAD8",
       "showNameOnTiles": true
     },
+    "nsis": {
+      "deleteAppDataOnUninstall": true,
+      "warningsAsErrors": false
+    },
     "files": [
       "src/electron.js",
       "src/app.preload.js",
