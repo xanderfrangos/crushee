@@ -204,7 +204,7 @@ function createSplash() {
       navigateOnDragDrop: false,
       contextIsolation: false
     },
-    titleBarStyle: "hidden"
+    titleBarStyle: "default"
   })
   splashWindow.setIgnoreMouseEvents(true)
   splashWindow.loadURL(
