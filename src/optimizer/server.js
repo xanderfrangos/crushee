@@ -7,6 +7,7 @@ const { v1: uuidv1 } = require('uuid');
 const EventEmitter = require('events');
 const appDataPath = require('appdata-path')
 const slash = require('slash')
+let threadsReady = 0
 
 
 let Settings = {}
@@ -167,6 +168,11 @@ function makeThread(threadNum) {
             // Return response from server
             forked.jobs[data.uuid].callback(data.result)
             delete forked.jobs[data.uuid];
+        } else if(data.type === "ready") {
+            threadsReady++
+            if(threadsReady === fileProcessorThreads.length) {
+                sendMessage("ready")
+            }
         }
 
     })
@@ -175,6 +181,8 @@ function makeThread(threadNum) {
 }
 
 function restartThreads(count = "auto") {
+    threadsReady = 0 // Clear ready state
+
     let threadCount = count;
     if(count === "auto"){
         threadCount = (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1)
@@ -559,9 +567,5 @@ const recrush = (UUID, options = "{}") => {
     const file = uploads[UUID]
     processFile(UUID, path.basename(file.In.Source), file.Path + "/source" + file.In.Extension, outPath, options)
 }
-
-sendMessage({
-    type: "ready"
-})
 
 console.log(`\x1b[34mServer Ready!\x1b[0m`)

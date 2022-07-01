@@ -24,10 +24,11 @@ if (!appLocked) {
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
     console.log(commandLine, workingDirectory)
+    if(commandLine.length <= 1) return false;
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       mainWindow.focus()
-      tryOpenFiles(files)
+      tryOpenFiles(commandLine.slice(1))
     }
   })
 }
@@ -41,22 +42,32 @@ app.on('will-finish-launching', () => {
 });
 
 function tryOpenFiles(files) {
-  if(files) {
-    if(typeof files == "object") {
-      for(let file in files) {
-        fs.lstat(file, (err, stats) => {
-          if(!err) {
-            mainWindow.webContents.send("open-file", file)
-          }
-        })
-      }
-    } else if(typeof files == "string") {
-      fs.lstat(files, (err, stats) => {
-        if(!err) {
-          mainWindow.webContents.send("open-file", files)
+  try {
+    if(files) {
+      if(typeof files == "object") {
+        for(let file of files) {
+          if(file.indexOf("--") === 0) continue;
+          try {
+            console.log(file)
+            fs.lstat(file, (err, stats) => {
+              if(!err) {
+                mainWindow.webContents.send("open-file", file)
+              }
+            })
+          } catch(e) { }
         }
-      })
+      } else if(typeof files == "string") {
+        try {
+          fs.lstat(files, (err, stats) => {
+            if(!err) {
+              mainWindow.webContents.send("open-file", files)
+            }
+          })
+        } catch(e) { }
+      }
     }
+  } catch(e) {
+    console.log('tryOpenFiles failed', e)
   }
 }
 
@@ -314,10 +325,10 @@ function createWindow() {
       }
       mainWindow.webContents.send('blurEnabled', blurEnabled)
       mainWindow.show();
+      tryOpenFiles(isDev ? process.argv.slice(2) : process.argv.slice(1))
     }, 500)
 
     mainWindow.webContents.send('version', `v${crusheeVersion}`)
-
   });
 
   // and load the index.html of the app.

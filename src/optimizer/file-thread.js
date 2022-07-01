@@ -601,6 +601,9 @@ process.on('message', (data) => {
         checkCanDoJob()
     } else if (data.type == 'setThreadNum') {
         threadNum = data.result
+        process.send({
+            type: 'ready'
+        })
         sendGenericMessage("Thread ready!")
     } else if (data.type == 'quit') {
         sendGenericMessage("Shutting down...")

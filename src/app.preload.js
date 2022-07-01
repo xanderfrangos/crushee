@@ -328,11 +328,19 @@ window.popupMenu = (menu, x = null, y = null, disable = false) => {
     })
 }
 
-
+let notReadyQueue = []
 function addFiles(files) {
-    window.sendMessage("upload", {
-        path: files
-    })
+    if(serverReady) {
+        // File server is ready, send them over.
+        window.sendMessage("upload", {
+            path: files
+        })
+    } else {
+        // File server not ready. Save file list.
+        notReadyQueue.push(files)
+        window.processingPlaceholder = true
+        sendUpdate()
+    }
 }
 window.addFiles = addFiles
 
@@ -504,11 +512,24 @@ window.changeQualityLevel = changeQualityLevel
 
 
 let scanList = 0
+let serverReady = false
+window.processingPlaceholder = false
 
 function processMessage(ev) {
     var data = ev
     if (typeof data.type != "undefined")
         switch (data.type) {
+            case "ready":
+                serverReady = true;
+                notReadyQueue.forEach((files) => {
+                    addFiles(files)
+                })
+                notReadyQueue = []
+                setTimeout(() => {
+                    window.processingPlaceholder = false
+                    sendUpdate()
+                }, 100)
+                break;
             case "check":
                 checkUUIDs(data.payload);
                 break;
