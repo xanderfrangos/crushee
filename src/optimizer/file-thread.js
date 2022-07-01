@@ -555,7 +555,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
         sendGenericMessage("Clearing temp files...")
 
         // Build and send results
-        const metadata = await sharp(finalFile).metadata()
+        const metadata = await sharp(results[smallest.name]).metadata()
         const result = {
             Crushed: path.basename(finalFile),
             BaseName: path.basename(fn, path.extname(fn)) + path.extname(resized),
