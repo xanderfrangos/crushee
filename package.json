@@ -1,6 +1,6 @@
 {
   "name": "crushee-desktop",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Crushee",
   "main": "src/electron.js",
   "repository": "github:xanderfrangos/crushee",
