@@ -37,6 +37,3 @@ window.requestSettings = requestSettings
 window.openURL = openURL
 window.lastUpdate = Date.now()
 window.settings = {}
-
-//window.version = 'v' + remote.app.getVersion()
-//window.isAppX = (remote.app.name == "crushee-appx" ? true : false)
