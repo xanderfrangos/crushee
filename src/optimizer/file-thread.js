@@ -185,8 +185,10 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
 
         }
 
+        let converted = false
         if (settings.app.convert === "jpg" || settings.app.convert === "png" || settings.app.convert === "webp" || settings.app.convert === "heif" || settings.app.convert === "avif") {
             ext = "." + settings.app.convert
+            converted = true
         }
 
         if (ext === ".jpg" || ext === ".jpeg") {
@@ -249,7 +251,7 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
             return false
         }
         
-        const outPath = outFolder + "manipulated" + ext
+        const outPath = outFolder + "manipulated" + (converted ? ext : path.extname(file))
         let promise = image.toFile(outPath)
             .then(() => {
                 return outPath
