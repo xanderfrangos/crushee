@@ -18,8 +18,8 @@
             height: 100%;
             display: block;
             border-radius: 5px;
-            background: white;
-            animation: splashIn 0.5s;
+            animation: splashIn 0.5s forwards;
+            opacity: 0;
         }
         @keyframes splashIn {
             0% { transform: scale(0.96); opacity: 0; }
@@ -28,9 +28,13 @@
         }
         @media screen and (prefers-color-scheme: dark) {
             .bg {
-                background: #161616;
+                background: #161616 !important;
                 fill: #161616 !important;
             }
+        }
+        .bg {
+            background: white;
+            fill: white;
         }
         </style>
     </head>

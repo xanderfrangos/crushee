@@ -193,7 +193,7 @@ function createSplash() {
       navigateOnDragDrop: false,
       contextIsolation: false
     },
-    titleBarStyle: "default"
+    titleBarStyle: "hidden"
   })
   splashWindow.setIgnoreMouseEvents(true)
   splashWindow.loadURL(
@@ -202,7 +202,9 @@ function createSplash() {
       : `file://${path.join(__dirname, "../build/splash.html")}`
   );
   splashWindow.webContents.on('did-finish-load', function () {
-    if (splashWindow) splashWindow.show();
+    setTimeout(() => {
+      if (splashWindow) splashWindow.show();
+    }, 50)
   });
 }
 
