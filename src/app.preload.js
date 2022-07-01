@@ -2,7 +2,6 @@ const { ipcRenderer: ipc, remote, Menu, MenuItem, BrowserWindow, ipcRenderer } =
 const path = require('path');
 const { fork } = require("child_process")
 const { dialog } = require('electron').remote
-const slash = require('slash')
 const os = require('os')
 let browser = remote.getCurrentWindow()
 

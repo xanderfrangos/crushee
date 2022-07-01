@@ -1,7 +1,6 @@
-const { app, BrowserWindow, ipcMain, systemPreferences, Menu, MenuItem, Notification, nativeTheme } = require('electron')
+const { app, BrowserWindow, ipcMain, systemPreferences, Menu, nativeTheme } = require('electron')
 const path = require("path")
 const fs = require("fs")
-const { fork } = require("child_process")
 const isDev = require("electron-is-dev");
 const os = require("os")
 const ua = require('universal-analytics');
