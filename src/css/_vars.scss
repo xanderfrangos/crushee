@@ -23,6 +23,12 @@
     --titlebar-icon: #888;
     --titlebar-icon-hover: #000;
 
+    --sidebar-select-bg: #ffffff;
+    --sidebar-select-bg-active: #dcdcdc;
+    --sidebar-select-label: #000000;
+    --sidebar-select-sublabel: #797979;
+    --sidebar-select-sublabel-active: #505050;
+
   }
 
   @media screen and (prefers-color-scheme: dark) {
@@ -44,5 +50,11 @@
   
       --titlebar-icon: #fff;
       --titlebar-icon-hover: #eee;
+
+      --sidebar-select-bg: #323232;
+      --sidebar-select-bg-active: #616161;
+      --sidebar-select-label: #ffffff;
+      --sidebar-select-sublabel: #999999;
+      --sidebar-select--sublabel-active: #c6c6c6;
     }
 }
