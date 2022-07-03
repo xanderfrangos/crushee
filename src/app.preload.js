@@ -3,6 +3,8 @@ const path = require('path');
 const { fork } = require("child_process")
 const os = require('os')
 
+let server
+
 const defaultSettings = {
     resize: {
         width: "",
@@ -158,9 +160,6 @@ ipc.on('settings-updated', (event, data) => {
         settings: window.GlobalSettings
     })
 })
-
-console.log("Starting optimizer...")
-let server = fork(path.join(__dirname, "../src/optimizer/server.js"))
 
 function openDialog(isFolder = false) {
 
@@ -357,14 +356,6 @@ const sendMessage = (type, payload = {}) => {
     })
 }
 window.sendMessage = sendMessage
-
-
-
-server.on('message', processMessage)
-
-
-
-window.server = server
 window.openDialog = openDialog
 
 
@@ -534,6 +525,9 @@ function processMessage(ev) {
                     window.processingPlaceholder = false
                     sendUpdate()
                 }, 100)
+                window.sendMessage("settings", {
+                    settings: window.GlobalSettings
+                })
                 break;
             case "check":
                 checkUUIDs(data.payload);
@@ -662,6 +656,16 @@ window.isMaximized = async function() {
     return ipc.invoke('isMaximized')
 }
 
-window.sendMessage("settings", {
-    settings: window.GlobalSettings
+
+window.startServer = function() {
+    server = fork(path.join(__dirname, "../src/optimizer/server.js"))
+    server.on('message', processMessage)
+    window.server = server
+}
+
+window.addEventListener('load', () => {
+    console.log("Starting optimizer...")
+    setTimeout(() => {
+        window.startServer()
+    }, 500)
 })

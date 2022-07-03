@@ -295,41 +295,11 @@ function createWindow() {
   mainWindow.webContents.on('did-finish-load', function () {
     processSettings()
 
-    let blurEnabled = true
-    try {
-      if (os.platform() === "win32") {
-        // Disabling blur on Windows for the foreseeable future. Too buggy. 
-        blurEnabled = false
-        /*
-        const SWCA = require('windows-swca')
-        const release = os.release().split('.')[2]
-        if (release < 18363) {
-          blurEnabled = false
-        } else if (release < 19041) {
-          SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDDBB)
-        } else {
-          SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND, 0xDDDDDDBB)
-
-          // Maybe one day this will work without lagging when transparency is on in Windows...
-          //SWCA.SetWindowCompositionAttribute(mainWindow.getNativeWindowHandle(), SWCA.ACCENT_STATE.ACCENT_ENABLE_ACRYLICBLURBEHIND, 0xDDDDDD22)
-        }
-        */
-      }
-    } catch (e) {
-      console.log("Could not enable blur.", e)
-      blurEnabled = false
-    }
-
-
     setTimeout(() => {
-      if (splashWindow) {
-        splashWindow.close();
-        splashWindow = null;
-      }
-      mainWindow.webContents.send('blurEnabled', blurEnabled)
       mainWindow.show();
-      tryOpenFiles(isDev ? process.argv.slice(2) : process.argv.slice(1))
-    }, 500)
+    }, 250)
+    
+    tryOpenFiles(isDev ? process.argv.slice(2) : process.argv.slice(1))
 
     mainWindow.webContents.send('version', `v${crusheeVersion}`)
   });
@@ -389,7 +359,6 @@ app.on('activate', function () {
 
 // Start up app
 function tryStart() {
-  createSplash()
   readSettings()
   createWindow()
   tryingConnection = false
