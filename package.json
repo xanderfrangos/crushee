@@ -44,7 +44,7 @@
     "electron-build": "electron-builder --x64",
     "postinstall": "electron-builder install-app-deps",
     "appx": "npm run parcel-build && electron-builder -w appx -c.extraMetadata.name=crushee-appx ",
-    "appx-signed": "npm run parcel-build && electron-builder -w appx -c.win.certificateFile=cert.pfx -c.extraMetadata.name=crushee-appx",
+    "appx-unsigned": "npm run parcel-build && electron-builder -w appx -c.appx.publisher=\"CN=AppModelSamples, OID.2.25.311729368913984317654407730594956997722=1\" -c.extraMetadata.name=crushee-appx -c.win.artifactName=\"${productName} v${version}-unsigned.${ext}\"",
     "mac": "npm run parcel-build && electron-builder --x64 ",
     "mac-unsigned": "npm run parcel-build && electron-builder --x64 -c.mac.identity=null",
     "build": "npm run parcel-build && npm run electron-build",
