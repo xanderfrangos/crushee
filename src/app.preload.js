@@ -337,7 +337,7 @@ function addFiles(files) {
         path: files
     })
     if(!serverReady) {
-        // File server not ready. Sho2 loading screen.
+        // File server not ready. Show loading screen.
         window.processingPlaceholder = true
         sendUpdate()
     }
