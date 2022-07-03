@@ -79,7 +79,7 @@ let settings = {
   analytics: true,
   autoThreads: (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1),
   uuid: uuid(),
-  version: app.getVersion(),
+  version: 'v' + app.getVersion(),
   isAppX: (app.name == "crushee-appx" ? true : false)
 }
 
@@ -168,6 +168,8 @@ function processSettings() {
       clearInterval(analyticsInterval)
     }
   }
+  settings.version = 'v' + app.getVersion()
+  settings.isAppX = (app.name == "crushee-appx" ? true : false)
   sendToAllWindows('settings-updated', settings)
 }
 
