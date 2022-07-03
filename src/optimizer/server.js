@@ -270,7 +270,9 @@ async function analyzeFile(uuid, uploadName, inFile, outDir) {
 
         jobQueue.push({
             uuid,
-            payload: [uuid, uploadName, inFile, outDir, {}, "preview"],
+            payload: [uuid, uploadName, inFile, outDir, { app: 
+                { backgroundColor: Settings.Quality.app.backgroundColor }
+             }, "preview"],
             callback: resolve
         })
 

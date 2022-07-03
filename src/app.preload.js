@@ -38,7 +38,8 @@ const defaultSettings = {
         advancedQuality: "false",
         overwite: false,
         darkMode: false,
-        convert: "none"
+        convert: "none",
+        backgroundColor: "#FFFFFF"
     }
 }
 window.defaultSettings = defaultSettings
@@ -148,10 +149,14 @@ window.appInfo = {
 
 ipc.on('settings-updated', (event, data) => {
     window.GlobalSettings.App = data
+    window.GlobalSettings.Quality.app.backgroundColor = data.backgroundColor
     window.appInfo.version = data.version
     window.appInfo.isAppX = data.isAppX
     sendMessage('adjust-threads', data.threads)
     sendUpdate()
+    window.sendMessage("settings", {
+        settings: window.GlobalSettings
+    })
 })
 
 console.log("Starting optimizer...")

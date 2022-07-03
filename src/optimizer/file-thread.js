@@ -59,6 +59,9 @@ let imgSettings = {
         lossless: false,
         speed: 5,
         chromaSubsampling: "4:2:0"
+    },
+    app: {
+        backgroundColor: "#FFFFFF"
     }
 }
 
@@ -194,7 +197,7 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
         if (ext === ".jpg" || ext === ".jpeg") {
             ext = ".jpg" // Force .jpg because it's objectively correct
             image.flatten({
-                background: { r: 255, g: 255, b: 255 }
+                background: settings.app.backgroundColor
             })
 
             image.jpeg({
@@ -360,7 +363,7 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
 //
 //   Builds thumbnail previews
 //
-async function makePreview(file, outFolder) {
+async function makePreview(file, outFolder, backgroundColor = "#FFFFFF") {
     const outPath = path.join(outFolder, "preview.jpg")
     try {
         let image = sharp(file)
@@ -369,7 +372,7 @@ async function makePreview(file, outFolder) {
         image.rotate() // Fix orientation from EXIF data, if available
         image.resize(200, 200, { fit: "cover" })
         image.flatten({
-            background: { r: 255, g: 255, b: 255 }
+            background: backgroundColor
         })
         image.jpeg({
             quality: 75,
@@ -410,7 +413,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
         // Make thumbnails
         fs.mkdirSync(slash(uuidDir + "preview/"), { recursive: true })
         try {
-            return await makePreview(f, uuidDir + "preview/")
+            return await makePreview(f, uuidDir + "preview/", options?.app?.backgroundColor)
         } catch (e) {
             sendGenericMessage("ERROR: Creating preview failed. " + e)
             process.send({

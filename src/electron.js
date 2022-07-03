@@ -77,6 +77,7 @@ let settings = {
   threads: 'auto',
   updates: true,
   analytics: true,
+  backgroundColor: "#FFFFFF",
   autoThreads: (os.cpus().length > 3 ? Math.floor(os.cpus().length / 3) + 1 : 1),
   uuid: uuid(),
   version: 'v' + app.getVersion(),

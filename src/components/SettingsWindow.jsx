@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import InputToggle from "./input/InputToggle";
+import { TwitterPicker } from 'react-color';
 
 
 export default class SettingsWindow extends PureComponent {
@@ -11,7 +12,8 @@ export default class SettingsWindow extends PureComponent {
       analytics: false,
       threads: "auto",
       updates: true,
-      autoThreads: "?"
+      autoThreads: "?",
+      backgroundColor: "#FFFFFF"
     }
     this.lastLevels = []
   }
@@ -66,6 +68,25 @@ export default class SettingsWindow extends PureComponent {
               value={this.state.analytics}
               onChange={(e, val, elem) => {this.settingChanged("analytics", val)}}
             />
+
+            <div class="color-option">
+              <div class="color-block"></div><div class="color-text">
+
+
+              <label>Default background color</label>
+              <div className="sublabel">Color for backgrounds when converting from a transparent image to a JPEG. Also used for thumbnails.</div>
+
+              </div>
+              <TwitterPicker
+              colors={['#000000', '#888888', '#FFFFFF']}
+              triangle={'hide'}
+              width={'280px'}
+              color={ this.state.backgroundColor }
+              onChange={ (color) => {
+                this.settingChanged("backgroundColor", color.hex)
+              } }
+              />
+            </div>
 
           </div>
 
