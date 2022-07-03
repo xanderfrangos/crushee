@@ -332,16 +332,12 @@ window.popupMenu = (menu, x = null, y = null, disable = false) => {
     })
 }
 
-let notReadyQueue = []
 function addFiles(files) {
-    if(serverReady) {
-        // File server is ready, send them over.
-        window.sendMessage("upload", {
-            path: files
-        })
-    } else {
-        // File server not ready. Save file list.
-        notReadyQueue.push(files)
+    window.sendMessage("upload", {
+        path: files
+    })
+    if(!serverReady) {
+        // File server not ready. Sho2 loading screen.
         window.processingPlaceholder = true
         sendUpdate()
     }
@@ -349,15 +345,22 @@ function addFiles(files) {
 window.addFiles = addFiles
 
 
+let notReadyQueue = []
 const sendMessage = (type, payload = {}) => {
-    window.server.send({
-        type,
-        payload
-    })
+    if(serverReady) {
+        window.server.send({
+            type,
+            payload
+        })
+    } else {
+        notReadyQueue.push({
+            type,
+            payload
+        })
+    }
 }
 window.sendMessage = sendMessage
 window.openDialog = openDialog
-
 
 window.fileCounts = {
     total: 0,
@@ -517,8 +520,8 @@ function processMessage(ev) {
         switch (data.type) {
             case "ready":
                 serverReady = true;
-                notReadyQueue.forEach((files) => {
-                    addFiles(files)
+                notReadyQueue.forEach(data => {
+                    sendMessage(data.type, data.payload)
                 })
                 notReadyQueue = []
                 setTimeout(() => {
