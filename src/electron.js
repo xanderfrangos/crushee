@@ -649,7 +649,10 @@ ipcMain.handle('showSaveDialog', async (event, params) => {
 })
 
 ipcMain.on('setProgressBar', (event, progress) => {
-  mainWindow.setProgressBar(progress)
+  try {
+    mainWindow.setProgressBar(progress)
+  } catch(e) {}
+  
 })
 
 ipcMain.on('setWindowState', (event, state) => {
