@@ -657,13 +657,19 @@ async function checkCanDoJob() {
             let data = processQueue[0]
             job(...data.payload).then((result) => {
 
-                // Send response that the job was finished
-                process.send({
-                    type: 'finished',
-                    result: result,
-                    uuid: data.uuid,
-                    threadNum: threadNum
-                })
+                try {
+                    // Send response that the job was finished
+                    process.send({
+                        type: 'finished',
+                        result: result,
+                        uuid: data.uuid,
+                        threadNum: threadNum
+                    })
+                } catch(e) {
+                    // If parent process failed, die.
+                    process.exit(0)
+                }
+
 
                 // Remove old job and make not busy
                 processQueue.splice(0, 1)
@@ -711,7 +717,9 @@ function sendStillAliveMessage() {
     })
 }
 
-
+process.on('disconnect', () => {
+    process.exit(0)
+})
 
 
 

@@ -161,6 +161,10 @@ ipc.on('settings-updated', (event, data) => {
     })
 })
 
+ipc.on('quit-app', function() {
+    window.closeServer()
+})
+
 function openDialog(isFolder = false) {
 
     const params = {
@@ -651,6 +655,7 @@ window.getFile = (uuid) => {
 window.setWindowState = function(state) {
     if(state === "close") {
         server.send({ type: "quit" })
+        window.closeServer()
     }
     ipc.send('setWindowState', state)
 }
@@ -664,6 +669,12 @@ window.startServer = function() {
     server = fork(path.join(__dirname, "../src/optimizer/server.js"))
     server.on('message', processMessage)
     window.server = server
+}
+
+window.closeServer = function() {
+    if(serverReady) {
+        server.kill('SIGINT');
+    }
 }
 
 window.addEventListener('load', () => {

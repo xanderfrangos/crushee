@@ -317,7 +317,6 @@ function createWindow() {
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
-    mainWindow = null
     app.quit()
   })
 }
@@ -329,13 +328,11 @@ function createWindow() {
 app.on('ready', tryStart)
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-  app.quit()
+app.on('before-quit', function () {
+  try {
+    if(mainWindow) mainWindow.webContents.send('quit-app')
+  } catch(e) { }
+  app.exit()
 })
 
 app.on('activate', function () {
@@ -683,4 +680,4 @@ app.whenReady().then(() => {
 });
 
 // Kill everything if this process fails
-app.on("error", () => { app.quit() })
+app.on("error", () => { app.exit() })

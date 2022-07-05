@@ -570,4 +570,8 @@ const recrush = (UUID, options = "{}") => {
     processFile(UUID, path.basename(file.In.Source), file.Path + "/source" + file.In.Extension, outPath, options)
 }
 
+process.on('disconnect', () => {
+    process.exit(0)
+})
+
 console.log(`\x1b[34mServer Ready!\x1b[0m`)
