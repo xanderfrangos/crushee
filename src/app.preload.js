@@ -517,6 +517,7 @@ window.changeQualityLevel = changeQualityLevel
 let scanList = 0
 let serverReady = false
 window.processingPlaceholder = false
+window.file = {}
 
 function processMessage(ev) {
     var data = ev
@@ -554,6 +555,12 @@ function processMessage(ev) {
                 sendUpdate()
                 break;
             case "upload":
+                for(let fileKey in window.files) {
+                    // Skip existing files
+                    if(window.files[fileKey].In.Source == data.payload.file.In.Source) {
+                        return false;
+                    } 
+                }
                 window.files[data.payload.file.UUID] = data.payload.file
                 window.fileCounts.total++
                 window.changeEventState("crushing", 0, false)
