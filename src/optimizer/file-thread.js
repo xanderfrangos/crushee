@@ -538,7 +538,7 @@ async function job(uuid, fn, f, o, options = {}, mode = "compress") {
             fs.mkdirSync(uuidDir + "crushed/")
         }
         
-        let finalFile = uuidDir + "crushed/" + path.basename(fn, path.extname(fn)) + "_" + Date.now() + path.extname(resized)
+        let finalFile = uuidDir + "crushed/" + path.basename("final", path.extname(fn)) + "_" + Date.now() + path.extname(resized)
 
         try {
             if(fs.existsSync(finalFile)) {
