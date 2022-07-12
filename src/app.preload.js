@@ -170,7 +170,7 @@ function openDialog(isFolder = false) {
     const params = {
         title: "Select image(s)",
         filters: [
-            { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'avif'] },
+            { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'avif', 'webp'] },
             { name: 'All Files', extensions: ['*'] }
         ],
         buttonLabel: (isFolder == true ? 'Add Folder(s)' : 'Add File(s)'),
