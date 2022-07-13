@@ -10,6 +10,7 @@
     "css-loader": "^5.0.1",
     "del": "^6.1.1",
     "electron-is-dev": "^1.2.0",
+    "heic-decode": "^1.1.2",
     "imagemin": "^7.0.1",
     "imagemin-advpng": "^6.0.0",
     "imagemin-jpeg-recompress": "^7.0.0",

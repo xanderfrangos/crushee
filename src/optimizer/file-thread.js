@@ -10,6 +10,9 @@ const imageminSVGO = require('imagemin-svgo');
 const imageminAdvpng = require('imagemin-advpng');
 const imageminPngquant = require('imagemin-pngquant');
 
+const { promisify } = require('util');
+const decode = require('heic-decode');
+
 const fs = require("fs")
 const path = require("path")
 
@@ -93,17 +96,45 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
     settings.resize.height = (parseInt(settings.resize.height) > 5400 ? 5400 : settings.resize.height)
 
     let ext = path.extname(file).toLowerCase()
+    let image
 
     try {
-        let image = sharp(file, {
-            density: 300
-        })
+
+        if(ext === ".heic") {
+            const buffer = await promisify(fs.readFile)(file);
+            const {
+              width, height, data
+            } = await decode({ buffer });
+            image = sharp(new Uint8Array(data), {
+                raw: {
+                    width,
+                    height,
+                    channels: 4,
+                    density: 300
+                }
+            })
+            image.png().toFile(outFolder + 'raw.png')
+            .then(() => {
+                sendGenericMessage("Saved raw.png for: " + file)
+            }).catch((e) => {
+                sendGenericMessage("Couldn't save raw.png for: " + file)
+            })
+        } else {
+            image = sharp(file, {
+                density: 300
+            })
+        }
 
         let metadata = await image.metadata()
 
         // Fix AVIF being detected as HEIF
         if(metadata.format === "heif" && ext === ".avif") {
             metadata.format = "avif"
+        }
+
+        // Force raw pixels (for HEIC) to JPEG if no conversion is set
+        if(metadata.format === "raw") {
+            if(settings.app.convert === "none") settings.app.convert = "jpg";
         }
 
         sendGenericMessage("Detected format:" + metadata.format)
@@ -366,7 +397,24 @@ async function compressFile(file, outFolder, options = {}, jpgEngineName = "jpeg
 async function makePreview(file, outFolder, backgroundColor = "#FFFFFF") {
     const outPath = path.join(outFolder, "preview.jpg")
     try {
-        let image = sharp(file)
+
+        let image
+        if(path.extname(file).toLowerCase() === ".heic") {
+            const buffer = await promisify(fs.readFile)(file);
+            const {
+              width, height,  data
+            } = await decode({ buffer });
+            image = sharp(new Uint8Array(data), {
+                raw: {
+                    width,
+                    height,
+                    channels: 4
+                }
+            })
+        } else {
+            image = sharp(file)
+        }
+
         const metadata = await image.metadata()
         let stats = fs.statSync(file)
         image.rotate() // Fix orientation from EXIF data, if available

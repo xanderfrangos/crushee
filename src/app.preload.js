@@ -170,7 +170,7 @@ function openDialog(isFolder = false) {
     const params = {
         title: "Select image(s)",
         filters: [
-            { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'avif', 'webp'] },
+            { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'avif', 'webp', 'heic'] },
             { name: 'All Files', extensions: ['*'] }
         ],
         buttonLabel: (isFolder == true ? 'Add Folder(s)' : 'Add File(s)'),
@@ -640,7 +640,8 @@ window.sendPreviewUpdate = sendPreviewUpdate
 
 const showComparison = (file) => {
     if (file.Status === "done") {
-        window.sendPreviewUpdate(true, "file://" + file.Path + "/source" + file.In.Extension + "?" + Date.now(), "file://" + file.Path + "/crushed/" + file.Out.Crushed + "?" + Date.now())
+        const beforeFile = (file.In.Format === "raw" ? "/raw.png" : "/source" + file.In.Extension)
+        window.sendPreviewUpdate(true, "file://" + file.Path + beforeFile + "?" + Date.now(), "file://" + file.Path + "/crushed/" + file.Out.Crushed + "?" + Date.now())
     }
     ipc.send('event', {
         ec: "Interaction",
