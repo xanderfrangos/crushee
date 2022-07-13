@@ -670,7 +670,7 @@ ipcMain.handle('isMaximized', async (event) => {
   return win.isMaximized()
 })
 
-ipcMain.on('showItemInFolder', (filePath) => {
+ipcMain.on('showItemInFolder', (e, filePath) => {
   shell.showItemInFolder(filePath)
 })
 
