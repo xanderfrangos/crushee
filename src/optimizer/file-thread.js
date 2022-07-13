@@ -101,29 +101,38 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
     try {
 
         if(ext === ".heic") {
-            const buffer = await promisify(fs.readFile)(file);
-            const {
-              width, height, data
-            } = await decode({ buffer });
-            image = sharp(new Uint8Array(data), {
-                raw: {
-                    width,
-                    height,
-                    channels: 4,
+            // If HEIC, try reading it as an HEIC
+            try {
+                const buffer = await promisify(fs.readFile)(file);
+                const {
+                  width, height, data
+                } = await decode({ buffer });
+                image = sharp(new Uint8Array(data), {
+                    raw: {
+                        width,
+                        height,
+                        channels: 4,
+                        density: 300
+                    }
+                })
+                image.png().toFile(outFolder + 'raw.png')
+                .then(() => {
+                    sendGenericMessage("Saved raw.png for: " + file)
+                }).catch((e) => {
+                    sendGenericMessage("Couldn't save raw.png for: " + file)
+                })
+            } catch(e) {
+                // Failed reading HEIC, try reading as JPEG
+                image = sharp(file, {
                     density: 300
-                }
-            })
-            image.png().toFile(outFolder + 'raw.png')
-            .then(() => {
-                sendGenericMessage("Saved raw.png for: " + file)
-            }).catch((e) => {
-                sendGenericMessage("Couldn't save raw.png for: " + file)
-            })
+                })
+            }
         } else {
             image = sharp(file, {
                 density: 300
             })
         }
+
 
         let metadata = await image.metadata()
 
@@ -133,7 +142,7 @@ async function processImage(file, outFolder, options = {}, quality = 100) {
         }
 
         // Force raw pixels (for HEIC) to JPEG if no conversion is set
-        if(metadata.format === "raw") {
+        if(metadata.format === "raw" || ext === ".heic") {
             if(settings.app.convert === "none") settings.app.convert = "jpg";
         }
 
@@ -400,18 +409,25 @@ async function makePreview(file, outFolder, backgroundColor = "#FFFFFF") {
 
         let image
         if(path.extname(file).toLowerCase() === ".heic") {
-            const buffer = await promisify(fs.readFile)(file);
-            const {
-              width, height,  data
-            } = await decode({ buffer });
-            image = sharp(new Uint8Array(data), {
-                raw: {
-                    width,
-                    height,
-                    channels: 4
-                }
-            })
+            // If HEIC, try reading it as an HEIC
+            try {
+                const buffer = await promisify(fs.readFile)(file);
+                const {
+                  width, height,  data
+                } = await decode({ buffer });
+                image = sharp(new Uint8Array(data), {
+                    raw: {
+                        width,
+                        height,
+                        channels: 4
+                    }
+                })
+            } catch(e) {
+                // Failed reading HEIC, try reading as JPEG
+                image = sharp(file)
+            }
         } else {
+            // Not HEIC, just read it
             image = sharp(file)
         }
 
@@ -444,6 +460,8 @@ async function makePreview(file, outFolder, backgroundColor = "#FFFFFF") {
         return promise
     } catch (e) {
         // Preview super failed
+        sendGenericMessage("Preview failed for: " + file)
+        console.log(e)
         return false
     }
 }
