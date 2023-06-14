@@ -1,6 +1,6 @@
 {
   "name": "crushee-desktop",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "description": "Crushee",
   "main": "src/electron.js",
   "repository": "github:xanderfrangos/crushee",
@@ -10,6 +10,7 @@
     "css-loader": "^5.0.1",
     "del": "^6.1.1",
     "electron-is-dev": "^1.2.0",
+    "ga4-mp": "^1.0.3",
     "heic-decode": "^1.1.2",
     "imagemin": "^7.0.1",
     "imagemin-advpng": "^6.0.0",
@@ -24,7 +25,6 @@
     "react-window": "^1.8.6",
     "sharp": "^0.30.7",
     "slash": "^3.0.0",
-    "universal-analytics": "^0.4.23",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

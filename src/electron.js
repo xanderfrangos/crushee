@@ -3,7 +3,6 @@ const path = require("path")
 const fs = require("fs")
 const isDev = require("electron-is-dev");
 const os = require("os")
-const ua = require('universal-analytics');
 const { v4: uuid } = require('uuid');
 let mainWindow
 let splashWindow
@@ -126,39 +125,29 @@ function processSettings() {
   if(settings.analytics) {
     if(!analytics) {
       console.log("\x1b[34mAnalytics:\x1b[0m starting with UUID " + settings.uuid)
-      analytics = ua('UA-137776048-2', settings.uuid)
-      analytics.set("ds", "app")
-      analytics.pageview(app.name + "/" + "v" + app.getVersion() + "/" + os.platform()).send()
-      analytics.event({
-        ec: "Session Information",
-        ea: "Version",
-        el: "v" + app.getVersion()
-      }).event({
-        ec: "Session Information",
-        ea: "App Name",
-        el: app.name
-      }).event({
-        ec: "Session Information",
-        ea: "Platform",
-        el: os.platform()
-      }).event({
-        ec: "Session Information",
-        ea: "OS Version",
-        el: os.release()
-      }).event({
-        ec: "Session Information",
-        ea: "CPU Cores",
-        el: os.cpus().length
-      }).event({
-        ec: "Session Information",
-        ea: "CPU Model",
-        el: os.cpus()[0].model
-      }).send()
+      analytics = require('ga4-mp').createClient("o4Sxc3-yQ-eLdlapMngsnQ", "G-CB0578PNH1", settings.uuid)
+
+      analytics.send([{
+        name: "page_view",
+        params: {
+          page_location: app.name + "/" + "v" + app.getVersion(),
+          page_title: app.name + "/" + "v" + app.getVersion(),
+          page_referrer: app.name,
+          os_version: os.release(),
+          os_platform: os.platform(),
+          app_type: app.name,
+          app_version: app.getVersion(),
+          cpu_cores: os.cpus().length,
+          cpu_name: os.cpus()[0].model,
+          engagement_time_msec: 1
+        }
+      }], true)
+      analyticsQueue = true
 
       analyticsInterval = setInterval(() => {
         if(analytics && analyticsQueue) {
           console.log("\x1b[34mAnalytics:\x1b[0m Sending analytics")
-          analyticsQueue.send()
+          analytics.flushBuffer()
           analyticsQueue = false
         }
       }, 30 * 1000)
@@ -592,44 +581,40 @@ ipcMain.on('popupMenu', (event, args) => {
 
 ipcMain.on('crushEvent', (event, settings) => {
   if(analytics) {
-    if(!analyticsQueue) {
-      analyticsQueue = analytics
-    }
+    /*
+    analyticsQueue = true
     for(let category in settings) {
       for(let key in settings[category]) {
-        analyticsQueue.event({
-          ec: "Crush Settings",
-          ea: category,
-          el: key,
-          ev: settings[category][key]
-        })
+        analytics.send([{
+          name: "crushee_crush_settings",
+          params: {
+            category: category,
+            key: key,
+            value: settings[category][key],
+            engagement_time_msec: 1
+          }
+        }], true)
       }
     }
+    */
   }
 })
 ipcMain.on('saveEvent', (event, data) => {
   if(analytics) {
-    if(!analyticsQueue) {
-      analyticsQueue = analytics
-    }
+    analyticsQueue = true
     for(let category in data) {
       for(let key in data[category]) {
-        analyticsQueue.event({
-          ec: "Save Results",
-          ea: category,
-          el: key,
-          ev: data[category][key]
-        })
+        analytics.send([{
+          name: "crushee_results",
+          params: {
+            category: category,
+            key: key,
+            value: data[category][key],
+            engagement_time_msec: 1
+          }
+        }], true)
       }
     }
-  }
-})
-ipcMain.on('event', (event, data) => {
-  if(analytics) {
-    if(!analyticsQueue) {
-      analyticsQueue = analytics
-    }
-    analyticsQueue.event(data)
   }
 })
 
