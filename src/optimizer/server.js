@@ -230,7 +230,7 @@ function monitorThreads() {
     fileProcessorThreads.forEach((fork, idx) => {
         const now = Date.now()
         //console.log(`Thread ${idx} last alive ${(now - fork.lastAlive) / 1000}s ago`)
-        if (fork.lastAlive < now - (1000 * 10)) {
+        if (fork.lastAlive < now - (1000 * 30)) {
             console.log(`Thread ${idx} responsive. Restarting thread.`)
             fork.thread.kill()
             fileProcessorThreads[idx] = makeThread(idx)
